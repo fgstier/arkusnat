@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fgstier-art.de/fgstier-art-image-sitemap.xml
+Sitemap: https://fgstier-art.de/sitemap.xml

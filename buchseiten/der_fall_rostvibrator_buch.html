@@ -59,6 +59,40 @@
     <div class="footer-tag">#ARKUSNAT #fgstier #shorts #scifi #ai #ki</div>
 
     <script>
+	
+	// Erzeugt eine winzige Textur mit feinen Linien für den Seitenstapel-Effekt
+const createPaperRillenTexture = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    const ctx = canvas.getContext('2d');
+    
+    // Hintergrund (Papierfarbe)
+    ctx.fillStyle = '#f4f1ea'; 
+    ctx.fillRect(0, 0, 16, 16);
+    
+    // Feine Schattenlinien für die Seitenstruktur
+    ctx.fillStyle = '#e5decf'; 
+    ctx.fillRect(0, 2, 16, 2);
+    ctx.fillRect(0, 8, 16, 2);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    // Die Textur wird stark wiederholt, um extrem feine Linien zu erzeugen
+    texture.repeat.set(50, 50); 
+    return texture;
+};
+const rillenTexture = createPaperRillenTexture();
+const farbePapierseiten = 0xf4f1ea; // Creme-Weiß
+
+const papierMaterial = new THREE.MeshStandardMaterial({ 
+    color: farbePapierseiten,
+    bumpMap: rillenTexture,  // Aktiviert die Struktur
+    bumpScale: 0.05,         // Wie tief die Rillen wirken (fein justierbar)
+    roughness: 0.8           // Macht das Papier schön matt
+});
+	
         // --- 1. Basis Setup ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
@@ -125,10 +159,10 @@ const textureSpine = loader.load('der_fall_rostvibrator_ruecken.jpg');
 const farbePapierseiten = 0xf4f1ea; // Creme-Weiß für die Seiten
 
 const materials = [
-    new THREE.MeshStandardMaterial({ color: farbePapierseiten }), // Rechts (Papier)
+    papierMaterial, // Rechts (Papier)
     new THREE.MeshStandardMaterial({ map: textureSpine }),  // Links (Rücken)
-    new THREE.MeshStandardMaterial({ color: farbePapierseiten }), // Oben (Papier)
-    new THREE.MeshStandardMaterial({ color: farbePapierseiten }), // Unten (Papier)
+    papierMaterial, // Oben (Papier)
+    papierMaterial, // Unten (Papier)
     new THREE.MeshStandardMaterial({ map: textureCover }),            // Vorne (Cover)
     new THREE.MeshStandardMaterial({ map: textureBack }) // Hinten (Backcover)
 ];

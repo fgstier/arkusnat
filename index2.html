@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.G. Stier | System-Matrix | ARKUSNAT</title>
+    <meta name="description" content="ARKUSNAT System-Matrix von F.G. Stier. Interaktive Erkundung von Science-Fiction, KI-Systemen, Philosophie und Quantenmechanik.">
+    
+    <!-- Tailwind CSS & Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberbg: '#030305',
+                        cyberpanel: '#09090f',
+                        neoncyan: '#00ffcc',
+                        neonblue: '#0066ff',
+                        neonpink: '#ff0055',
+                        mutedgray: '#52526b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    boxShadow: {
+                        cyberglow: '0 0 15px rgba(0, 255, 204, 0.25)',
+                        cyberpink: '0 0 15px rgba(255, 0, 85, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Cyber-Scanlines Effekt */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* Pulsierender Text */
+        .neon-pulse {
+            animation: pulse-neon 2s infinite ease-in-out;
+        }
+        @keyframes pulse-neon {
+            0%, 100% { text-shadow: 0 0 5px rgba(0, 255, 204, 0.2), 0 0 10px rgba(0, 255, 204, 0.2); opacity: 0.9; }
+            50% { text-shadow: 0 0 15px rgba(0, 255, 204, 0.6), 0 0 25px rgba(0, 255, 204, 0.4); opacity: 1; }
+        }
+
+        /* Matrix-Textfall-Animation-Kompensation */
+        .glow-border {
+            box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.1), 0 0 10px rgba(0, 255, 204, 0.1);
+            border-color: rgba(0, 255, 204, 0.2);
+        }
+        .glow-border:hover {
+            box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.2), 0 0 20px rgba(0, 255, 204, 0.3);
+            border-color: rgba(0, 255, 204, 0.8);
+        }
+
+        /* CSS 3D Perspektive */
+        .viewer-3d-viewport {
+            perspective: 1200px;
+        }
+		
+				
+    </style>
+</head>
+<body class="bg-cyberbg text-slate-100 font-sans selection:bg-neoncyan selection:text-black overflow-x-hidden">
+
+    <!-- Tech Status-Bar -->
+    <div class="w-full bg-black/60 border-b border-zinc-800/80 text-xs font-mono py-2 px-4 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span class="text-neoncyan font-bold tracking-widest">// SECURE_SYS_NODE: fgstier-art.de</span>
+                <span class="hidden md:inline text-zinc-500">|</span>
+                <span class="hidden md:inline text-zinc-400">LOC: <span class="text-neonblue">SUPERPOSITION_MATRIX</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-neoncyan animate-ping"></span>
+                    <span class="text-zinc-400">KI_CORE: <span class="text-neoncyan">ACTIVE</span></span>
+                </div>
+                <div class="flex items-center gap-2 border-l border-zinc-800 pl-4">
+                    <span class="text-zinc-400">DECRYPT: <span class="text-neonpink font-bold">100% READY</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Globaler Audio Flux Deck -->
+    <div class="max-w-2xl mx-auto mt-6 px-4">
+        <div class="bg-cyberpanel/90 border border-zinc-800/80 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-cyberglow">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-neonblue/20 flex items-center justify-center border border-neonblue/40 text-neonblue animate-pulse">
+                    ⚡
+                </div>
+                <div>
+                    <p class="text-xs font-mono text-zinc-500">AUDIO-STREAM_SOURCE</p>
+                    <p class="text-sm font-semibold font-mono text-neoncyan tracking-wider">ARKUSNAT_CYBER_FLUX.MP3</p>
+                </div>
+            </div>
+            <audio controls class="w-full md:w-64 h-8 opacity-85 invert brightness-125 focus:outline-none">
+                <source src="audio/ARKUSNAT_CYBER_FLUX.mp3" type="audio/mpeg">
+                System error: Audio-flux codec unsupported.
+            </audio>
+        </div>
+    </div>
+
+    <!-- Hero / Quantum Core Visualizer -->
+    <section class="relative min-h-[75vh] flex items-center justify-center pt-8 pb-16 overflow-hidden">
+        <!-- Interaktives Quanten-Vektorgitter im Hintergrund -->
+        <div class="absolute inset-0 z-0">
+            <canvas id="quantumCoreCanvas" class="w-full h-full opacity-60"></canvas>
+            <div class="absolute inset-0 bg-gradient-to-b from-cyberbg/10 via-cyberbg/40 to-cyberbg"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-block px-3 py-1 bg-neoncyan/10 border border-neoncyan/30 rounded-full text-xs font-mono text-neoncyan mb-6 tracking-widest animate-pulse">
+                [ ESTABLISHED QUANTUM LINK ]
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold font-mono tracking-tight mb-6">
+                F.G. STIER <span class="text-transparent bg-clip-text bg-gradient-to-r from-neoncyan to-neonblue neon-pulse">SYSTEM-MATRIX</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed font-light">
+                "Als technischer Autor nutze ich die <span class="text-neoncyan font-medium">inimitable temptation</span> der Worte als Bildmaschine."
+            </p>
+
+            <p class="text-xs md:text-sm text-slate-400 font-mono max-w-2xl mx-auto mb-12 bg-black/40 backdrop-blur-sm p-3 border border-zinc-800 rounded-lg">
+                Forschungsschnittstelle zur dezentralen Entschlüsselung literarischer Anomalien, quantenmechanischer Grenzzustände und maschineller Dialogsysteme.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#datenbank" class="px-8 py-3 bg-gradient-to-r from-neoncyan to-neonblue hover:from-neoncyan hover:to-neoncyan text-black font-extrabold rounded-lg transition-all duration-300 shadow-cyberglow transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
+                    SEKTOR_DATENBANK
+                </a>
+                <a href="#terminal-section" class="px-8 py-3 bg-transparent border border-neonpink hover:bg-neonpink/10 text-neonpink font-extrabold rounded-lg transition-all duration-300 shadow-cyberpink transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
+                    KAUSALITÄTS_CONSOLE
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terminal Sektion -->
+    <section id="terminal-section" class="py-12 bg-black/40 border-y border-zinc-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-cyberpanel border border-zinc-800 rounded-xl overflow-hidden shadow-cyberglow">
+                <!-- Terminal Header -->
+                <div class="bg-zinc-950 px-4 py-3 border-b border-zinc-900 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-neonpink"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-neoncyan"></span>
+                        <span class="text-xs font-mono text-zinc-500 ml-2">sys_node_terminal@arkusnat:~$</span>
+                    </div>
+                    <span class="text-xs font-mono text-neoncyan/60 animate-pulse">● QUANTUM_ONLINE</span>
+                </div>
+                
+                <!-- Terminal Body -->
+                <div class="p-6 h-64 overflow-y-auto font-mono text-xs md:text-sm text-slate-300 leading-relaxed flex flex-col gap-2" id="terminalOutput">
+                    <p class="text-neoncyan">// INITIALISIERUNG DES DECRYPTION-ENGINES...</p>
+                    <p class="text-zinc-500">Lade mathematische Kausal-Algorithmen... OK</p>
+                    <p class="text-zinc-500">Binde Quantenverschränkungs-Simulator... OK</p>
+                    <p class="text-slate-300">Tippe <span class="text-neonpink font-bold">help</span> für Befehle, um Sektor-Videos und Archiv-Anomalien direkt zu laden.</p>
+                </div>
+                
+                <!-- Terminal Input -->
+                <div class="bg-zinc-950/80 px-4 py-3 border-t border-zinc-900 flex items-center gap-2">
+                    <span class="text-neoncyan font-bold font-mono text-sm">&gt;</span>
+                    <input type="text" id="terminalInput" class="bg-transparent text-neoncyan focus:outline-none w-full font-mono text-sm" placeholder="Befehl eingeben..." autofocus>
+                    <button onclick="executeTerminalCommand()" class="px-3 py-1 bg-neoncyan/10 border border-neoncyan/40 text-neoncyan text-xs font-mono rounded hover:bg-neoncyan hover:text-black transition-colors">RUN</button>
+                </div>
+            </div>
+            <!-- Terminal Hotkeys -->
+            <div class="flex flex-wrap gap-2 mt-3 justify-center">
+                <span class="text-xs font-mono text-zinc-500 self-center">Schnell-Diagnosen:</span>
+                <button onclick="triggerHotkey('help')" class="px-2 py-0.5 bg-zinc-900/60 border border-zinc-800 text-zinc-400 font-mono text-xs rounded hover:text-neoncyan">help</button>
+                <button onclick="triggerHotkey('analyse 03')" class="px-2 py-0.5 bg-zinc-900/60 border border-zinc-800 text-zinc-400 font-mono text-xs rounded hover:text-neoncyan">analyse_verursachung</button>
+                <button onclick="triggerHotkey('quantum')" class="px-2 py-0.5 bg-zinc-900/60 border border-zinc-800 text-zinc-400 font-mono text-xs rounded hover:text-neoncyan">quantum-info</button>
+                <button onclick="triggerHotkey('clear')" class="px-2 py-0.5 bg-zinc-900/60 border border-zinc-800 text-zinc-400 font-mono text-xs rounded hover:text-neonpink">clear</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Datenbank / Werk-Sektion -->
+    <main id="datenbank" class="max-w-7xl mx-auto px-4 py-16">
+        
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 border-b border-zinc-800 pb-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold font-mono tracking-wide text-neoncyan">// SYSTEM-WERKVERZEICHNIS</h2>
+                <p class="text-sm text-slate-400 mt-1">Gefiltert nach dekompilierten literarischen Sektoren.</p>
+            </div>
+            
+            <!-- Filter-HUD -->
+            <div class="flex flex-wrap gap-2 font-mono text-xs">
+                <button onclick="filterSectors('all')" class="sector-filter-btn px-4 py-2 rounded bg-neoncyan text-black font-bold" id="filter-all">ALL_SECTORS</button>
+                <button onclick="filterSectors('scifi')" class="sector-filter-btn px-4 py-2 rounded bg-cyberpanel border border-zinc-800 text-zinc-400 hover:text-neoncyan" id="filter-scifi">SCI_FI</button>
+                <button onclick="filterSectors('quantum')" class="sector-filter-btn px-4 py-2 rounded bg-cyberpanel border border-zinc-800 text-zinc-400 hover:text-neoncyan" id="filter-quantum">QUANTUM</button>
+                <button onclick="filterSectors('cyber')" class="sector-filter-btn px-4 py-2 rounded bg-cyberpanel border border-zinc-800 text-zinc-400 hover:text-neoncyan" id="filter-cyber">CYBERNETICS</button>
+            </div>
+        </div>
+
+        <!-- Sektor-Katalog Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="sectorCatalog">
+
+            <!-- Sektor 01: Norden ist immer oben -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="scifi">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+				    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"><source src="video/norden-ist-immer-oben.mp4" type="video/mp4"></video>
+                    <img src="bilder/norden-ist-immer-oben.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_01</span>
+                            <span class="px-2 py-0.5 bg-neoncyan/10 text-neoncyan text-[10px] font-mono rounded">SCI-FI</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Norden ist immer oben</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Kosmologische Verwerfungen, dezentrale Orientierung und die unbändige Kraft der Bildmaschine Wort.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Norden ist immer oben', 'bilder/norden-ist-immer-oben.jpg')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991654229" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/norden-ist-immer-oben/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 02: Ruecklauf auf unendlich -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="scifi,quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/ruecklauf-auf-unendlich.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_02</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Ruecklauf auf unendlich</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Unerklärbare Zeitschleifen dekonstruiert durch unendliche Iterationsstufen des Lebens.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Ruecklauf auf unendlich', 'buchseiten/ruecklauf_auf_unendlich_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752087" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/ruecklauf-auf-unendlich/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 03: Das Prinzip der zeitlosen Verursachung -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum,cyber">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch flex items-center justify-center">
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"><source src="video/verursachung.mp4" type="video/mp4"></video>
+                    <!-- Fallback Overlay, falls Video blockiert wird -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-2 pointer-events-none">
+                        <span class="text-[9px] font-mono text-neoncyan tracking-widest">[ LIVE_FEED ]</span>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_03</span>
+                            <span class="px-2 py-0.5 bg-neonpink/10 text-neonpink text-[10px] font-mono rounded">PHILOSOPHIE</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono text-neonpink">Zeitlose Verursachung</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein Frontalangriff auf die lineare Kausalität. Mit integrierter interaktiver Video-Analyse.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="buchseiten/analyse_verursachung.html" class="px-3 py-2 bg-neonpink text-white text-center font-extrabold text-xs font-mono rounded hover:bg-neonpink/80 transition-all shadow-cyberpink">ANALYSE_PAGE</a>
+                        <a href="https://www.amazon.de/dp/3991811987" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/das-prinzip-der-zeitlosen-verursachung/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 04: Das surreale Segel -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="scifi">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch flex items-center justify-center">
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"><source src="video/surreale-segel.mp4" type="video/mp4"></video>
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_04</span>
+                            <span class="px-2 py-0.5 bg-neoncyan/10 text-neoncyan text-[10px] font-mono rounded">SCI-FI</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Das surreale Segel</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Metaphysische Seefahrt an den Klippen des Absoluten. Aufhebung der logischen Verankerung.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Das surreale Segel', 'bilder/das-surreale-segel.jpg')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991655888" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/das-surreale-segel/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 05: Der Compiler-Dialog -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="cyber">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/der-compiler-dialog.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_05</span>
+                            <span class="px-2 py-0.5 bg-neonpink/10 text-neonpink text-[10px] font-mono rounded">KI-SYSTEMS</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Der Compiler-Dialog</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Literarische Code-Synthese. Schnittstelle zwischen menschlicher Kreativität und algorithmischer Strenge.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Der Compiler-Dialog', 'buchseiten/der_compiler_dialog_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991922770" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/der-compiler-dialog/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 06: Die Hinrichtung der Kausalität -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/die-hinrichtung-der-kausalitaet.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_06</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Die Hinrichtung der Kausalität</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein fiktives Syntaxexperiment zur Aufhebung zeitlicher Verkettungen. Ursache wird zu einer fernen Syntax.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Die Hinrichtung der Kausalität', 'buchseiten/die_hinrichtung_der_kausalitaet_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991925702" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/die-hinrichtung-der-kausalitaet/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+            <!-- Sektor 07: loop.boog.dusseline -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum,cyber">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/loop-bug-dusseline.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_07</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">KI-SYSTEMS</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Loop:Bug:Dusseline</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein KI-Myterium der fast menschlichen Leidenschaft. Ursache wird ein Netzwerk der toten Zellen.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Loop:Bug:Dusseline', 'buchseiten/loop_bug_dusseline_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752109" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/loop-bug-dusseline/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 08: Der Fall Rostvibrator -->
+			<article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/der-fall-rostvibrator.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_08</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Der Fall Rostvibrator</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein reales Beamtenerlebnis im Sektor und die Monetäre Kausalitäts-Verschleierung eines globalen Konzerns.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Der Fall Rostvibrator', 'buchseiten/der_fall_rostvibrator_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752060" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/der-fall-rostvibrator/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Sektor 09: Die Logik der Zensur -->
+			<article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum,cyber">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/die-logik-der-zensur.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_09</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">KI-SYSTEMS</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Die Logik der Zensur</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein fiktives Quantenszenario der Zensur. Die Pionische Verschränkung (PIVU) – eine Waffe, die logische Inkonsistenz in Form der Formel der zeitlosen Verursachung.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Die Logik der Zensur', 'buchseiten/die_logik_der_zensur_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752044" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/die-logik-der-zensur/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+
+<!-- Sektor 10: Sammlung leerer Intelligenz -->
+			<article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/sammlung-leerer-intelligenz.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_10</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Sammlung leerer Intelligenz</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein wahrhaft sinnleeres und intelligentes Artefakt der zeitlicher Verkettungen. Ursache wird zu einer fernen imaginären Erinnerung.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Sammlung leerer Intelligenz', 'buchseiten/sammlun_leerer_intelligenz_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752028" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/sammlung-leerer-intelligenz/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+
+<!-- Sektor 11: Totalschaden oder Mathematik -->
+			<article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/totalschaden-oder-mathematik.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_11</span>
+                            <span class="px-2 py-0.5 bg-neonblue/10 text-neonblue text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Totalschaden oder Mathematik</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Wir messen nicht die Realität, wir verwalten nur unsere eigenen Erwartungswerte. Ursache wird zu einer fernen imaginären Forschung.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Totalschaden oder Mathematik', 'buchseiten/totalschaden_oder_mathematik_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3912752001" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/totalschaden-oder-mathematik/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+ <!-- Sektor 12: Rattara und die Rattenlüge -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="scifi">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+				    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"><source src="video/rattara.mp4" type="video/mp4"></video>
+                    <img src="bilder/rattara.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_12</span>
+                            <span class="px-2 py-0.5 bg-neoncyan/10 text-neoncyan text-[10px] font-mono rounded">SCI-FI</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Rattara und die Rattenlüge</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Kosmologische Verwerfungen, Verschränkung mit Rattenholz, dezentrale Orientierung und die unbändige Kraft der Bildmaschine Wort.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Rattara und die Rattenlüge', 'bilder/rattara.jpg')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991528231" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/rattara/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+ <!-- Sektor 13: Die schlaue Dusseline -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="cyber">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+				    <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"><source src="video/schlaue-dusseline.mp4" type="video/mp4"></video>
+                    <img src="bilder/die schlaue Dusseline.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_13</span>
+                            <span class="px-2 py-0.5 bg-neoncyan/10 text-neoncyan text-[10px] font-mono rounded">KI-SYSTEMS</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">Die schlaue Dusseline</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Ein KI-Myterium der fast menschlichen Leidenschaft. Ursache wird ein Netzwerk der toten Zellen und die unbändige Kraft der Bildmaschine Wort.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('Die schlaue Dusseline', 'bilder/die schlaue Dusseline.jpg')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991656914" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/die-schlaue-dusseline/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+<!-- Sektor 14: DIE QUANTEN-LÜGE -->
+            <article class="sector-card bg-cyberpanel border border-zinc-800/80 rounded-xl overflow-hidden flex flex-col sm:flex-row items-center glow-border transition-all duration-300" data-tags="cyber,quantum">
+                <div class="w-full sm:w-44 aspect-[3/4] bg-zinc-950 flex-shrink-0 relative overflow-hidden self-stretch">
+                    <img src="bilder/die-quanten-luege.jpg" alt="Cover" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80'">
+                </div>
+                <div class="p-6 flex flex-col justify-between h-full w-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-mono text-neoncyan tracking-wider">// SEKTOR_14</span>
+                            <span class="px-2 py-0.5 bg-neonpink/10 text-neonpink text-[10px] font-mono rounded">QUANTUM</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 font-mono">DIE QUANTEN-LÜGE</h3>
+                        <p class="text-sm text-slate-400 line-clamp-3 mb-6">Literarische Code-Synthese. Schnittstelle zwischen menschlicher Kreativität und algorithmischer Strenge.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="open3DViewer('DIE QUANTEN-LÜGE', 'buchseiten/die_quantenluege_buch.html')" class="px-3 py-2 bg-neoncyan text-black font-extrabold text-xs font-mono rounded hover:bg-neoncyan/80 transition-all shadow-cyberglow">3D_PREVIEW</button>
+                        <a href="https://www.amazon.de/dp/3991921618" target="_blank" class="px-3 py-2 bg-zinc-900 border border-zinc-800 text-center text-zinc-300 font-bold text-xs font-mono rounded hover:bg-zinc-800 transition-all">AMAZON_LINK</a>
+                        <a href="https://fgstier-art.de/die-quanten-luege/index.html" class="col-span-2 px-3 py-1.5 bg-zinc-950/60 border border-zinc-800/80 text-center text-neonblue text-xs font-mono rounded hover:border-neonblue/60 hover:text-neoncyan transition-all">[ SEKTOR_ARCHIV_OPEN ]</a>
+                    </div>
+                </div>
+            </article>
+
+
+
+        </div>
+    </main>
+
+    <!-- Quantum Simulation Playground -->
+    <section class="max-w-4xl mx-auto px-4 py-8 mb-16">
+        <div class="bg-cyberpanel border border-zinc-800 rounded-xl p-6 glow-border">
+            <h3 class="text-lg font-bold font-mono text-neoncyan mb-3">// LIVE_SIMULATION: QUANTUM_DECOHERENCE</h3>
+            <p class="text-xs text-slate-400 mb-6 font-mono">Mithilfe dieses Simulators kannst du Verschränkungszustände von Qubits in Echtzeit erzwingen. Dies spiegelt das Leitmotiv "Die Hinrichtung der Kausalität" wider.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center">
+                <!-- Qubit Alpha -->
+                <div class="p-4 bg-zinc-950 rounded-lg border border-zinc-800">
+                    <span class="text-xs font-mono text-zinc-500">QUBIT_A</span>
+                    <div id="qubit-a-state" class="text-xl font-bold font-mono text-neoncyan my-2">|Ψ⟩ = α|0⟩ + β|1⟩</div>
+                    <span id="qubit-a-badge" class="px-2 py-0.5 bg-neoncyan/20 text-neoncyan text-[10px] font-mono rounded">SUPERPOSITION</span>
+                </div>
+                <!-- Controls -->
+                <div class="flex flex-col gap-3 justify-center">
+                    <button onclick="measureQuantumSystem()" class="px-4 py-2 bg-neonpink text-white font-extrabold text-xs font-mono rounded hover:bg-neonpink/80 transition-all shadow-cyberpink">MESSUNG_COLLAPSE</button>
+                    <button onclick="resetQuantumSystem()" class="px-4 py-2 bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-xs rounded hover:bg-zinc-800">RESET_PROBABILITIES</button>
+                </div>
+                <!-- Qubit Beta -->
+                <div class="p-4 bg-zinc-950 rounded-lg border border-zinc-800">
+                    <span class="text-xs font-mono text-zinc-500">QUBIT_B (VERSCHRÄNKT)</span>
+                    <div id="qubit-b-state" class="text-xl font-bold font-mono text-neoncyan my-2">|Ψ⟩ = α|0⟩ + β|1⟩</div>
+                    <span id="qubit-b-badge" class="px-2 py-0.5 bg-neoncyan/20 text-neoncyan text-[10px] font-mono rounded">SUPERPOSITION</span>
+                </div>
+            </div>
+            
+            <div id="measurement-result" class="mt-6 text-center text-xs font-mono text-zinc-400 p-2 bg-black/60 rounded border border-zinc-900 hidden">
+                // ERGEBNIS DER MEßFUNKTION: Kausalität zusammengebrochen...
+            </div>
+        </div>
+    </section>
+
+    <!-- Interaktiver 3D-Buch-Viewer Modal -->
+    <div id="viewerModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-xl z-[1000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-400" onclick="close3DViewerOnBackdrop(event)">
+        <div class="modal-container bg-cyberpanel border border-zinc-800/80 w-11/12 max-w-[650px] h-[80vh] max-h-[600px] rounded-2xl relative flex flex-col overflow-hidden shadow-cyberglow">
+            <!-- Modal Header -->
+            <div class="modal-header px-6 py-4 border-b border-zinc-900 flex justify-between items-center z-10">
+                <span id="modalBookTitle" class="modal-title font-mono text-neoncyan font-bold tracking-wider">BUCH-VORSCHAU</span>
+                <button class="close-btn text-2xl text-slate-400 hover:text-neoncyan transition-colors" onclick="close3DViewer()">&times;</button>
+            </div>
+            <!-- Viewport -->
+            <div class="viewer-3d-viewport flex-grow flex items-center justify-center bg-radial-gradient relative touch-none cursor-grab active:cursor-grabbing" id="viewport3D">
+                <div class="book-3d-box w-[210px] h-[310px] relative transition-transform duration-100" id="book3D">
+                    <!-- Vorderseite -->
+                    <div class="book-face book-front absolute w-full h-full rounded-r bg-cover bg-center shadow-inner" id="bookCover" style="transform: rotateY(0deg) translateZ(15px); backface-visibility: hidden;"></div>
+                    <!-- Rückseite -->
+                    <div class="book-face book-back absolute w-full h-full rounded-l bg-zinc-950 p-6 flex flex-col justify-between border border-zinc-900" style="transform: rotateY(180deg) translateZ(15px); backface-visibility: hidden;">
+                        <div class="book-back-logo font-mono text-[10px] text-neoncyan/60">// ARKUSNAT_SYSTEM</div>
+                        <div class="book-back-text text-[9px] text-zinc-500 leading-relaxed font-mono">ARKUSNAT Publishing. Kausalitätsgesteuerte Literatur, dekonstruiert durch dezentrale Netzschleifen und unendliche Iterationen des Geistes.</div>
+                        <div class="text-right font-mono text-[8px] text-neonpink">ISBN 978-3-912752</div>
+                    </div>
+                    <!-- Buchrücken -->
+                    <div class="book-spine absolute w-[30px] h-full bg-zinc-950 shadow-inner flex items-center justify-center" style="left: -15px; transform: rotateY(-90deg) translateZ(0);">
+                        <span id="spineTitle" class="spine-text font-mono text-neoncyan text-[9px] uppercase tracking-widest text-center whitespace-nowrap rotate-[-90deg] w-[310px]">ROSTVIBRATOR</span>
+                    </div>
+                    <!-- Buchseiten (Rechts, Oben, Unten) -->
+                    <div class="book-pages absolute w-[28px] h-[296px] bg-gradient-to-r from-zinc-200 to-zinc-400 shadow-inner" style="right: -14px; top: 7px; transform: rotateY(90deg) translateZ(0); background-size: 100% 3px; background-image: linear-gradient(rgba(0,0,0,0.08) 50%, transparent 50%);"></div>
+                    <div class="book-top-pages absolute w-[204px] h-[28px] bg-gradient-to-b from-zinc-200 to-zinc-400" style="top: -14px; left: 3px; transform: rotateX(90deg) translateZ(0); background-size: 3px 100%; background-image: linear-gradient(90deg, rgba(0,0,0,0.08) 50%, transparent 50%);"></div>
+                    <div class="book-bottom-pages absolute w-[204px] h-[28px] bg-gradient-to-t from-zinc-200 to-zinc-400" style="bottom: -14px; left: 3px; transform: rotateX(-90deg) translateZ(0); background-size: 3px 100%; background-image: linear-gradient(90deg, rgba(0,0,0,0.08) 50%, transparent 50%);"></div>
+                </div>
+                <div class="absolute bottom-4 font-mono text-[10px] text-zinc-600 pointer-events-none tracking-widest">ZIEHEN ZUM ROTIEREN (3D-RENDER_ENGINE)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-12 px-4 border-t border-zinc-900 bg-black/40 text-xs font-mono text-zinc-600">
+        <p class="mb-4">#ARKUSNAT #fgstier #scifi #ki #science #Philosophie #SciFiMusik</p>
+        <p class="mb-6">&copy; 2026 ARKUSNAT Publishing & F.G. Stier. Alle dezentralen Wellenmuster geschützt.</p>
+        <div class="flex justify-center gap-6">
+            <a href="impressum_datenschutz.html" class="text-neoncyan hover:underline tracking-wider">// SEKTOR_DATENRECHT & IDENTITÄT (Impressum & Datenschutz)</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. MATHE-BASIERTE QUANTENCORE-ANIMATION (Canvas) ---
+        const canvas = document.getElementById('quantumCoreCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 65;
+        let mouseX = -1000, mouseY = -1000;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 2 + 1;
+                // Quantenzustand: Verschränkungsphase (0 bis 2*PI)
+                this.phase = Math.random() * Math.PI * 2;
+                this.phaseSpeed = Math.random() * 0.02 + 0.005;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.phase += this.phaseSpeed;
+
+                // Border wrap-around
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+
+                // Maus-Interaktion / Gravitationseffekt
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 200) {
+                    const force = (200 - dist) / 200;
+                    this.x -= (dx / dist) * force * 1.5;
+                    this.y -= (dy / dist) * force * 1.5;
+                }
+            }
+
+            draw() {
+                // Dynamische Opazität basierend auf Phase
+                const currentAlpha = 0.3 + Math.abs(Math.sin(this.phase)) * 0.7;
+                ctx.fillStyle = `rgba(0, 255, 204, ${currentAlpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Init Particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Animation Loop
+        function animateQuantumCore() {
+            ctx.fillStyle = 'rgba(3, 3, 5, 0.2)'; // Schweifeffekt
+            ctx.fillRect(0, 0, width, height);
+
+            // Gitter/Netzwerkverbindungen (Interferenzlinien)
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+                p1.update();
+                p1.draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+                    if (dist < 120) {
+                        const alpha = (120 - dist) / 120 * 0.15;
+                        ctx.strokeStyle = `rgba(0, 102, 255, ${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateQuantumCore);
+        }
+
+        animateQuantumCore();
+
+        // Mouse listeners for Quantum core
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+
+        // --- 2. DECRYPTION TERMINAL EMULATOR LOGIK ---
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalInput = document.getElementById('terminalInput');
+
+        const terminalCommands = {
+            'help': 'Verfügbare Befehle:\n  - <span class="text-neoncyan">help</span>: Zeigt diese Liste an.\n  - <span class="text-neoncyan">analyse 03</span>: Dekompiliert die Sektordaten und verweist auf die tiefe Videoanalyse zu "Das Prinzip der zeitlosen Verursachung".\n  - <span class="text-neoncyan">quantum</span>: Zeigt Systemdaten über verschränkte Zustände.\n  - <span class="text-neoncyan">books</span>: Listet alle dechiffrierten literarischen Objekte im Cache auf.\n  - <span class="text-neoncyan">clear</span>: Bereinigt die Terminalkonsole.',
+            'analyse 03': 'STATUS: Sektorendaten geladen. Dekompiliere "Das Prinzip der zeitlosen Verursachung"...\n- ANALYSE: Kausalität ist eine Illusion chronologischer Vektoren.\n- VIDEO-DECODING: Live Video-Deep-Dive verfügbar unter <a href="buchseiten/analyse_verursachung.html" class="text-neonpink underline">[LINK ZUR ANALYSE-SEITE]</a>.',
+            'quantum': 'QUANTUM ENGINE STATUS:\n- Entanglement Phase: SUPERPOSITIONED\n- Qubit A & B State: ENTANGLED\n- Verschränkungskoeffizient: r = 0.9987 (Störungsfrei)\nNutze das untere Panel, um eine Messung zu erzwingen!',
+            'books': 'LITERARISCHE DATENBANK:\n- Sektor 01: Norden ist immer oben [SCI-FI]\n- Sektor 02: Ruecklauf auf unendlich [QUANTUM]\n- Sektor 03: Das Prinzip der zeitlosen Verursachung [PHILOSOPHIE]\n- Sektor 04: Das surreale Segel [METAPHYSISCH]\n- Sektor 05: Der Compiler-Dialog [KI-DIALOGE]\n- Sektor 06: Die Hinrichtung der Kausalität [QUANTUM]',
+            'clear': 'CLEAR'
+        };
+
+        function writeToTerminal(text) {
+            const p = document.createElement('p');
+            p.innerHTML = text;
+            terminalOutput.appendChild(p);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        function executeTerminalCommand() {
+            const val = terminalInput.value.trim().toLowerCase();
+            if (!val) return;
+
+            writeToTerminal(`<span class="text-neonpink">guest@arkusnat:~$</span> ${val}`);
+
+            if (terminalCommands[val]) {
+                if (terminalCommands[val] === 'CLEAR') {
+                    terminalOutput.innerHTML = '';
+                } else {
+                    writeToTerminal(terminalCommands[val]);
+                }
+            } else {
+                writeToTerminal(`<span class="text-red-500">Systemfehler: Befehl "${val}" nicht dechiffrierbar.</span> Tippe "help" für Befehle.`);
+            }
+
+            terminalInput.value = '';
+        }
+
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') executeTerminalCommand();
+        });
+
+        function triggerHotkey(cmd) {
+            terminalInput.value = cmd;
+            executeTerminalCommand();
+        }
+
+
+        // --- 3. FILTER FUNKTIONALITÄT FÜR SEKTOR-KATALOG ---
+        function filterSectors(tag) {
+            const cards = document.querySelectorAll('.sector-card');
+            const buttons = document.querySelectorAll('.sector-filter-btn');
+
+            // Reset Buttons
+            buttons.forEach(btn => {
+                btn.className = "sector-filter-btn px-4 py-2 rounded bg-cyberpanel border border-zinc-800 text-zinc-400 hover:text-neoncyan";
+            });
+
+            // Set active button
+            const activeBtn = document.getElementById(`filter-${tag}`);
+            if (activeBtn) {
+                activeBtn.className = "sector-filter-btn px-4 py-2 rounded bg-neoncyan text-black font-bold";
+            }
+
+            // Filter cards
+            cards.forEach(card => {
+                const tags = card.getAttribute('data-tags').split(',');
+                if (tag === 'all' || tags.includes(tag)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+
+        // --- 4. INTERAKTIVER QUANTEN-SPIELWIESE-SIMULATOR ---
+        function measureQuantumSystem() {
+            const qubitA = document.getElementById('qubit-a-state');
+            const qubitB = document.getElementById('qubit-b-state');
+            const badgeA = document.getElementById('qubit-a-badge');
+            const badgeB = document.getElementById('qubit-b-badge');
+            const resultBox = document.getElementById('measurement-result');
+
+            // Deterministischer Zufall (Verschränkung kollabiert auf denselben Zustand!)
+            const collapsedState = Math.random() > 0.5 ? '0' : '1';
+
+            qubitA.innerText = `|${collapsedState}⟩`;
+            qubitB.innerText = `|${collapsedState}⟩`;
+
+            badgeA.innerText = "COLLAPSED";
+            badgeA.className = "px-2 py-0.5 bg-neonpink/20 text-neonpink text-[10px] font-mono rounded";
+            
+            badgeB.innerText = "COLLAPSED";
+            badgeB.className = "px-2 py-0.5 bg-neonpink/20 text-neonpink text-[10px] font-mono rounded";
+
+            resultBox.innerHTML = `// COLLAPSE ERFOLGREICH: Beide Qubits kollabierten verschränkt auf den Zustand [|${collapsedState}⟩]. Lineare Kausalität aufgehoben.`;
+            resultBox.classList.remove('hidden');
+        }
+
+        function resetQuantumSystem() {
+            const qubitA = document.getElementById('qubit-a-state');
+            const qubitB = document.getElementById('qubit-b-state');
+            const badgeA = document.getElementById('qubit-a-badge');
+            const badgeB = document.getElementById('qubit-b-badge');
+            const resultBox = document.getElementById('measurement-result');
+
+            qubitA.innerText = "|Ψ⟩ = α|0⟩ + β|1⟩";
+            qubitB.innerText = "|Ψ⟩ = α|0⟩ + β|1⟩";
+
+            badgeA.innerText = "SUPERPOSITION";
+            badgeA.className = "px-2 py-0.5 bg-neoncyan/20 text-neoncyan text-[10px] font-mono rounded";
+
+            badgeB.innerText = "SUPERPOSITION";
+            badgeB.className = "px-2 py-0.5 bg-neoncyan/20 text-neoncyan text-[10px] font-mono rounded";
+
+            resultBox.classList.add('hidden');
+        }
+
+
+        // --- 5. IMMERSIVES CSS 3D BUCH MODAL ---
+        const viewerModal = document.getElementById('viewerModal');
+        const book3D = document.getElementById('book3D');
+        const bookCover = document.getElementById('bookCover');
+        const spineTitle = document.getElementById('spineTitle');
+        const modalBookTitle = document.getElementById('modalBookTitle');
+        const viewport3D = document.getElementById('viewport3D');
+
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let currentRotation = { x: 20, y: -30 };
+
+        function open3DViewer(title, coverSrc) {
+            modalBookTitle.innerText = title.toUpperCase();
+            spineTitle.innerText = title.toUpperCase();
+            bookCover.style.backgroundImage = `url('${coverSrc}')`;
+            
+            // Reset position
+            currentRotation = { x: 20, y: -30 };
+            updateBookRotation();
+            
+            viewerModal.classList.remove('pointer-events-none');
+            viewerModal.classList.add('opacity-100');
+        }
+
+        function close3DViewer() {
+            viewerModal.classList.add('pointer-events-none');
+            viewerModal.classList.remove('opacity-100');
+        }
+
+        function close3DViewerOnBackdrop(e) {
+            if (e.target === viewerModal) close3DViewer();
+        }
+
+        function updateBookRotation() {
+            book3D.style.transform = `rotateX(${currentRotation.x}deg) rotateY(${currentRotation.y}deg)`;
+        }
+
+        // Drag/Touch Handling für 3D Drehung
+        function handleStart(clientX, clientY) {
+            isDragging = true;
+            previousMousePosition = { x: clientX, y: clientY };
+        }
+
+        function handleMove(clientX, clientY) {
+            if (!isDragging) return;
+
+            const deltaMove = {
+                x: clientX - previousMousePosition.x,
+                y: clientY - previousMousePosition.y
+            };
+
+            currentRotation.y += deltaMove.x * 0.5;
+            currentRotation.x -= deltaMove.y * 0.5;
+
+            // X-Rotationslimits, um Überkopf-Drehung zu sperren
+            currentRotation.x = Math.max(-60, Math.min(60, currentRotation.x));
+
+            updateBookRotation();
+            previousMousePosition = { x: clientX, y: clientY };
+        }
+
+        function handleEnd() {
+            isDragging = false;
+        }
+
+        // Listeners for 3D Viewer
+        viewport3D.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', () => handleEnd());
+
+        viewport3D.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) handleStart(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => handleEnd());
+    </script>
+</body>
+</html>

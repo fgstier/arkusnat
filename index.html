@@ -76,82 +76,64 @@
 				
     </style>
 </head>
+
+
 <body class="bg-cyberbg text-slate-100 font-sans selection:bg-neoncyan selection:text-black overflow-x-hidden">
-
-    <!-- Tech Status-Bar -->
-    <div class="w-full bg-black/60 border-b border-zinc-800/80 text-xs font-mono py-2 px-4 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-            <div class="flex items-center gap-4">
-                <span class="text-neoncyan font-bold tracking-widest">// SECURE_SYS_NODE: fgstier-art.de</span>
-                <span class="hidden md:inline text-zinc-500">|</span>
-                <span class="hidden md:inline text-zinc-400">LOC: <span class="text-neonblue">SUPERPOSITION_MATRIX</span></span>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-neoncyan animate-ping"></span>
-                    <span class="text-zinc-400">KI_CORE: <span class="text-neoncyan">ACTIVE</span></span>
-                </div>
-                <div class="flex items-center gap-2 border-l border-zinc-800 pl-4">
-                    <span class="text-zinc-400">DECRYPT: <span class="text-neonpink font-bold">100% READY</span></span>
-                </div>
-            </div>
-        </div>
+    
+	
+<!-- Hero / Quantum Core Visualizer -->
+<section class="relative min-h-[60vh] flex flex-col items-center justify-center py-12 overflow-hidden rounded-xl bg-cyberpanel/20 border border-zinc-900">
+    
+    <!-- Interaktives Quanten-Vektorgitter im Hintergrund -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+        <canvas id="quantumCoreCanvas" class="w-full h-full opacity-60"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-b from-cyberbg/10 via-cyberbg/40 to-cyberbg"></div>
     </div>
 
-    <!-- Globaler Audio Flux Deck -->
-    <div class="max-w-2xl mx-auto mt-6 px-4">
-        <div class="bg-cyberpanel/90 border border-zinc-800/80 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-cyberglow">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-neonblue/20 flex items-center justify-center border border-neonblue/40 text-neonblue animate-pulse">
-                    ⚡
-                </div>
-                <div>
-                    <p class="text-xs font-mono text-zinc-500">AUDIO-STREAM_SOURCE</p>
-                    <p class="text-sm font-semibold font-mono text-neoncyan tracking-wider">ARKUSNAT_CYBER_FLUX.MP3</p>
-                </div>
-            </div>
-            <audio controls class="w-full md:w-64 h-8 opacity-85 invert brightness-125 focus:outline-none">
-                <source src="audio/ARKUSNAT_CYBER_FLUX.mp3" type="audio/mpeg">
-                System error: Audio-flux codec unsupported.
-            </audio>
+    <!-- DER EINFACHE TEXT-ANKER: Direkt im Inhaltsfluss platziert -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+        
+        <!-- Das Portal-Tag: Schlicht, sauber, stabil -->
+        <div class="text-xs font-mono text-neoncyan tracking-widest mb-3 uppercase">
+            // OFFIZIELLES VERLAGSPORTAL
+        </div>
+        
+		<!-- Der strahlende Buch-Kontext-Text -->
+        <p class="text-sm md:text-base font-mono text-transparent bg-clip-text bg-gradient-to-r from-neoncyan via-white to-neoncyan max-w-2xl mx-auto mb-3 tracking-wide leading-relaxed filter drop-shadow-[0_0_12px_rgba(0,255,204,0.8)]">
+         Literarische System-Matrix von F.G. Stier. Alle Romane, philosophischen Analysen und interaktiven 3D-Buchvorschauen.
+        </p>
+		
+        <div class="inline-block px-3 py-1 bg-neoncyan/10 border border-neoncyan/30 rounded-full text-xs font-mono text-neoncyan mb-6 tracking-widest animate-pulse">
+            [ ESTABLISHED QUANTUM LINK ]
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-extrabold font-mono tracking-tight mb-6">
+            F.G. STIER <span class="text-transparent bg-clip-text bg-gradient-to-r from-neoncyan to-neonblue neon-pulse">SYSTEM-BÜCHER</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed font-light">
+            "Als technischer Autor nutze ich die <span class="text-neoncyan font-medium">inimitable temptation</span> der Worte als Bildmaschine."
+        </p>
+
+        <p class="text-xs md:text-sm text-slate-400 font-mono max-w-2xl mx-auto mb-12 bg-black/40 backdrop-blur-sm p-3 border border-zinc-800 rounded-lg">
+            Forschungsschnittstelle zur dezentralen Entschlüsselung literarischer Anomalien, quantenmechanischer Grenzzustände und maschineller Dialogsysteme.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="#datenbank" class="px-8 py-3 bg-gradient-to-r from-neoncyan to-neonblue hover:from-neoncyan hover:to-neoncyan text-black font-extrabold rounded-lg transition-all duration-300 shadow-cyberglow transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
+                SEKTOR_DATENBANK
+            </a>
+            <a href="#terminal-section" class="px-8 py-3 bg-transparent border border-neonpink hover:bg-neonpink/10 text-neonpink font-extrabold rounded-lg transition-all duration-300 shadow-cyberpink transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
+                KAUSALITÄTS_CONSOLE
+            </a>
         </div>
     </div>
+</section>	
+	
+	
+       
 
-    <!-- Hero / Quantum Core Visualizer -->
-    <section class="relative min-h-[75vh] flex items-center justify-center pt-8 pb-16 overflow-hidden">
-        <!-- Interaktives Quanten-Vektorgitter im Hintergrund -->
-        <div class="absolute inset-0 z-0">
-            <canvas id="quantumCoreCanvas" class="w-full h-full opacity-60"></canvas>
-            <div class="absolute inset-0 bg-gradient-to-b from-cyberbg/10 via-cyberbg/40 to-cyberbg"></div>
-        </div>
-
-        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-            <div class="inline-block px-3 py-1 bg-neoncyan/10 border border-neoncyan/30 rounded-full text-xs font-mono text-neoncyan mb-6 tracking-widest animate-pulse">
-                [ ESTABLISHED QUANTUM LINK ]
-            </div>
-            
-            <h1 class="text-4xl md:text-6xl font-extrabold font-mono tracking-tight mb-6">
-                F.G. STIER <span class="text-transparent bg-clip-text bg-gradient-to-r from-neoncyan to-neonblue neon-pulse">SYSTEM-MATRIX</span>
-            </h1>
-            
-            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed font-light">
-                "Als technischer Autor nutze ich die <span class="text-neoncyan font-medium">inimitable temptation</span> der Worte als Bildmaschine."
-            </p>
-
-            <p class="text-xs md:text-sm text-slate-400 font-mono max-w-2xl mx-auto mb-12 bg-black/40 backdrop-blur-sm p-3 border border-zinc-800 rounded-lg">
-                Forschungsschnittstelle zur dezentralen Entschlüsselung literarischer Anomalien, quantenmechanischer Grenzzustände und maschineller Dialogsysteme.
-            </p>
-
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#datenbank" class="px-8 py-3 bg-gradient-to-r from-neoncyan to-neonblue hover:from-neoncyan hover:to-neoncyan text-black font-extrabold rounded-lg transition-all duration-300 shadow-cyberglow transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
-                    SEKTOR_DATENBANK
-                </a>
-                <a href="#terminal-section" class="px-8 py-3 bg-transparent border border-neonpink hover:bg-neonpink/10 text-neonpink font-extrabold rounded-lg transition-all duration-300 shadow-cyberpink transform hover:-translate-y-0.5 tracking-wider font-mono text-sm">
-                    KAUSALITÄTS_CONSOLE
-                </a>
-            </div>
-        </div>
-    </section>
+	
 
     <!-- Terminal Sektion -->
     <section id="terminal-section" class="py-12 bg-black/40 border-y border-zinc-900">
@@ -169,7 +151,7 @@
                 </div>
                 
                 <!-- Terminal Body -->
-                <div class="p-6 h-64 overflow-y-auto font-mono text-xs md:text-sm text-slate-300 leading-relaxed flex flex-col gap-2" id="terminalOutput">
+                <div class="p-6 h-64 overflow-y-auto font-mono text-xs md:text-sm text-slate-300 leading-relaxed space-y-2" id="terminalOutput">
                     <p class="text-neoncyan">// INITIALISIERUNG DES DECRYPTION-ENGINES...</p>
                     <p class="text-zinc-500">Lade mathematische Kausal-Algorithmen... OK</p>
                     <p class="text-zinc-500">Binde Quantenverschränkungs-Simulator... OK</p>
@@ -193,6 +175,32 @@
             </div>
         </div>
     </section>
+
+
+<!-- Globaler Audio Flux Deck -->
+<div class="max-w-2xl mx-auto mb-8">
+    <div class="bg-cyberpanel/90 border border-zinc-800/80 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-cyberglow">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-neonblue/20 flex items-center justify-center border border-neonblue/40 text-neonblue animate-pulse">
+                ⚡
+            </div>
+            <div>
+                <p class="text-xs font-mono text-zinc-500">AUDIO-STREAM_SOURCE</p>
+                <p class="text-sm font-semibold font-mono text-neoncyan tracking-wider">ARKUSNAT_CYBER_FLUX.MP3</p>
+            </div>
+        </div>
+        
+        <!-- FIX: Filter-Wrapper schützt das Layout vor den Rendering-Fehlern des Audio-Elements -->
+        <div class="w-full md:w-64 h-8 overflow-hidden rounded-lg opacity-85 invert brightness-125 isolate">
+            <audio controls class="w-full h-full focus:outline-none">
+                <source src="audio/ARKUSNAT_CYBER_FLUX.mp3" type="audio/mpeg">
+                System error: Audio-flux codec unsupported.
+            </audio>
+        </div>
+    </div>
+</div>	
+
+
 
     <!-- Datenbank / Werk-Sektion -->
     <main id="datenbank" class="max-w-7xl mx-auto px-4 py-16">
@@ -762,6 +770,8 @@
 
         terminalInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') executeTerminalCommand();
+			
+			
         });
 
         function triggerHotkey(cmd) {

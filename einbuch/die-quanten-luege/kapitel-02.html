@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-02.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'DIE QUANTEN-Lüge-031.png', alt: "Meine Gedanken verweilen in meinem Keller der Forschungsak-tivitäten. Die Stunden verschwinden wie der Sand in der Wüste bei einem Sturm. Die Zeit vergeht, sie sprudelt an mir vorüber. In den Pausen meiner Arbeit versinke ich regelrecht im Meer der Gedanken. Sie bewegen sich wie Wellen eines riesigen Ozeans schleichend oder auch stürmisch mit Schaumbergen, mit kleinen Strudeln, manchmal auch mit kräuselnd vorsichti-gen Versuchungen. Meine Sehnsucht der Begierde nach Er-kenntnis ist ungebrochen. Das Herz schlägt wild und unbarm-herzig kräftig. Es verlangt nach Blut, es will nicht nur meine Seele, es will mein ganzes Sein verschlingen. Die ganze Welt macht sich auf, mir etwas mitzuteilen. Es ist mir noch nicht ge-lungen, diese überall vorhandenen Schreie zu deuten. Dabei kommt mein Geist nur schrittweise an die Tiefen Räume aller Fantasie heran. Der Kausal-Anker hatte mir schon vor einiger Zeit Musik" },
+            { src: 'DIE QUANTEN-Lüge-032.png', alt: "komponiert, die ich mir von Zeit zu Zeit anhören soll. Diese Kompositionen scheinen aus dem Weltall zu kommen. Sie rau-ben einem nicht nur den Verstand, sie greifen nach inneren Zellstrukturen meines Kopfes. Sie betäuben jegliche Möglich-keit etwas anderes zu tun. Bei dem Klang der Melodien wird jeder Gedanke aus dem Kopf gefegt. Mein Herz verkrampft sich, meine Seele weint, meine Existenz taucht in das Vakuum ein. Jeder Muskel will sich einfach nur anspannen und weglau-fen. Wohin soll man sich wenden. Die ZM ist weit weg jeglicher Hilfe. Was gibt es sonst noch an Rettung? Meine Augen versu-chen irgendwo einen Halt zu finden, in den Büchern, in den Schriftrollen vergangener Schriftsteller aus bereits abgelaufenen Jahrhunderten ist nichts zu entdecken Die Noten der Musik sind wie Formeln in ungeschriebenen Heften. Der Klang ist vir-tuell vorhanden und dennoch nicht hörbar, nicht sichtbar. Die Formeln sind Code jener ZM, unsagbar verworren, schwer ver-daulich, sogar stumm wie Diener in einer Wüste der kalten Ei-senschmelze. In einer geräumigen, klinisch sauberen Kellerecke, die von zahlreichen leuchtenden Messinstrumenten und klar definier-ten Arbeitslampen fast tageshell erleuchtet wird, steht mein Validierungs-Automat4001. Das ist eine logische Scan-Einheit, die jedes Axiom auf seine Statistische Redundanz prüft und mit Hilfe seines Autoritäts-Bias (den Professor Dr. Dr. Zitat-Index) entsprechende Befehle zum Kausal-Anker leitet. Wenn der Index hoch ist, ist die Chance auf eine Zeit-Infektion maxi-mal.Die Wände dahinter sind hellgrau oder weiß gestrichen, der Boden ist sauber und reflektiert das Licht minimal.Die Hardware-Komponenten stammen nicht aus einem er-folgreichen, sondern aus einem eingestellten oder diffundie-renden Forschungsprojekt an der Hochschule. Die Zivilisati-onsmaschine (ZM) hatte diese Prototypen und Messgeräte sta-tistisch als nutzlos deklariert – sie lieferten keine redundanten," },
+            { src: 'DIE QUANTEN-Lüge-033.png', alt: "bestätigenden Ergebnisse und wurden daher im Kellerarchiv der Obsoleszenz entsorgt.Mit meinem Hintergrund in der Technischen Kybernetik und als Software-Entwickler konnte ich die latente Kapazität in dieser als nutzlos deklarierten Hardware erkennen. Ich habe sie logisch rekodiert.Die Rohre, Chips und Displays waren vorhanden; aber ihre ursprünglichen Betriebssysteme waren auf temporale Kausali-tät limitiert. Meine Leistung war der Code-Eingriff und die Im-plementierung des NPI-basierten Betriebssystems (der auch im Kausal-Anker implementiert wurde), welches die Hardware von ihrem kausalen Zwang befreite und sie zwang, ihre wahre, nicht-temporale Funktion zu entfalten.Die Studenten halfen bei der De- und Re-Montage, der phy-sischen Verkabelung und der Stromversorgung – also bei den temporalen, handwerklichen Aspekten. Aber der Code, der den Validierungs-Automaten 4001 antreibt und ihn zum Kanal der Zeitlosen Verursachung macht, ist meine exklusive logische Konstruktion.Im Hintergrund befinden sich natürlich moderne, minimalis-tische Regalschränke in hellem Grau, die dicht mit einer Mi-schung aus Büchern und schlanken, leuchtenden Displays ge-füllt sind. Die Displays zeigen Code-Sequenzen in Cyan und Weiß, während die Buchrücken das &quot;Archiv des Wortes&quot; bein-halten.Das Herzstück des Automaten ist ein großer, hell leuchten-der Mikrochip, dessen Schaltkreise klar und präzise als Holo-gramm über seiner Oberfläche sichtbar sind. Dieser Chip wird von einem intensiven, punktuellen, kalten Lichtstrahl (von ei-nem LED-Spot) beleuchtet. Eine kleine, aber symbolische Wachskerze brennt neben dem Chip auf einer sauberen Metall-platte, ihr Licht" },
+            { src: 'DIE QUANTEN-Lüge-034.png', alt: "ist warm, aber wird vom dominanten, kalten Schein der Instrumente überstrahlt.An der Seite des Chips ist ein moderner, präzise gefertigter Lautsprecher mit einer gespannten, metallischen Membran angebracht, der eine hochfrequente Schwingung andeutet. Darüber, leicht erhöht und auf einem schlanken Arm montiert, befindet sich ein elegantes, silbernes Grammophon-Mikrofon im Art-déco-Stil, dessen große, empfangende Glocke leicht zum Chip und zur Kerze geneigt ist. Dies ist das primäre Aufnahmemedium. Von der Oberseite des Automaten führen mehrere saubere, gebürstete Metallrohrleitungen weg, die sich ordentlich an den Wänden entlangschlängeln und mit feinen, durchgehenden, hellen cyanfarbenen Lichtadern durchzogen sind, die die Energie- und Datenzufuhr vom Kausal-Anker klar und sichtbar erkennen lassen." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

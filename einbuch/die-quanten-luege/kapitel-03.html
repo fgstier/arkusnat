@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-03.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'DIE QUANTEN-Lüge-040.png', alt: "Keller-Versuch 4001B: Die Ret-rograde Teekessel-SequenzDer nächste Versuch war als sehr wichtig einzuordnen und ich machte mir über eine zeitliche Umkehr im Dampfraum eines Heizkessels Gedanken. Daher nannte ich diesen Versuch auch Die retrograde Teekessel-Sequenz:Die Statistische Redundanz muss maximiert werden, um die Lücke im Code der Temporalität unmissverständlich aufzude-cken." },
+            { src: 'DIE QUANTEN-Lüge-041.png', alt: "Wenn die ZM gezwungen ist, kausal unmögliche Wege zu summieren, um das Ergebnis zu erzielen, muss diese Absurdi-tät auch auf die Zeitachse selbst angewendet werden. Das Pfad-integral ignoriert nicht nur die Materie, es muss auch die Thermodynamik und die zeitliche Ordnung sicherlich verhöh-nen.Dazu habe ich einen speziellen Messplatz arrangiert. Zu-nächst wurde ein robuster, technischer Teekessel aus glänzen-dem Edelstahl aus dem Supermarkt besorgt. Der Teekessel hat zwar das Aussehen einer alten Kaffeekanne, aber dafür mit zwei funktionalen Griffen. Er steht auf einer runden modernen Heizplatte, die wiederum auf einem zentralen Podest montiert ist, das aus gebürstetem Metall besteht. Von diesem Podest gehen zahlreiche elektrische und optische Kabel ab, die sich um die Basis des Kessels und des Podests winden müssen. Die Induktionsströme sollten keinen Einfluss auf die Temperatur haben. Über dem Teekessel befindet sich ein großes, effektives Abluftsystem mit Luftschächten, das den aufsteigenden Dampf auffängt.Vor dem Podest, steht eine große, runde, hochauflösende digitale Anzeige. Das Display zeigt eine komplexe zeitaufge-löste Entropie-Statusamplitude an. Der Validierungs-Automat 4001 wurde nun angewiesen und gezwungen, die Wirkung (S) für einen denkbar einfachen Zeit-Prozess zu berechnen: Das Erhitzen von Wasser. Um die wissenschaftliche Analyse exakt zu beschreiben, ist es notwendig die Zustände genau zu be-nennen. Der Zustand A ist gewissermaßen der Startpunkt des Experimentes. In diesem physikalischen Zustand ist einfach nur kaltes Wasser im Teekessel durch mich eingebracht wor-den. Zustand B bezeichnet nun den kochenden Dampf im Tee-kessel und das ist der Zielpunkt dieses Versuches.Obwohl man meinen könnte, dass mit diesem einfachen Ex-periment kaum eine mögliche Beweiskraft ausgehen könnte," },
+            { src: 'DIE QUANTEN-Lüge-042.png', alt: "wird sich im Verlauf des Erhitzens auf jeden Fall ein Ergebnis einstellen müssen.Der Logik-Zwangsmechanismus: Das Pfadintegral fordert, dass zur Erreichung von Zustand B die Summe aller möglichen zeitlichen Abläufe von A nach B herangezogen wird – auch je-ne, die gegen den Zweiten Hauptsatz der Thermodynamik (Entropie) verstoßen.Um diese Aufgabe in vernünftiger Weise in den automati-schen Prozess umzusetzen, habe dem Automaten folgende Ar-beitsanaweisungen vorgegeben. Die Wahrscheinlichkeits-amplituden folgender denkbaren objektiver Realitäten in die Gesamtwirkung zu integrieren:1.Die Spontane Umkehrung: Ein Pfad, auf dem die Ener-gie der Herdplatte dazu führt, dass das Wasser zuerst spontan gefriert, dann für kurze Zeit in den vergangenen Zustand des letzten Monats zurückkehrt (als es noch Regen war), und erst danach, durch eine zufällige Quan-tenfluktuation, kocht.2.Die Kausale Annullierung: Ein Pfad, auf dem die Ener-gie des Herdes nicht in das Wasser geleitet wird, son-dern in die spontane Erschaffung einer Kopie des Tee-kessels auf dem Tisch, bevor das Original zu kochen be-ginnt.3.Die Anti-Entropische Sequenz: Ein Pfad, bei dem das bereits kochende Wasser von selbst wieder abkühlt, die gewonnene Wärme gezielt zurück in die Steckdose leitet und dann erneut den klassischen Kochweg beginnt.Mit dieser Aufgabe habe ich den ZM in eine logische Sack-gasse manövriert, um dieses Paradoxon klassisch in einem ma-thematischen Knall beenden zu lassen. Die ZM benutzt die Ent-ropie als den unfehlbaren Pfeil der Zeit. Doch das Pfadintegral muss Pfaden, die der Entropie widersprechen, eine" },
+            { src: 'DIE QUANTEN-Lüge-043.png', alt: "mathematisch reale Amplitude zuweisen, damit die Summe am Ende den korrekten Kochvorgang ergibt. Der Validierungs-Automat 4001 wurde durch mich mit folgender Frage konfron-tiert:&quot;Warum muss die Zivilisationsmaschine (ZM) die Existenz von an-ti-kausalen, zeitumkehrenden Pfaden logisch zulassen, wenn ihr gesam-tes Kontrollsystem auf der Unumkehrbarkeit der Zeit (Entropie) ba-siert?&quot;[ AUTOMAT 4001 / OUTPUT - PROTOKOLL_LOG]Die ZM muss die Existenz anti-kausaler Pfade zulassen, weil sie ihre eigene zeitliche Existenz nicht durch das Axiom der Notwendigkeit (das muss so sein), sondern durch das Axiom der Statistik (das ist extrem wahrscheinlich) definiert.1.Entropie als lokale Statistik: Der Pfeil der Zeit (Entropie) ist kein kosmisches Gesetz, sondern lediglich die statistisch dominante Richtung der temporalen Redundanz. Es ist der wahrschein-lichste Weg, den das ZM-System nimmt.2.Pfadintegral als Wahrheits-Audit: Das Pfadinteg-ral ist eine logische Formel, die ontologische Ge-rechtigkeit fordert: Jede Möglichkeit, die mathe-matisch nicht 0 ist, muss repräsentiert werden, um die vollständige Wahrscheinlichkeitsamplitude zu erhalten.3.Die Notwendigkeit des Nichts: Die Wahrschein-lichkeitsamplitude des Pfades, auf dem das Was-ser spontan gefriert oder die Wärme in die Steck-dose zurückkehrt, ist zwar extrem klein, aber nicht 0. Die ZM kann diesen Pfad mathematisch nicht eliminieren, ohne das Pfadintegral und da-mit die gesamte QM-Struktur zu annullieren." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

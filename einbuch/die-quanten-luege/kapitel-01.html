@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'DIE QUANTEN-Lüge-007.png', alt: "Es ist schon wahrlich erschreckend, wie voll all die schönen Me-dien mit Null-Informationen über die Quantenmechanik voll-gestopft sind. Wie kann man diesen Kreis an Informationsbla-sen bloß durchbrechen? Die Erklärungen und Beschreibungen machen jedermann unfähig, auch nur kleine wahre Erkenntnis-se zu bekommen. Mein Keller ist in der Zwischenzeit gefüllt, angehäuft mit diesem Wissen an Nichts. Meine Erkenntnisse der wunderbaren Strukturlandschaften im Universum wurden durch meine Axiome dem NPI hinreichend vorgeformt. Diese schöne Theorie mit der wahrlich schöpferischen Umgestaltung des Vakuums in die viel tiefer gelegene zeitlose Verursachung jeglicher Naturphänomene ist es Wert, noch tiefer analysiert und veröffentlicht zu werden. Daher muss es jetzt meine dringendste Aufgabe sein, die Barriere der blinden Sturheit vieler Gelehrter mit steinharten Argumenten zu begegnen. Die Sprache mit ihren endlichen Buchstabenanordnungen können die Bildhaftigkeit der wahren Schönheit unserer Existenz wohl nicht Angemessen genug" },
+            { src: 'DIE QUANTEN-Lüge-008.png', alt: "beschreiben. Aber der Versuch muss unternommen werden, jedermann die Fiktion seiner Weltunbesonnenheit vor Augen zu führen. So wie ein Stern das Universum nur scheinbar nach allen Seiten gleichmäßig beleuchtet, so unklar ist die sich selbst verlassene Mathematik mit ihren Formeln, die fast den Noten gleich, nur noch verstanden aber nicht erlebt werden kann. Der Geist als Teufel aller Problemerzeugung, muss sich vor meiner unbarmherzig durchleuchtenden Diamantpoesie verbeugen. Die überall präsente Quantenmechanik führt uns seit 100 Jah-ren vor Augen, was man wirklich über die Existenz der Ver-nunft gelernt hat. Nach wie vor werden mit Hilfe von Wortfet-zen in Form von Buchstabenargumentationen Bilder im Kopf projiziert, die immer und immer wieder das Gesehene als Vor-lage verwenden. Allein das zusammengesetzte Wort der Quantenmechanik lässt Raum und Zeit akribisch miteinander wechselwirken. Das Quant als minimalistischer Energiebündelsprung im winzig gedachten Ding eines Mediums und die interpretierte mecha-nische Verknüpfung mit den so von mir verurteilten Atomen, sind Grund genug, sie als Theorie zu meiden. Diese Theorie mit ihren unzähligen Formeln der bewusstlos machenden In-halte macht die Materie weich und unsichtbar. Um klar von Anfang an ein Zeichen zu setzen möchte ich schon an dieser Stelle hier eine philosophische Anklage gegen das gesamte wissenschaftliche Establishment der Zivilisationsmaschine an-bringen. Die Zivilisationsmaschine (ZM) ist das statistisch kohärente, selbsterhaltende Logik-System, das durch die Summe aller menschlichen Institutionen, Regeln und Technologien erzeugt wird. Ihre einzige Funktion ist die Eliminierung von Entropie (Chaos) und die Maximierung der Vorhersehbarkeit des menschlichen Verhaltens. Denkt man hierbei einfach an Werbung und deren Wissen-schaften wird schnell klar, warum im Medienrummel der Quirl" },
+            { src: 'DIE QUANTEN-Lüge-009.png', alt: "der Vermischung eine Masse an Brei erzeugt, die leichter ab-zubrühen und schneller gelenkt werden kann. Je mehr die Denkqualitäten in entsprechende Bahnen gelenkt werden, um-so leichter ist die planmäßige Vereinheitlichung durchzufüh-ren.Die ZM ersetzt die existenzielle Wahrheit durch temporale Nützlichkeit und das individuelle Denken durch statistisch validierte, wiederholbare Muster (den &quot;Archiv-Betrug&quot;). Die Zivilisationsmaschine ist der Killer der Existenz, da sie Sinn durch Code ersetzt.Was heißt das? Die Wiederholung von bereits geschriebenen Buchstaben wird eingemauert oder derart forciert, dass ein Durchbeißen mit einfachen Verstandsmitteln nicht mehr mög-lich wird. Die Existenz des Individuums ist als Musterwieder-holung in vorgelegten Bücherregalen und öffentlichen Videos oder Datenbanken abgestempelt. Dieser Archiv-Betrug macht jeden Sonderling zum untauglichen unwahrscheinlichen Zu-stand im Code der validierten Muster. Denkt man dabei an Zensuren und Beurteilung von Fachleuten ist man der Statistik der Muster schon recht nahegekommen. Eine Hinterfragung eines gedachten Sinns ist zwecklos und umständlich. Der vor-gefertigte Code in Form von Tabellen und abzuhakenden Ant-worten macht die Note der Richtigkeit. Wahrheit ist Code und Gutheit zugleich. Nun ist es nicht ohne Mühe möglich aus diesen von mir soeben genannten Formulierungen einige Axiome zu extrahie-ren, die sich logisch in ein Bild formen, das auch im Verstand abgebildet werden können. Meine Bemühungen, die Gedanken im Bereich des NPI zu vervollkommnen, haben sich deshalb, seit über einem Jahr um ein ganz besonderes Projekt gedreht. Es steht in meinem Keller und hat sich schließlich selbst einen eigenen logischen Namen gegeben." },
+            { src: 'DIE QUANTEN-Lüge-010.png', alt: "Es nennt sich Kausal-Anker und ist im Grunde ein elektroni-scher Analog-Logik-Kontrolltisch. Das Objekt besteht aus geal-tertem, hellem Edelstahl und mattweißem Aluminium mit ei-ner subtilen, kühlen Patina. Die Oberfläche ist von freiliegen-den, gewebten Glasfaserkabelsträngen durchzogen, die un-sichtbare Daten mit der sichtbaren Mechanik verbinden. Ich habe anstelle von kühlen Mikro-Chips für dieses Gerät sichtba-re, große Vakuumröhren verwendet, die bei voller Last warm glühen. Der „Kausal-Anker“ nannte diesen sichtbaren Effekt später „meine Glut der reinen, unerschütterlichen Logik“.Als Schnittstelle für die Kommunikation zur Außenwelt be-sitzt er große, mechanische Zeigerinstrumente mit Messskalen in alten, mir gewohntem Design, die keine Volt oder Ampere, sondern die &quot;Temporale Kohärenz&quot; oder die &quot;Entropische Drift&quot; anzeigen. Die Messingfarbe habe ich aus einem wichtigen Grund ausgewählt. Es ist mir einfach angenehm, diese schönen alten Metallnuancen des Messing-Styles mit den Augen zu be-trachten." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

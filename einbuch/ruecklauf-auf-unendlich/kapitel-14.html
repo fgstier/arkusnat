@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-14.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Rücklauf auf unendlich-168.png', alt: "Am AbgrundMein Albtraum sitzt bereits im Kaffeeraum und ist mit Schreiben beschäftigt. Er hat stets ein Notizbuch bei sich. Ein Laptop oder Handy sind bei ihm ja mega-out. Mein Handy hatte ich ausgeschal-tet und liegt unnütz im Koffer herum. K hatte mich über die Gefah-ren der Geräte bereits intensiv aufgeklärt. Hastig schlürft er seinen Kaffee herunter und ist wohl scheinbar ständig mit Selbstgesprä-chen beschäftigt. Jedenfalls spricht er womöglich mit unsichtbaren Gegenständen. „Hallo K, ich bin wieder da. Das Meer ist überaus sehr beruhigend und angenehm zu spüren. Das muss unbedingt bald wiederholt werden,“ begrüßte ich ihn. K schaute unvermittelt hoch und schmunzelte mir zu. Seine Stirn glättete sich sofort und er sah auch irgendwie entspannter aus. Komisch, dass er sich so ab-lenken ließ. Im Grunde kann niemand ihm das Wasser reichen. Die Wunder," },
+            { src: 'Rücklauf auf unendlich-169.png', alt: "welche er mir gezeigt hat, sind so umwerfend unglaublich, dass ich schon mit einem Fuß in der Psychiatrie, wenn nicht sogar zwei Fü-ße, stehen könnte. Aber mein Gemüt hat mich zum Glück immer wieder gebändigt. Noch ist meine Aufnahmebereitschaft ungebro-chen für seine Spielchen. Er war unzweideutig sehr erfreut und fing gleich wieder an zu sprechen, als wenn er einen Wasserfall von seinen Sperrbalken aus Holzbrettern befreit hätte.„Ah, hallo Alrik. Endlich bist du wieder zurück. Da ist noch eine ganz wichtige Sache, die ich dir ans Herz legen muss, damit du endgültig überzeugt wirst, dass die Dinge gefährlicher sind, als wie du bisher dachtest. Es ist nicht nur gefährlich über die Straße zu gehen, weil man dort überfahren werden könnte. Auch ist das Problem der Dauergefahr durch Krankheit und anderen Unfällen zu Schaden zu kommen nicht so kritisch, wie die Gefahr, die ich dir nun zeigen werde. Diese Gefahr ist größer, als ein Meteoritenein-schlag auf der Erde. Warum? Weil die Gefahr von Menschen ge-macht wird und durch viel Geld ständig forciert wird. Es entsteht eine neue Versklavung. Eine nicht nur durch Sprachbarrieren ver-ursachte Schranke jeglichen Fortschrittes. Das Bewusstsein im Y-Quant wird noch brutaler und entschiedener verschleiert werden, als es jetzt schon versucht wird.“ Er sieht schon wieder entsetzlich angespannt aus. Sein Gesicht ist verzerrt und ängstlich. Eben war er noch sichtlich leichten Her-zens. Nun ist er das erste Mal sogar schauderhaft emotional ange-tan. Er wandelt sich von einem Moment zum anderen in eine ande-re Person. Ein Schauspieler könnte es nicht viel besser machen. Wer weiß, was in seinem Kopf so ständig herumgeistert. Bestimmt hat er echt große Schwierigkeiten seine, sich ständig wechselnden" },
+            { src: 'Rücklauf auf unendlich-1610.png', alt: "Gedankengänge, frei zu schaufeln. Er fährt fort: „Bisher waren wir nur an der Oberfläche der Entdeckungen vom Dr. Plwessiow an-gekommen. Er hat mir noch ein anderes, selbst mir unbegreifliches Stück, heimlich zukommen lassen. Es war über viele Umwege ver-schiedener Versandmöglichkeiten in meinen Keller abgestellt worden. Es ist zwar lediglich ein kleiner Gegenstand, aber dafür verpackt wie eine Flasche Nitroglyzerin. Ich habe über zwei Stun-den gebraucht, um die Kiste endlich auszupacken. Zunächst war es mir unbegreiflich, was mir da in die Hände gelegt wurde. Aber nachdem ich den Anweisungen des geehrten Dr. gefolgt war, läute-ten bei mir die Glocken sozusagen. Ich wusste nicht, ob ich staunen oder vor Schreck erstarren sollte. Mein Kopf wurde leer gefegt durch die Erkenntnis, dass die Hölle bereits auf Erden war. Das sie eh schon ständig überall lauert durch die Menschheit selbst, ist mir natürlich immer schon bewusst gewesen. Aber diese Erscheinung war schließlich so endgültig, dazu überzeugend das Schlimmste, was die biology cyberneticists für ihre schleimigen Zwecke auf die Erde gebracht haben. Die ganze Menschheit wird hier zum Ab-grund des Universums getrieben. Milliarden von Käufer werden in die Sklaverei der Dummheit und Sucht befördert, ohne an ihr Be-wusstsein auch nur im Geringsten zu zweifeln. Im Y-Quant ist ein freies Bewusstsein versteckt, welches bisher noch nicht entdeckt worden ist. Hier, mit dem, was ich ihnen zeigen werde, wird gleich ein teuflisches, krankes und mit Qualen vollgestopftes Wesen er-zeugt. Es kann kein Huhn sein, kein Schwein, kein Mensch, keine Bakterie, kein Tier überhaupt. Es ist tot, aber dennoch lebt es. Es ist nicht am Leben, aber dennoch tot. Es leidet Qualen, weil es sich nicht normal ausdrücken kann. Es kann nicht sterben, weil es nicht lebt. Aber leben kann es nicht, weil es schon tot ist.“" },
+            { src: 'Rücklauf auf unendlich-1611.png', alt: "K legt mir eine Zigarettenschachtel auf den Tisch und ein kleines Stück Holz. Das Holz sieht aus wie ein Zahnstocher mit abgebro-chener Spitze. K besorgt uns erst mal Kaffee. Er scheint auch nichts anderes zu trinken und zu essen am Tag. Allein Kaffee ist für sein Werken notwendig.Er berichtet weiter: „Ich glaube fest, der liebe Dr. ist nicht ver-schwunden, weil er unglaubliche Dinge erfunden hat und am Y-Quant gearbeitet hat. Ihn hätte wahrscheinlich sowieso niemand ernstlich für Normal gehalten, wenn er versucht hätte, an die Öf-fentlichkeit zu gehen. Spott nebst Lachen wären sein Lohn gewe-sen. Nein, dieses Ding hier, ist wohl der Grund seines Verschwin-dens. Dabei bin ich mir nicht sicher, ob die Aktivierung dieses We-sens hier mitgehört werden kann. Es sendet keine Strahlung oder Ähnliches aus. Das habe ich bereits vor einiger Zeit ausprobiert und gemessen. Es benötigt etwas Energie, die aus der Tischplatte absorbiert wird. Der Tisch wird nachher einige Gramm leichter sein, als vorher. Es verwendet ein so genanntes und bewährtes light-harvesting-complex Verfahren an. 36Mit Hilfe einer Ansammlung von Membranproteinen, wie auch in den fotosynthetischen Membranen bei Organismen, wird hierbei" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-04.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Rücklauf auf unendlich-050.png', alt: "Das UndingBevor K sich zu mir setzte, löschte er die ominöse Kerze und stellte sie weg. Auch den schwebenden Ball legte er in eine Ecke zurück. „Damit sie nicht immer hinschauen und durcheinander gewürfelt sind im Kopf. Es ist besser, ihr Kopf ist leer – ich meine klar ausge-richtet auf meine Erklärungen.“„Jaaaa,“ ließ er sich lang vernehmen. „Die Dinge sind für sie, so wie sie es verstehen, alles andere als einfach zu vergessen.“ K setz-te sich, während er seinen Kaffee schlürfte. Er nahm kein Zucker und keine Milch. Er schaute in seine Hände und begann zu erzäh-len.“ 1972 gab es einen Russen mit Namen Andrej Viktor Cals-dornow. Er forschte an einem Projekt der Militärs in Russland am Ural. Der Ort hieß damals Osrowjanarsk. Seine Aufgabe war die Generierung eines Bewusstseins in eine Mensch – Maschine, mit der die Staaten damals infiltriert werden sollten. Der Mechanismus für diese Spionage war schon zu damaliger Zeit im Grunde eine Sensation. Ein noch zu" },
+            { src: 'Rücklauf auf unendlich-051.png', alt: "bestimmender Mensch war dafür auserkoren. Er sollte nichts da-von wissen. Nur, dass er ein neues Bewusstsein implementiert be-kommen sollte, was so ähnlich war wie bei einem Schizophrenie-Kranken. Das versteckte Bewusstsein sollte unbewusst für den Träger arbeiten und Informationen heimlich über versteckte Radi-okanäle verschlüsselt übertragen, ohne Kenntnis des Trägers wohl gemerkt. Ein verstecktes Bewusstsein in einem Menschen mit über-lagertem Bewusstsein sozusagen. Das ist faszinierend, nicht wahr?“ Er nickte mir fragend zu, obendrein fuhr er fort:„Man operierte hier mit einigen Unbekannten und nicht zu ver-stehenden Abläufen, die zwar bekannt waren, aber noch nicht er-forscht worden sind. So war es bekannt, dass es eine Frau gab, ich glaube sie hieß Domina Schrenowskaja, die mit der Haut lesen konnte. Ja, sie hat mit Hilfe ihrer Finger Zeitungen vorgelesen, ein-schließlich der Ziffernverweise ganz unten. Es konnte nicht er-forscht werden, wie sie es gemacht hat. In den Fingern waren keine besonderen Sensoren gefunden worden. Dann existierte ein gewisser Sergejow Androwitch, der war in einer Irrenanstalt untergebracht. Zeit seines Lebens gab er unkon-trollierbare Ausdrücke von sich wie zum Beispiel: androidzirku-lim metzda phasikum frindola kapitaljow. Man hat diese zusam-menhangslosen Ausrufe viele Jahre niedergeschrieben. Nach 20 Jahren hat ein Professor N. J. Vistationula herausgefunden, dass die Texte, nach einem entschlüsselten Muster zufolge, den gesam-ten Inhalt der noch folgenden 10 Jahre Raketenforschung beinhalte-te, beileibe geordnet nach Doktoranden-Arbeiten und Jahrgängen. Unfassbar und Unbegreiflich. Was war im Gehirn von diesem Mann abgespeichert und für alle Welt nicht erkennbar und lesbar gewesen!“ K gab mir" },
+            { src: 'Rücklauf auf unendlich-052.png', alt: "ein Buch und ich blätterte kurz darin herum. Was konnte man da so lesen? androidzirkulim, metzda, phasikum, frindola, kapitaljow, zyklos-tat, neuromand, vipro-logik, delta-frequenz, arkusnat, quanten-skalar, dresden-sektor, teuton-zelle, rathaus-operator, spektral-code, zirkular-moment, habitat-nutzer, synchron-exekutive, vibro-matrix, dezibel-limit, kohärenz-kurator, stabiliäts-inspektorat, primär-extraktor, basis-bestand, system-frequenz, evolutions-takt, konstruktions-algorithmus, kognitiv-rauschen, material-defekt, compiler-fluss, digital-stille, elbe-strom-takt, neostadt-frequenz, sektor-chronik, fraktions-cluster, system-kritik, kapitalverursacher, ur-depot, zentral-habitat, schwingungs-delta, motor-vibration, iso-lations-vektor, prüfungs-anwalt, rechtssicher-filter, weichspüler-nullpunkt, dekonstruktions-befehl, zeitlos-verursachung, realitäts-artefakt, schall-dämmung, verschleiß-zyklus, schwingungs-dämpfer, wolf-aggregat, watt-moment, motor-frequenz, lüftungs-raster, dachboden-resonanz, hauptbeweisstück-a, langzeit-speicher, quantimedus-impuls, dusseline-logik, rattenlügen-bit, segel-surrealismus, nord-vektor, oben-ausrichtung, fiktion-anker, wissen-schafts-aberglaube, omniszenz-fehler, zensur-vektor, diktator-modus, zivilisations-maschine, absurditäts-schleife, identitäts-scan, kybernetik-puls, software-revision, materie-kompilation, de-fect-code, körper-maschine, kausalitäts-exekutive, imaginations-kern, nutrient-solution, traum-simulation, binary-grid, zeitlos-vektor, philosoph-extrakt, literatur-dekonstruktion, nichts-parameter, existenz-bit, code-fragment, inimitable-temptation, wort-bildmaschine, bild-extraktor, video-frequenz, musik-wellenform, lyria-takt, veo-strom, nano-banana-impuls, stier-signatur, arkusnat-final…" },
+            { src: 'Rücklauf auf unendlich-053.png', alt: "Ich schaute auf und K berichtete weiter: „Am wichtigsten scheint mir aber die Arbeit von Dr. Plwessiow gewesen zu sein. Er be-hauptete, dass es unmöglich sein kann, dass es so was wie Atome gibt, die immer und immer wieder gleich aufgebaut sein sollten. Elementarteilchen sah er als im Gehirn geträumte und ersonnene Erscheinungen des Bewusstseins an. Er bewies, dass jedes Atom ein Eigenleben hat. Zusätzlich konnten verborgene Eigenschaften des Bewusstseins nachgewiesen werden, die so unglaublich waren, dass man ihn damals unverzüglich in die Nervenanstalt nach Wormansk einlieferte.Die Y-Quanten sind der Schlüssel für diese neue Bewusstseins-ebene. Dann war nie wieder etwas von ihm zu lesen. Nur die Ori-ginalarbeit seiner Doktorarbeit habe ich! Das muss unter uns blei-ben und ist auch für ihr derzeitiges Leben mittlerweile notwendig geworden. Sollte jemals etwas von dem, was ich ihnen hier zeigen als auch beschreiben werde nach außen dringen, wird das ihr jetzi-ges Leben beenden und wir landen beide in der Irrenanstalt. Dort sind viele Zeitgenossen, die als große Wissenschaftler geehrt wer-den sollten und es tut mir unendlich leid, dass sie dort ihr Leben schmachten müssen." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

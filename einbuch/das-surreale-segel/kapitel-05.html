@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-05.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Das surreale Segel_148x210cm-067.jpg', alt: "Der Alptraumein Körper war sichtlich und spürbar ausgelaugt durch die Es-kapaden der vergangenen Nacht. Schlaf musste auf jeden Fall nachgeholt werden. Meine Hoffnungen lagen in der neuen Ka-bine. An diesem Abend war es notwendig zeitig ins Bett zuge-hen. Vielleicht hätte mich auch nicht mal das krächzende Ge-räusch des Seitenruders aus dem Schlaf gerissen. Kaum im Bett angekommen übermannte mich sofort der Schlaf. Meine Träu-me spukten wieder sehr intensiv zwischen meinen Hirnwin-dungen umher. Ich sah mich selbst wieder mit der Straßenbahn fahren. Unterhalb eines Fensters der Kabine lag ein Stapel mit Fahrscheinen herum. Er - meine Person - ging dort hin und be-diente sich ausreichend. Allerdings passten diese Scheine be-stimmt niemals zu den schmalen Öffnungen im Entwertungs-automaten. Der Schlitz war viel zu klein für die Papierscheine." },
+            { src: 'Das surreale Segel_148x210cm-068.jpg', alt: "Dann kam ein riesiges Monster am Fenster vorbei und schrie lautlos wie ein stummer Fisch. Da konnte man nichts hören, nur zu sehen war ein großes Maul. Das Monster schrie wie am Spieß und riss die Augen weit auf. Mein Herz schien den Herz-schlag augenblicklich zu verdoppeln. Mir war beängstigend heiß im Gesicht. Die Person schien das Untier zu streicheln. Hatte die Gestalt dort mit diesem brüllenden Monstrum etwa Mitleid? Erkannte man hier das mysteriöse Ruder? Es war zu beobachten, wie die Menschen aus der Kabine verschwanden, sie saßen zunächst im Maul dieser Kreatur. Sie schienen nichts zu bemerken. Ich, als Träumer, wollte ihnen helfen, konnte mich selbst aber nur knapp bewegen. Meine Stimme war wie angewurzelt schwer, träge, auf keinen Fall im Stande einen Ton zu erzeugen. Die Angst stieg mir über meine Brust kommend bis zum Hals. Im nächsten Augenblick war die dortige Person an der Reihe im gefräßigen Maul zu verschwinden. Er schien mit dem Wesen zu verhandeln, ob er nicht als Feder auf dem Sessel des Leseraums an Bord bleiben könne. Die Antwort war ein lauter Schrei. Soweit man diese Bemerkung verstehen durf-te, konnte er nur als Abflussrohr oder Bratpfanne sein Bewusst-sein behalten. Maximal möglich wäre eine Treppenstufe im Aufgang des Schiffes oder im Inneren von einer dieser grünen Linsen am Geländer. Man konnte nun auch das ständige Ver-schwinden der Seelen der Menschen am Ufer beobachten. Sie vermischten sich mit den Wellen der Wasseroberfläche und den Sandkörnern am steinigen Ufer. Sie manifestierten sich zu großen eckigen Steinen. Von denen lagen sehr viele unförmig am Ufer entlang. Die Ideen, dieser geformten Bewusstseins, verschwanden mit dem Lauf der Wellen, lösten sich im Wasser blitzschnell auf, bildeten kurze Augenblicke eines Strudels, verschwanden sodann auf nimmer Wiedersehen in der Tiefe. Endlos wiederkehrend wiederholte sich dieser Vorgang. Un-endliche Wogen von Steinen häuften" },
+            { src: 'Das surreale Segel_148x210cm-069.jpg', alt: "sich an der Wasserkante. Die Sinne vernebelten sich sichtbar dunkler werdend. Ein Schleier an Gedankenlosigkeit weht über den Schaumkronen der Strudel herbei. Die Klimaanlage meiner Kajüte gab immer mehr blubbernde und glucksende Geräusche von sich. Stimmen von unendlich vielen Mündern brausten durch meinen Verstand. Alle schrien etwas, was nicht zu verstehen war. Der Heckmotor klang wie ein hungriger Magen. Das Wasser zischte derweil vor sich hin. Das Glucksen deutete mir an, ruhig zu sein. Ein Mädchen schaute mich an und hielt ihren erhobenen Zeigefinger an ihre ungeschminkten Lippen. Ihre Augen waren tiefschwarz, so schwarz wie wohl dunkle Perlen sein können. Mir ist dennoch noch nie eine solche Dunkelheit begegnet. Unvermittelt flog mein Geist über eine Stadt. Ringsherum fuhren Autos ohne Räder, mit Köpfen als Scheinwerfer. Sie sa-hen mich alle an. Meine Beine standen im Wasser, meine Hän-de" },
+            { src: 'Das surreale Segel_148x210cm-0610.jpg', alt: "trugen das Mädchen, das so leicht wie eine Feder war. Was soll das hier? Das Wasser spritzte bis zum Oberkörper. Dort hinter-ließen die Schaumkronen Unmengen von Backsteinen. Die An-zahl der Steine wuchs zusehends. Das Gewicht würde mich bald unweigerlich niederdrücken. Aus den Steinen öffneten sich Reißzahn bestückte Mäuler. Sie leckten mich, sie bissen mich. Mein Bewusstsein erwachte endlich wieder, aber nicht wirklich. Man erwacht aus einem Traum und befindet sich dennoch im selbigen Angstwahn. Noch schlimmer kann der Traum nimmermehr werden? Doch! Die Illusion geht noch krasser, noch bedrohlicher, noch abscheulicher. Das Blut wird gleich kochen vor panischer Todesfurcht. Meine Kajüte hatte plötzlich ein großes schaufensterartiges Bullauge. Knieend konnte man auf dem Sofa aus hinaus schau-en. Da die Dunkelheit keinen Moment verschwand, sah man nur das Wasser vor dem Fenster derweil auch schemenhaft das Ufer. Die Bäume schienen sich zu unterhalten. Die Zweige be-rührten sich, sie schienen sich aneinander fest zu zurren. Sie hatten keinen Mund, keine Füße, keinen Kopf, nur scheinbar bestand doch eine unsichtbare Brücke, die sie miteinander ver-band. Die Wellen schlugen weißen Schaum am Schiff empor. Die Tropfen spritzten bis zum Fenster hinauf. Nichts war re-produzierbar. Alles gehorchte dem Prinzip der Zufälligkeit. Es gab keine Wiederholung, die Bewegungen ordneten sich ein-malig unwiederbringlich vergessend. Meine Gedanken schie-nen sich erneut aufzulösen in den Fängen" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

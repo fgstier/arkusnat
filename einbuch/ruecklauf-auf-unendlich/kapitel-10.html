@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-10.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Rücklauf auf unendlich-120.png', alt: "Viele Hühner und das Schwein RosaliMein Reiseführer entpuppte sich überraschend als Hühnerkenner. „Wie Hühner sich vermehren kennen sie bestimmt. Der Hahn kräht und macht sich stark für seine Hühner. Dann werden sie getreten, so nennt man die Paarung, und anschließend können so an die zehn Eier befruchtet sein. Das Huhn legt aber nur jeden Tag so et-wa ein Ei. Wenn der Hahn mehrere Hühner tritt, dann gilt das glei-che für die anderen Hühner. Wir haben hier auf dem Hof nun her-ausgefunden, dass die Küken, die dann schlüpfen ein eigenartiges Verhalten zeigen. Das vierte und das sechste Küken sind mit dem jeweils anderen Küken einer anderen Henne regelrecht transgres-sus oder verschränkelt." },
+            { src: 'Rücklauf auf unendlich-121.png', alt: "Diese Eigenschaft ist nicht das gleiche, als wie die bekannte Ver-schränkung aus ihrer Welt. Das sind hier alles Haushühner. Die werden auch Grünleger genannt, weil sie grüne Eier legen können. Aber nur die, die miteinander transgressus sind. Wir haben diese Nester nummeriert und können immer vergleichen, ob die Farbe der Eier gleich ist. Die Farben der Eier in jedem Nest sind wirklich immer zufällig. Aber im Vergleich, ist das Ei vom Huhn mit der Nummer sechs grün, dann ist das Ei vom Huhn mit der Nummer sechs weiß, sowie das alles auch umgekehrt.Wir führen hier oben über einen längeren Zeitraum schon Buch über diese Zusammenhänge und ich habe bereits eine Theorie entwickelt. Der Zusammenhang ist der, dass es keinen gibt. Der Zufall spielt uns hier einen neckischen Streich. Es sieht eben ledig-lich so aus, als ob hier eine Gesetzmäßigkeit vorhanden ist. Die Eier haben für sich eine Eigenschaft und die anderen Eier sind sta-tistisch völlig unabhängig. So, wie bei dem Roulette die Häufigkeit hintereinander ermittelten geraden und ungeraden Zahlen, obwohl man meint, wenn viele gerade Zahlen vorhanden waren, ist die Wahrscheinlichkeit größer, dass nun endlich eine Kugel in einen ungerade Fächer fällt. Es sieht so aus, als wenn ein Orakel im Huhn erkennt, was sein muss, damit wir getäuscht werden. Haben sie schon von dem Orakel gehört? Das ist ein Gemisch aus 'Ahnung haben' sowie 'hinters Licht führen'." },
+            { src: 'Rücklauf auf unendlich-122.png', alt: "Ein gemeiner Täuscher der vilis fraudsters . Ich habe ständig mit diesem Wicht zu tun. Der hat sich in mein Hirn verschanzt. Ständig muss er hinausbegleitet werden, wahrlich sehr lästig.“ 28Nachdem ich irgendwie geschluckt habe, was hier auf mich ein-geströmt ist, wollte ich endlich etwas System in meine Erlebnisse bringen und den Dingen tiefer auf den Grund gehen.„Die Verschränkung ist allerdings festgestellt, tabelliert sowie auch verbucht. Wieso kann der von ihnen gefundene Zusammen-hang nicht auch so interpretiert werden? Wenn das mathematisch korrekt ist, dann ist bereits hier eine Gesetzmäßigkeit gefunden worden? Sie sollten das als super empfinden, dass sie solch einen Zusammenhang bei Hühnern entdeckt haben. Die 'K-Huhnverschränkung' klingt sehr seriös, meine ich.“Damit sollte K herausgelockt werden. Er musste mir einfach noch mehr Information über seine Denkweise geben. „OK, dann werde ich den Anti-Zusammenhang verdeutlichen. Wenn sie zwei Geräu-sche hören, versuchen sie unter allen Umständen ein Zusammen-hang zu finden. Unsere Hirne sind da sehr erfinderisch. Überall werden Hexen, böse Monster und dergleichen vermutet. Angst vor etwas Unbekannten ist ja gerade der Fantasie geschuldet. Überall werden geheime Dinge vermutet. In der Musik gibt es da die Töne. Wenn mehr als ein Ton erklingt, könnte sich das schon um eine Melodie handeln. Selbst der Klang von etwas, schieben wir in eine Schublade. Der Zusammenhang wird nun allerdings von uns sel-ber gefunden. Den finden wir dann schön oder hässlich. Warum? Das liegt im Gedächtnis, das unbewusst diesem Klang ein vergan-genes" },
+            { src: 'Rücklauf auf unendlich-123.png', alt: "Ereignis zuordnet. Diese Erinnerung muss ja nicht mal korrekt ab-gespeichert worden sein. Leider kommt die Erinnerung nicht wei-ter in unseren Sinn und daher haben wir nur so ein irgendwie gear-tetes Gefühl. Die Musik wird daher emotional wahrgenommen. Ob das wirklich von einer Tonfolge kommt, die jemand absichtlich erzeugt hat, dass wissen wir noch gar nicht zu diesem Zeitpunkt. Da gibt es noch ein tolles Beispiel für sie!“Der Hühnerkenner rennt ins Haus zurück und kommt mit einem Zettel in der Hand zu mir. Er zeigt mir den Zettel, auf dem stehen die nun folgenden Zeichen. Da war freilich nichts zu entziffern auf den ersten Blick. K fragte mich: „Was meinen sie dazu? Der Text könnte einen Sinn haben, oder auch nicht. Wie viele Jahre der For-schung könnte das hier dauern, um nur zu entscheiden, ob da ein Inhalt ist oder halt Blödsinn?“Ich überlegte so vor mich her. Das ist kaum möglich, hier einen Sinn zu entdecken. „Das ist nicht so einfach, da gibt es tausende Möglichkeiten, wie man das hier entschlüsseln könnte, wenn das überhaupt verschlüsselte wurde.“, gab ich kleinlaut zu.„Ich gebe ihnen einen Tipp, wenn sie nach km suchen, was stellen sie da fest?“Ich las den Text sehr intensiv durch und versuchte, die beiden Buchstaben zu finden, und tatsächlich waren die systematisch an-geordnet. Ich erklärte eifrig: „Ja, habe ich gefunden. Das erste Mal kommen km nach zehn" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-13.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Das surreale Segel_148x210cm-150.jpg', alt: "Die gläserne Treppes war an der Zeit, einen tieferen Blick durch diese grünen Lin-sen zu werfen. Natürlich ist damit nicht gemeint, etwas durch diese Glaskristalle zu werfen. Meine Scharfsinnigkeit wird in die reflektierten Lichtstrahlen geworfen, um sie zu filtern. Scheinbar schmuckbestückt ist die Treppe ein kleines Pracht-stück an Konstruktion. Ein beobachtender Blick auf die gläser-nen Verzierungen kann durchaus ein lustiges Schauspiel sein. Allerdings ist die verhängnisvolle Vorahnung, die ausspähen-de Vermutung, die gedankliche Angst - eher das Problem der Ausführung dieses Planes. Immer wenn mein Blick ein unge-wisse Sache begutachtet, dann bin ich, ein größeres Hindernis" },
+            { src: 'Das surreale Segel_148x210cm-151.jpg', alt: "mir selbst gegenüber, als die eventuellen sichtbaren Gegen-stände dort. Die Phantasie spielt mir immer wieder einen Streich. In mir entstehen eine Unzahl von verschiedenen Ge-schichten, die so nicht sichtbar sind. Vielleicht sind sie so abge-laufen, während einer anderen Zeit, in einer anderen Dimensi-on, aber nicht wirklich zu dem Zeitpunkt, wo sie erspürt wer-den. Diese Linsensysteme brechen das Licht, zerbröseln die Realität, täuschen eine Gegenwart vor, die nicht vorhanden ist. Die Informationen werden anschließend zur falschen Realität moduliert, weil sie gedacht werden können. Damit verschleiern sie die unsichtbaren Fäden der Abläufe der Vergangenheit bis zur jetzigen Gegenwart. Unheimlich ist das. Da spuken Gestal-ten im Innersten der Gläser, die sich nur schemenhaft zeigen. Sie entstehen aus dem Nichts an Farbe, bringen Geometrie her-bei für das Spiel des Geistes, versuchen sich zu behaupten, ver-schwinden im nächsten Augenblick wieder im Dunkel der durch die Glitzerstrahlen überschatteten Flächen. Mein Scharf-sinn erschafft aus den chaotischen Bildern eine Realität, die nur durch meine Augen beobachtet wird. Wie soll man sich dann auf die realen Dinge konzentrieren? Mein imaginäres Gegen-über rettet mich dann aus einer verloren geglaubten Geschichte wieder zurück zu mir selber. Er schafft es, mich zu fangen, zu lösen aus dem Bann der Träumerei. Die Gegenwart ist dann unerbittlich realer, noch als meine Träume. Die beileibe echten Gestalten im Glasgefängnis der Linse, sind dann viel erdrü-ckend mächtiger, als meine kleine eigene Fantasie. So gewaltig bedrohlich kann man gar nicht denken. An der Treppe ange-kommen, waren dort die vielen Glaslinsen befestigt worden. Bestimmt ein paar Dutzend an der Zahl lauerten mit ihren in-neren Geheimnissen auf meine Beobachtung. Was könnten sie mir erzählen? Wie viel Lichtbewegung haben sie aufgezeichnet und abgespeichert? Etwas zögerlich begann ich die erste Linse zu inspizieren. Extrem groß sowie fein" },
+            { src: 'Das surreale Segel_148x210cm-152.jpg', alt: "glitzernd war das optische System anzuschauen. Schon beim behutsamen Blick auf die Oberfläche, begann das Spiel der in-neren Lichtbrechung. Die unendliche Möglichkeit an Spiege-lung, an holografischen Speichertiefen, die zeitlich gestaffelten Geschichten der hier vorbeigehenden Menschen zeigt sich hier. Man muss vorsichtig sein. Die Menge der Datenerhebungen können ein Bewusstsein immens schlagartig schaden. Die Aus-lösung der Wiedergabe aller dort verdrahteten Lichtströme kann sich zu einem tödlichen Gedankenstoß verfestigen. Die dort abgelegten Gedankensträhnen der Menschen manifestie-ren eigene Universen an Objekten. Viele Sinnbezeichnungen für gesehene Möglichkeiten werden aufgebrochen. Hier ist ein Schlachtfeld der gedanklichen Wunder entstanden. Die Gefahr, dort eingebunden zu werden, ist so hoch, dass mein Gefährte nur vorsichtige Schritte und Blicke wagt. Man erahnt die Ab-gründe jeglichen Seins, die todbringenden Ängste jeglicher Kreaturen in diesem Kerker. Mir ist kaum möglich, dort ohne Gefahr einen Einblick zu nehmen. Oh Schreck! Zurück! Zu-nächst erst versuchen, sich Klarheit darüber zu verschaffen, wie man in diese Informationssysteme eindringen kann. Das Schiff entwickelt sich zu diesem Zeitpunkt in einem be-drohlichen Informationsräuber, welches rücksichtslos Begriffe aus der Umgebung abräumt. Das Aussaugen der Bewusstseins-inhalte der Passagiere verdichten sich hier bemerkenswerter-weise sehr konzentriert. Das ist wahrscheinlich ein Zentrum der Abschöpfung von Gedankenenergie auf dem Schiff. Diese Un-menge an potentiellen Schöpfermöglichkeiten muss irgendwo das Schiff wieder verlassen. Die Masse der unverarbeiteten Verkettungen kann nicht an Bord belassen werden. Irgendwie muss ein Ableitstrom zum Land vorhanden sein. Beim Betrach-ten der vielen Linsen auf der Treppe schwinden mir fast die Sinne. Das ist eine ungeheuerliche Flut an Saugern, die hier installiert" },
+            { src: 'Das surreale Segel_148x210cm-153.jpg', alt: "wurde. Man spürt regelrecht die fressende Brut. Der gefähr-lichste Ort scheint genau hier zu sein. Dort wo viele Leute ver-weilen, wenn sie gegessen haben, oder sich zwischendurch tref-fen. Dann wird die Transformation zu den Femobat vollzogen, unmerklich leise, aber unglaublich schnell. Niemand schöpft Verdacht, keiner wird berührt. Die elektronischen Geräte wie Handys wirken wie Magnete für die schmierigen Würmer der Vernunft.Sie springen zu den Köpfen der Menschen. Dort machen sie die Opfer zu Sklaven der biologischen Cybernetics. Dieser üble Ort muss schnell verlassen werden. Mein imaginäres Gegen-über mahnt mich zur Eile. Diese Stelle des Schiffes kann nicht lange" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

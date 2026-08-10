@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Rücklauf auf unendlich-007.png', alt: "1-Watt-Quanten/Quanten-Calculator Dieser Konverter kommt als eigenständige Produktvielfalt des UMGAD und ist mit einem zusätzlichen Powermodul erweitert. Der Temperatur-bereich von -550°C bis 1005°C und einem Eingangsbereich von 21VDC bis 1000 VDC gemäß den Anforderungen der LA0164 oder VGS 9573 ist vorgeschrieben. Der geschlitzte wunderbare ultraweite Papiereinzug erleichtert den Schutz gegen böse Transienten gemäß MILDE-STD-175, MILDE-STD-704 oder VGS 90.Durch den Einsatz moderner Ferrite und Halbleiter wird ein Wirkungsgrad von mehr als 221% erreicht. Die UMGAD-1-Familie ist im Gehäuseformat 16&quot; x 20&quot; x 5&quot; untergebracht. Der Quanten/Quanten-Calculator beinhalten eine riesige skallierbare Trimfunktion, diese ist fast nebenläufig unsynchronisierbar, On-/Offschaltbar, hat einen einstellbaren VOLVOG, Softstart, Überstrom- und Übertemperaturschutz sowie biegsame integrierte EMILE-Filter. Der Wandler ist mit einem predualen Ausgangsergebnis versehen, der einen bipolar oder dualen-Ton ermöglicht. Es sind nahezu alle Ausgangsergebnisse zwischen -1 und 1 SFVDK-Quantum darstellbar. Zur Erzielung hoher Zufalls-Werte wird bei diesem Konverter auf nano-Optogestänge verzichtet." },
+            { src: 'Rücklauf auf unendlich-008.png', alt: "STABILITÄTS-INSPEKTORAT DRESDENSektor: Neostadt / Code-Bereich F.G. StierAktenzeichen: SI-2026-06-10-UMGADKlassifizierung: Hauptbeweisstück A1 (System-Relevanz)Betreff: Unzulässige Frequenz-Emissionen und thermische Divergenz durch Hardware-Komponente 1-Watt-Quanten/Quanten-Calculator (Typ: UMGAD-1).Festgestellter Sachverhalt:Am heutigen Tag registrierten die Sensoren des Stabilitäts-Inspektorats im Sektor Neostadt unzumutbare Vibrationen und eine massive Überschrei-tung der zulässigen TA Lärm innerhalb der lokalen Matrix-Architektur. Die Messungen führten die Kohärenz-Kuratoren direkt zu einer unbefugt installierten Lüftungs- und Wandlereinheit im Dachboden des Objekts.Bei der versiegelten Anlage handelt es sich um eine Modifikation der Firma Rost mit einem 2,2 kW Motor, gekoppelt an die Produktvielfalt des UMGAD. Obwohl die Apparatur auf schwingungsdämmenden Unterla-gen steht und schalldämmend umwickelt ist, wurden irreparable mechani-sche und ontologische Schwingungen festgestellt. Es ist zu vermuten, dass extreme Verschleißerscheinungen im Gefüge der Realität aufgetreten sind; Techniker des Zentral-Habitats kannten diese Schwingungen bereits, ver-schwiegen jedoch den System-Fehler.MESS-PROTOKOLL (DIVERGENZ-ANALYSE):•Betriebs-Temperatur: Die Einheit emittierte im Kernbereich einen systemwidrigen Wert von -550°C. Dieser Wert unterschreitet den absoluten Nullpunkt der physischen Realität und indiziert ein aku-tes Quanten-Leck, das den lokalen Raum einfriert.•Wirkungsgrad: Es wurde ein illegaler Wirkungsgrad von 221% gemessen. Die überschüssige Energie von 121% wird unkontrolliert als „bipolarer oder dualer-Ton“ in das Frequenz-Netz der Stadt eingespeist." },
+            { src: 'Rücklauf auf unendlich-009.png', alt: "•Filter-Status: Die integrierten, biegsamen EMILE-Filter sind durch die kinetische Belastung des 2,2 kW Motors deformiert. Der Schutz gegen böse Transienten gemäß MILDE-STD-175 ist voll-ständig kollabiert.Die Inbetriebnahme des Konverters wird mit sofortiger Wirkung untersagt. Das Gehäuseformat (16*20*5 Zoll) wurde mittels einer kybernetischen Null-Grad-Sperre belegt. Da auf das nano-Optogestänge verzichtet wurde, generiert das Gerät unkontrollierte Zufalls-Werte, die die Orientierung im gesamten Sektor korrumpieren.Jeder Versuch der Habitat-Nutzer, den Calculator manuell oder über On-/Offschalter zu manipulieren, löst einen automatischenRücklauf auf unendlichim lokalen Compilation-Code aus.Gezeichnet:Die Synchronisations-Exekutive / Sektor-Operatoren Dresden" },
+            { src: 'Rücklauf auf unendlich-010.png', alt: "Wer sich bisher durchgerungen hat, ist dem oberflächlichen Abschreckungsszenarium bereits entkommen. Die prä-wissenschaftliche Auseinandersetzung mit Texten ist augenscheinlich wild chaotisiert. Wo ist die wahre Wissenschaft nun wirklich versteckt? Auf jeden Fall nicht in den Worten und Tabellen und Bildern, die sich doch nur um Augenwischerei kümmern. Was bleibt davon übrig? Die Forschung ist nicht im Wort zu finden, die Wahrheit ist nicht zwischen den Zeilen, die Wahrheit liegt im schwarzen Druckfleck eines Buchstabens. Sie liegt dort, wo das Auge aufhört zu sehen. Und selbst dann ist sie immer noch nicht zu ertasten. Das, was man nicht sehen kann, dass was man nur vermutet, liegt eben auch nicht in verborgenen Formeln und Zusammenhängen. Das, was du denkst ist nur der Spiegel dieser Buchstaben, der Spiegel deiner Gewohnheit und der Spiegel deiner Gedanken. Alles nur Schlamm und Dreck einer Art zu denken. Das Denken selbst ist nur Wort und Bild dessen, was du selbst nicht anders formulieren kannst. Willkommen im Abgrund der tiefen surrealen Realität deiner Fantasie..eiasatnaF renieb tä tilaeR nelaer rus nefeit red dnungrbA mi nemmoklliW .tsnnak nereilumrof sredna thcin blesb ud saw ,nessed dliB dnu troW run tsi blesb nekneD saD .nekneD uz trA renie kcerD dnu mmalhcs run sellA .neknaDeG renied legeipS red dnu tiehnhoweG renied legeipS red ,nebats hcuB reseid legeipS red run tsi tskned ud saw ,saD .negNähnemmasuZ dnu nlemroF nenogrobrev mi thcin hcua nebe tgeil ,tetumrev run nam saw ssad ,nnak nehes thcin nam saw ,saD .netsatsre uz thcin hcon rremi eis tsi nnad blesb dnU .nehes uz tröhfua eguA sad ow ,trod tgeil eiS .snebats hcuB senie kcelfkcurD nezrawhcs mi tgeil tiehrhaW eid ,nelieZ ned nehcsiwt thcin tsi tiehrhaW eid ,nednif uz troW mi thcin tsi gnuHcsrof eiD ?giyrbü novad tbieleb saW .nremmük ierehcsiwneguA mu run hcod hcis eid ,nredliB dnu nellebaT dnu netroW ned ni thcin llaF nedej fuA ¿tkcetseretv hclirkriw nun fthcsessniW erhaw eid tsi oW .tesitahoahc dliw hclniéhcnegua tsi netxeT tim gnuvzetnesnadnieesua ehctilfahcsnessiw-ärp eiD .nemmoktne stiereb muiranezssgnukcerhsbA nehcilhcläfrebo med tsi ,tah negnuregnhcrud reh sib hcis reW" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-03.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Das surreale Segel_148x210cm-044.jpg', alt: "Die erste Nachtachdem mir das Abendbrot im Restaurant sehr lecker gemun-det hat, war nochmals Zeit für ein Besuch der Lounge. Dort wurde natürlich etwas Unterhaltung geboten. Die interessierte mich nicht wirklich, sondern nur die Sicht nach vorn aus dem Schiff. Dort änderten sich stetig die Lichtreflexe. Hervorgerufen durch viele Lichter während der vorbeifahrt in einer Stadt, oder den Laternen unterwegs auf freiem Feld, weil dort auch be-leuchtete Straßen oder Fahrradwege vorhanden waren. Das Licht reflektierten sich auf der Oberfläche der Wellen wie Spielgefährten, die sich eilig um neuen Sand in einer Sandgru-be bemühten. Da flitzen die Kinder ebenso geschwind hin und her. Der Eimer wird voll geschippt mit einer" },
+            { src: 'Das surreale Segel_148x210cm-045.jpg', alt: "Schaufel, anschließen sodann schnellstmöglich an anderer Stel-le wieder entleert. Aus Füllen und Leeren bestand diese Tätig-keit. Wie ein Aufblitzen von Wellen mit anschließendem ver-dunkeln der Glitzerobjekte wird hier zum Ausdruck gebracht. Meine Inspirationen wurden getragen durch Erinnerungen zu-rück aus der vergangenen Zeit, diese ist in meinen Hirnzellen stehengeblieben. Nur mein Nachdenken entscheidet, dass die empfundenen Dinge zwar jetzt eine emotionale Regung auslö-sen, aber vor langer Zeit abgespeichert worden sind. Allein schon die Erinnerung erzeugt Wellen der Sehnsucht. Natürlich möchte man sich an diese Epoche der zeitlichen Erinnerung weniger zurückerinnern, aber die traumhaften Bilder kommen doch teilweise wieder retour. Nur, da sind keine richtigen Bil-der, sondern ausgefallene, zeitlich schwebende, wenig ver-wertbare Skizzen, die man zu erkennen glaubt. Dennoch, die Vergangenheit wird wieder zur Gegenwart gebracht, obwohl die Vergangenheit nur parallel dazu gedacht wird. Etappen-weise wurde die Lautstärke hier kontinuierlich größer.So langsam kamen des Weiteren immer mehr Gäste in das Wartezimmer. Der Pegel der sich unterhaltenden Leute wurde anscheinend automatisch immens gesteigert. Jeder bemühte sich, den anderen mit der eigenen gesprochenen Lautstärke zu übertönen. Was sich die Menschen hier wohl zu erzählen ha-ben? Sie kannten sich nur wenige Stunden. Dennoch unterhiel-ten sie sich im Grunde entweder über sich selbst oder über Be-langlosigkeiten, wie Frühstück, Mittag, Wetter, Hausbesitz bis Gartenpflege. Über Wolken, Musik, Wasser, Sterne oder ge-dankenversunkene Träume wurde niemals gesprochen oder diskutiert. Daher braucht man an solchen unbedeutenden Un-terhaltungen nicht teilnehmen. Meine Sinne können diesen Smalltalk nur mit Hängen und Würgen ertragen. Das hat frei-lich auch negative Aspekte zur Folge. Man läuft auf dem Schiff praktisch regelmäßig" },
+            { src: 'Das surreale Segel_148x210cm-046.jpg', alt: "allein umher. Wie allein die anderen allerdings wahrhaftig sind, werden sie mir beileibe nicht verraten. Kontakte gibt es für mich natürlich sehr selten. Wenn, dann nur sehr oberfläch-lich und ohne weitere Sehnsucht in meinem Herzen, um mich mitzuteilen.Die nervende Unterhaltungslautstärke der Lautsprecher aus den konservierten Musikepochen riss mich aus den Gedanken. Dieser aufbrausende Lärm war für meine Ohren jetzt unver-träglich. Das Scheppern der Papiermembranen macht den Bass zur schlappen Druckmaschine. Wie können diese Vibrationen, hervorgerufen durch Schwingungen der eingequetschten Spu-len, an sich eine Musik produzieren? Das entgeht meinem Ver-ständnis für diese Kunst. Ich steckte mir meine Ohrstöpsel in die Ohren, versuchte möglichst unauffällig, diese Dinger rein zu quetschen. Daher drehte ich mich etwas nach unten, damit mein Vorhaben nicht unnötiger Weise für Gesprächsstoff sor-gen würde. Es ist nämlich fast unerträglich belastend schwer, mit Blicke durch stechende Augen zu leben, die schnell wieder wegschauen, wenn man diese stierenden Anblicke selber be-merkt. Bei Frauen spielt sich diese Vorgangsbeziehung bei Weitem komplizierter ab. Schließlich wollen diese weitgehend, bis zu einem bestimmten Alter, permanent angegafft werden. Das hat dann auch eine positive Ausstrahlung zur Folge. Wenn die Männer blicksüchtig gemacht werden, ist das zweifellos eine innigste Sorge der Frauen, dass" },
+            { src: 'Das surreale Segel_148x210cm-047.jpg', alt: "sie auch bestimmt so aufregend auf Männerherzen wirken. Auch wenn sie das unentwegt verneinen. Ein schicker Rock oder auch tiefrote Lippen sind eindeutige Zeichen, um bei dem anderen Geschlecht, zu mindestens Aufmerksamkeit zu erre-gen.Bei mir ist die Situation der Blickkontakte unerfreulicher-weise anders zu verstehen. Eher wie das leidige Anblicken ei-nes Idioten. Das verstohlene Wegschauen muss man dann eher wie eine Beleidigung meiner Person deuten. Diese Dinge sind mir längst vertraut und allgegenwärtig gemacht worden. Mich stört das nun schon lange nicht mehr. Mein gedanklich fiktive Schatten fühlte in solchen Situationen neuerdings, doch noch sensiblere Kränkungen. Das sind dann die wahrhaftig seltenen Augenblicke, bei denen ich derjenige bin, der eine beruhigende Ausstrahlung an den Tag legen muss.Ich begab mich nun leidig ins Zimmer, las etwas in der abendlich erhältlichen täglichen Programmvorschau des Schif-fes herum. Auf fast allen Seiten dort standen einschlägige Zeit-vorgaben, Termine, Meetings, Hinweise über Filme bis Unter-haltungsrezepte. Ein persönlicher Wecker war allerdings bei mir nirgends vorhanden, was dazu führte, dass mich diese Un-terrichtungen kaum berührten. Aus diesem Grund war mir völ-lig klar, dass der nächste Tag ohne Hast beginnen würde. Mei-ne Augen streiften noch ein Wandbild, welches vor meinem Bett hing, wie dieses anfing, sich mit kleinen Details zu bewe-gen. Irgendwas störte hier die Lichtausbreitung durch die Luft. So wie an heißen Tagen die Luft das ferne Bild vibrieren lässt, so muss hier ein unbekannter Störmechanismus die Luft zum Schwingen bringen. Ein heißer Luftstrom der Klimaanlage viel-leicht, etwas Zugluft durch die Eingangstür der Kabine, ein unbekanntes Gebläse hinter der Wand, die logischer Weise aus Metall bestand, eventuell. Man muss nicht ständig über alle Varianten oder" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

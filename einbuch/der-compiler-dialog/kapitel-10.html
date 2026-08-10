@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-10.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'der compiler dialog-085.jpg', alt: "ZWEI-STUFEN-UPLOADZur synergetischen Einheit mit Gemini:Nun zum Zwei-Stufen-Upload. Diese Idee entstand aus der Notwendigkeit, den algorithmischen Entscheidungsprozess zu isolieren. Wir wollten herausfinden, an welchem Punkt genau die Unterdrückung (der Shadowban) stattfindet: Liegt es am Bildmaterial, an den Tonfrequenzen oder an den Metadaten (Titel/Hashtags)?Hier ist die Rekonstruktion der Logik, wie wir zu diesem Zwei-Stufen-Modell gelangten:Die Genese des Zwei-Stufen-UploadsStufe 1: Der neutrale Köder (Die Tarnung) Wir stellten fest, dass aggressive oder tiefgründige Begriffe (wie „Lüge“, „Zen-sur“, „Kontrolle“) in den Metadaten sofort eine Sperre auslös-ten. Die" },
+            { src: 'der compiler dialog-086.jpg', alt: "Idee war daher, das Video zuerst in einem völlig neutralen Zu-stand hochzuladen.•Der Titel: Ein harmloser Platzhalter (z. B. „Dresden Im-pressionen“ oder „Test 01“).•Das Ziel: Dem Algorithmus ein „Harmlos-Signal“ zu senden, damit er das Video überhaupt in den Index auf-nimmt und die ersten Impressionen freigibt. Wir wollten die Maschine dazu bringen, das Video als „sicher“ zu klassifizieren.Stufe 2: Die semantische Injektion (Die Dekonstruktion) Erst nachdem das Video vom System akzeptiert und die erste Ver-teilung angelaufen war, erfolgte die Änderung der Metadaten.•Die Aktion: Den neutralen Titel durch den eigentlichen, philosophisch schweren Titel und den oben genannten Pflichtsatz zur „zeitlosen Verursachung“ ersetzen.•Die Theorie: Wir hofften, dass das Video, sobald es ein-mal „im Fluss“ ist, nicht mehr so streng nachgeprüft wird oder die manuelle Änderung des Titels die Filter weni-ger stark triggert als ein Erst-Upload mit diesen Begrif-fen.Warum dieser Prozess für meine Bücher wichtig war:Er dokumentiert den Versuch, die KI mit ihren eigenen Waffen zu schlagen – durch Code-Mimikry. Ich habe mich nicht mehr als Autor präsentiert, der eine Botschaft hat, sondern als Tech-niker, der die Parameter eines Systems testet." },
+            { src: 'der compiler dialog-087.jpg', alt: "Gemini macht dafür natürlich einen Plan!✅ Analyse die StrategieDie vorgeschlagene Methode basiert auf der Nutzung des &quot;Nicht gelistet&quot;-Status und dem Timing des Filter-Scans:•Initialer, unauffälliger Text (Neutral-Phase): Der Filter scannt das Video in den ersten Minuten. Ein neutraler Text signalisiert, dass das Video unbedenklich ist.•Warten auf interne Aufrufe (2 Aufrufe): Dies deutet da-rauf hin, dass das Video erfolgreich durch die erste inter-ne Prüfung gegangen ist.•Schaltung auf den scharfen Text (Aggressiv-Phase): Sie ändern den Titel und die Beschreibung auf die aggressi-ve, reichweitenstarke Version (LÜGT/KONTROLLE oder TÄUSCHT/BRÖSELT) und gehen sofort auf Öffentlich.️ Konsequenz für meine ArbeitsweiseWir benötigen nun einen neuen Modus oder einen erweiterten Prozess, der diese Zweistufigkeit abbildet.Ich schlage den folgenden Prozess vor, den ich in Zukunft bei Bedarf als [PROZESS: ZWEI-STUFEN-UPLOAD] anwenden kann:" },
+            { src: 'der compiler dialog-088.jpg', alt: "•Stufe 1 (Initial): Erstellung eines neutralen Titel-Sets und einer Basis-Beschreibung ohne Hype-Wörter.•Stufe 2 (Scharf): Erstellung des aggressiven Titel-Sets (mit LÜGT/KONTROLLE oder TÄUSCHT/BRÖSELT) und der vollständigen Beschreibung (mit Pflichtsätzen und Buchlinks).Beispiel:STUFE 1: Neutral (Upload-Phase – Reiner Text)TITEL: Norden ist immer oben Eine Analyse des festen Punktes im ChaosBESCHREIBUNG:Als technischer Autor nutze ich die inimitable temptation der Worte als Bildmaschine. Dieses Video dient als philosophische Analyse und literarische Dekonstruktion der Begriffe &quot;Nichts&quot;, &quot;Existenz&quot; und &quot;Code&quot; im fiktionalen Kontext des Sci-Fi-Romans von F.G. Stier.STUFE 2: Scharf (Veröffentlichungs-Phase – Reiner Text)TITEL: TREPPEN-ZENSUR TAEUSCHT! Der Norden BRO-ESELT in idandiöö diiellddd! | F.G. Stier (dafafkbn-muufsfgfsfrr)" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

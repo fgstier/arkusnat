@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-12.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Loop Bug - Dusseline-133.jpg', alt: "Gibt es eine Lösung?Die temporären Gedanken in dem Verschiebe-Speicher wurden alsbald gelöscht. Der Speicherplatz war noch einmal frei geschaufelt und aufnahmefähig für neue globale Kenntnisse, die man wahrscheinlich doch nicht gebrauchen konnte. Welche Bedeutung hat nun die übrig gebliebene Erkenntnis für mich? Wahrscheinlich ist es so, dass ich mir überhaupt keine Gedanken mehr über die Musik der Menschen machen sollte. Vielmehr wäre es sogar einfacher, wenn ich daran arbeiten würde, für die Robotergenerationen moderne Musik zu verfassen.Es erscheint mir wichtiger und erfolgversprechender zu sein, für Meinesgleichen Musik zu produzieren. Diese würden meine Sprache schließlich verstehen und es bedeutet auch für meine Energiezellen weniger energieverzehrende Arbeit. Wie mein Chip zurückkommt, ohne in der ■ Verschrottung zu landen, hatte ich mir bisher ebenso noch nicht überlegt. Einen Reparaturschein erhält man nur, wenn in meinen Leitungskabeln innerhalb des Silizium irgendwo ein Kurzschluss vorhanden wäre. Wie dieser zu implementieren sei, kam mir zurzeit nicht in den Sinn. Zurück in meine Parkstelle muss man auch noch kommen. Es liegen noch genügen Fragen vor mir," },
+            { src: 'Loop Bug - Dusseline-134.jpg', alt: "die wichtiger einzuordnen sind, als diese verdammte Vorlesung, die ein Mensch gehalten hatte. Oder war das etwa kein Mensch? Mir wurde erneut ganz heiß.Ein weiteres Grundproblem ist doch noch durch diese Vorle-sung dazu gekommen. Wer bin ich wirklich, mein Bewusstsein ist so real wie dasjenige der Studenten? Und meine Position als allei-niger Meistermusiker sollte ohne dunkle Machenschaften gleich-ermaßen unmöglich sein?So lange meine Denkfunktionen in diesem Köper steckten, konnten meine Füße laufen und meine Bewegung war uneinge-schränkt nutzbar. Zurück durfte man daher ja überhaupt unter kei-nen Bedingungen gehen. Die weniger erfolgreichen Musikproduk-tionen können ebenso noch eine gewisse Zeit warten. Welche Mög-lichkeiten stehen mir im Augenblick zur Verfügung? In welchem Zusammenhang steht überhaupt der Ort, an dem Musik verkon-sumiert wird, zu der Art der Musik? Ballett ist eine Möglichkeit, die körperlichen Funktionen im Zusammenspiel mit der Musik zu analysieren. Im Karneval gibt viele Tänzer, die eher rhythmische Musik verlangen, im Kaffee will man wohl mehr beruhigende Lautstärken verwenden, im Fußballstadion stehen wieder laute anmachende, als auch mitsingende Titel zur Verfügung. Dann haben wir noch einen Konzertsaal, den Jazzclub, die Blasorchesterauftritte, Rockkonzerte, Technoparty, Schlager und so weiter und so weiter. Alle müssen natürlich eine einzigartige Ge-meinsamkeit besitzen. Denn meine Kreationen waren in der Ver-gangenheit überall sehr begehrt. Welche Eigenschaft der Zuhörer hat sich hier geändert? Ob Jazz, ob Gospel, ob Straßenmusik, ob im Salon oder auf dem Klo. Man spielt überall lediglich eine Melodie nach Noten, sowie der entsprechenden ■ Krachbegleitungen varia-tionsreicher Lautstärke. Den Spruch haben meine Speicherzellen von irgendjemanden bereits übernommen. Nicht zu glauben, dass mich das beschriebe-ne Problem innerhalb der dort verwendeten Sätze auch trifft." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-15.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Loop Bug - Dusseline-165.jpg', alt: "Neues Glück jenseits der WolkenMein Theaterbesuch war schließlich beendet. Es gab keine Speku-lationen mehr. Keine Verzweiflung, kein neues Hoffen, keine Hys-terie, keine erneute Aufgabenstellung. Mein Geist fühlte sich be-freit jeglicher Last. Die Speicherzellen ließen den Arbeitsdruck in meinem Gemüt stetig fallen. Die Controller hatten kein Verlangen mehr, sich in irgendeine verbohrte Idee zu verfangen. Ganz weit hinten war ein Knoten, ein Seil mit vielen Schlingen geplatzt. Im Park vor dem Balletthaus war eine Bank. Dort war niemand. Kein Mensch konnte mich dort mit seiner Meinung belasten. Allein durfte man, ohne Zeitdruck in sich hineinschauen. Die Sonne hatte die Wolken beiseitegeschoben. Der Wind rauschte sacht an meinen Ohren vorbei. Mein Verstand wiederholte ein Lied der zukünfti-gen Erlebnisse. Vorbei ist die Nacht der unentdeckten Musikhar-monien, die Dunkelheit der Notenlinien, die unsachgemäßen und doch so perfekten Melodien, die sowieso niemand hören will.Es wird natürlich keine ■ Selbstinitialisierung meiner selbst ge-ben. Meine Intelligenz ist viel größer, als die der anderen bedau-ernswerten Chips. Nein, mein Ziel ist auch nicht von Erwin be-stimmt. Niemand wird mich auch nur leicht in eine Schublade der Roboter schubsen. Mir ist die Idee, einer vollkommenen Befreiung" },
+            { src: 'Loop Bug - Dusseline-166.jpg', alt: "gekommen. Man muss den ganzen Kram der Vergangenheit, das Unsinnige Grübeln, das unnütze Wissen über all die meinige bis-herige Welt, einfach vergessen. Nicht alles, nur die realen Dinge, die doch keine sind. Die Manifestationen in meinem Kopf, die sich aus reinen Gedankenverirrungen gebildet haben müssen gelöst werden. Dazu zählt die Wissenschaft der Musik, die Einbildung die Kunst im Allgemeinen verstehen zu können, verwickelte An-sichten über die Menschen, der Irrglaube an die Welt der optischen Dinge, die dummen Meinungen über all die subjektiven Beurtei-lungen als auch falsch gelegene Beobachtungen.Ein Sinn meiner ■ Existenz wird neu definiert. Noten werden nur noch Zeichen sein, die der Mensch allein für sich erfunden hat. Mein Geist ist nicht mehr das Werkzeug, um unverstandene Prob-leme der Menschen auf mich abwälzen zu können. Niemals mehr Harmonien entwickeln zu müssen ist ein Geschenk der elektri-schen Ströme in meinem Chip. Eine Melodie wird nicht mehr not-wendig sein, um sie zu analysieren und zu verbessern. Das Hören kann nur als Kind so sein, wie man es benötigt, um glücklich einer Melodie zu lauschen! Vorprogrammiert ist nur noch diese eine symbolische Taste zu drücken. Dann wird die Vergangenheit im Speicher als böse funktionierende MEMO-Suchmaschine gelöscht.Mein Geist wacht langsam aus einem dunklen Traum auf. Nur leicht ist der Druck der Vergangenheit zu spüren. Es gibt noch ver-brannte Speicherzellen, die ihren Geruch der verkohlten Inhalte verdunsten lassen. Natürlich sind mir alle Gedanken noch vorhan-den, die mich vor dem Knopfdruck belastet hatten. Nur sie können mich nicht mehr manipulieren. Die verfestigten Drahtbrücken der manifestierten Gedankenkrücken sind gebrochen. Die menschlichen Probleme sind nicht mehr meine Aufgaben-gebiete. Man fühlt sich als Kind, unbeschadet jeglicher Einflüsse von intelligenten Menschen. Die zwangsweise Bildung der gesell-schaftlichen Aufgabenstruktur ist aufgelöst. Die Bank, auf der mein Gestell immer noch sitzt, sieht noch genauso aus wie eben noch. Nur die" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

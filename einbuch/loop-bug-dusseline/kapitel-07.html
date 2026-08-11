@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-07.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Loop Bug - Dusseline-041.jpg', alt: "Die SchulungWer Musik mit dem Computer macht, weiß ganz sicher nur zu ge-nau, man sucht immer und ewig den Knaller-Sound für das Ohr. Es muss was Geiles sein. Etwas, nie dagewesenes oder nie gehör-tes oder etwas total Abgefahrenes an Klängen. Es ist ja so, dass die Erzeugung von Musik mit den Software-Produkten unter keinen Bedingungen einfach ist. Wer selbst ein Instrument spielt oder ge-spielt hat, der weiß auch, was alles dazu gehört. Es gibt elektroni-sche Hilfsmittel, um die natürlichen Klänge der Instrumente zu ändern oder zu verfeinern. Die Boxen der Lautsprecher, die Ver-stärker, die Einstellungen der Geräte, die Synthesizer, die Melo-dien, die Begleitung. Eine Unmenge an Informationen muss hier verarbeitet werden. Irgendwie ist man auch total zugeschüttet von schon gehörten Dingen. Man kann auch schon gar nicht mehr etwas Neues, Phänomenales, denken. Ständig hat man eine bekannte Melodie, einen immer schon ge-hörten Rhythmus, einen längst gemischten Sound im Ohr. Da fällt einem einfach nichts mehr Neues ein. Und doch gibt es Menschen, die jedes Jahr etwas glaubhaft Perfektes produzieren und verkau-fen können. Warum sollte das einem selber nicht auch passieren? Die Hilfsmittel im Internet sind scheinbar unüberschaubar. Allein die" },
+            { src: 'Loop Bug - Dusseline-042.jpg', alt: "Suche nach günstigen Angeboten lässt einen kaum Ruhe. Dazu kommen die Einarbeitungszeiten in die Bedienung, die Software-fehler, die Abstürze der Programme, die unvollständig vorhande-nen Treiber, diverse Lizenzprobleme, Foren, die bekannten Inter-netseiten, mit unzähligen Lehrern, Ratgebern, Info-Seiten, Besser-wissern, Vorlesungen, virtuelle Übungsanweisungen, ■ Vorspie-ler, Musiker mit ihren Instrumenten …So, da hat man schon mal so viel zu tun, dass man auch leicht in eine Irrenanstalt eingewiesen werden könnte, wenn man sich nicht irgendwie vor der Menge der Vielfalt abschottet. Aber gerade das will man ja nicht. Es muss alles verkonsumiert werden, damit man gerade das Wichtige, was man meint zu brauchen, auch wirklich findet. Selbst innerhalb der Musik gibt es zu viele grundsätzlich ver-schiedene Basisansichten der akustischen Klanggewohnheiten zu berücksichtigen, als dass man hier eine gemeinsame Sprache fin-den könnte. Die eigene Sprache für dieses Konstrukt wird einem ja selbst seit der Kindheit aufgebürdet. Was man hört, das hört man ständig und immer wieder kehrend. Der Lehrer der Gewohnheit ist die Landschaft der Medien. Sie prägen die Muster, die Vorgaben der Erwartung, die Lautstärke, die Klangeigenschaften der Instru-mente, die Melodie, Rhythmus und eben den Sound. So wie die Sprache eine tiefe Wurzel im Kopf hat, so wird die Musik ebenso verwurzelt in das Geflecht der Hörangewohnheit.Im Grunde gibt es kein ■ Entkommen und daher auch kein Wei-terkommen. Der magnetische Schuh der Erziehung ist schwerer als die Gravitation der Erde. Damit ein Einstieg in das eigentliche Problem erfolgen kann, wurde dieses dunkle Buch der Vergan-genheit hier zunächst geschlossen. Vergessen wird ab jetzt die ganze Flut der Software und Medienpräsens. Vergessen wir mal schnell die Wissenschaft der Töne, die Harmonielehre, die vielen Hochschulen der Musik, die vielen Berufsmusiker, die Abkömm-linge der Laienmusikanten, praktisch alle die, die ihr Geld mit dem Hören der Musik" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

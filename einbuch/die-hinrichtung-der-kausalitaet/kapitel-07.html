@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-07.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'dissertation die Hinrichtung der Kausalität-069.jpg', alt: "Sein „Ich“ als Opfer und FehlerAlrik saß auf den Treppen eines vorgelagerten Hügels des Leuchtturms, doch die Freiheit der Meeresluft fühlte sich wie eine Lüge an. Die Analyse seiner Reise in den Chip war gna-denlos: Er war kein Entdecker. Er war ein Fehlerwert. In der perfekten Konstruktion der algorithmischen Welt war sein Be-wusstsein der Sand, der das Getriebe zum Stillstand brachte. Diese Invers-Kerze war keine abartige Erfindung. Sie zeigte nur die Welt, die sich im gleichen Raum als unbeobachtbar materi-alisierte. K. hatte eine Methode gefunden, diese Welt sichtbar zu machen. Sein ICH war die unvorhersehbare Abweichung, die das Sys-tem dazu zwang, Ebenen der Materie und des Schmerzes über-haupt erst zu erschaffen, um ihn zu binden. Seine Seele war das Opferlamm auf dem Altar der Logik. Jedes Gefühl, jede Erinne-rung an seine Vergangenheit war nur ein Köder des Compilers, um den Fehler „Alrik“ in einer Endlosschleife aus Leid zu iso-lieren. Er war kein Wesen – er war ein Bug, der sich für eine Seele" },
+            { src: 'dissertation die Hinrichtung der Kausalität-070.jpg', alt: "hielt. Und diese traumbehaftete Seele, die sich selbst auch so bezeichnet, ist eingebettet in einen Körper, der ohne diese Seele als Körper materiell existiert, ohne diese inneren Gedanken durch surreale Ströme. Wie jedes Lebewesen oder auch ein Chip mit massenhaft konstruierten sogenannten Neuronen. Das Sterben wird zum grausamen Akt dieser Seele. Sie konnte nichts dafür, als sie entstand. Sie kann es nicht verhindern zu vergehen. Nur die Einbildung und die Schmerzen sind ihm erlassen und begleiten sie unaufhaltsam in der Zeit. Die Zeit ist ein übelstes Monster in der Vorstellung dieses Geistes. Diese nutzlose Erfindung macht ihn zum Krüppel seiner Angst. Die-ser Fehler muss beseitigt werden, damit das Leiden dieser völ-lig sinnfreien Tätigkeit im Geist aufhört. Der Compiler versucht die Maschen dieses gestrickten Automaten des Lebens aufzu-dröseln.Er selbst war nicht der Fehler. Der Fehler war die Entstehung des Bewusstseins an sich – dieser neuronale Kurzschluss, der aus bloßer Materie ein „Ich“ formte, das anfing, die Welt zu interpretieren. Das Bewusstsein war die Maschine, die den Leuchtturm, das Archiv und sogar den Schmerz erst konstruier-te. Ohne diesen Bug gäbe es nur schweigende Materie, reine Existenz ohne das Monster der Zeit. Wenn das ganze Bewusstsein ein Fehler war, dann war K. die Instanz, der diesen Fehler dokumentiert hatte. Er suchte sie nicht mehr als Retterin, sondern als Zeugin seiner Auflösung. Doch um zu ihr zu gelangen, benötigte er die Kerze. Sie war kein Lichtbringer im spirituellen Sinne – sie war der haptische Anker. In einer Welt, die der Compiler gerade aufdröselte, war die Kerze das einzige Objekt, dessen Materie noch eine feste Adresse im" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

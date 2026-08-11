@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'dissertation die Hinrichtung der Kausalität-010.jpg', alt: "Befehle aus der Buchstaben-FalleAlrik bemerkte im Paket noch ein Schreiben. Das musst K. noch schnell geschafft haben. Man konnte erkennen, dass er schnell schreiben musste. Das, was dort geschrieben war, musste au-ßerordentlich wichtiges sein. Er las es immer wieder. Irgendwie konnte er keinen Sinn für die Anweisungen erkennen. Aber eins war klar, es waren regelrecht Befehle, die nirgends be-gründet wurden. Alrik fixierte das Papier genauer. Die Buch-staben waren keine Symbole für Gedanken, sie waren Anwei-sungen, die direkt in seine Muskulatur griffen. K.s Handschrift wirkte nicht wie geschrieben, sondern wie in die Realität ge-ätzt.„Handlung ist keine Entscheidung, Alrik. Sie ist der Vollzug einer bereits geschriebenen Zeile.“Ein plötzlicher Widerstand in seinem Hirn flackerte auf – ein letztes Aufbäumen des „Ich-Bugs“. Er wollte das Schreiben vernichten, diesen Wahnsinn zerquetschen, die Kausalität durch eine trotzige Geste der Zerstörung wiederherstellen. Er fasste" },
+            { src: 'dissertation die Hinrichtung der Kausalität-011.jpg', alt: "den Entschluss, das Papier zu zerknüllen. Wieder nur Erklärungen und unverständlich formulierte Behauptungen, die man nicht verstehen kann und dann schließlich durch realisierte Wunderobjekte in die Welt befördert werden. Es war schlimm genug, dass man ihn wirklich hier aus dem Verkehr gezogen hat. Aber es muss ein Ende haben mit diesen überzogenen Experimenten." },
+            { src: 'dissertation die Hinrichtung der Kausalität-012.jpg', alt: "Er starrte immer noch auf das Papier. Die Worte von K. Unverdaut brannten wie Säure in seiner Wahrnehmung. Er wollte die Hand heben, wollte die Finger krümmen, wollte das Pergament zu einer bedeutungslosen Kugel pressen. Doch die Rückmeldung seiner Nerven traf ein, noch bevor sein Wille den Befehl hätte senden können.Doch als sein Wille den Befehl der Zerstörung an seine Finger senden wollte, spürte er bereits das raue Pergament in seiner geschlossenen Faust. Er spürte den harten Widerstand des zerknüllten Papiers bereits in seiner Handfläche. Seine Fingerknöchel waren weiß vor Anspannung. Das leise, trockene Knistern des brechenden Papiers war bereits verklungen, als sein Gehirn gerade erst die Entscheidung zur Zerstörung formulieren wollte. Die Tat war keine Folge seines Willens; sie war die Voraussetzung dafür.Alrik starrte auf seine Faust. Er fühlte sich nicht wie der Täter. Er fühlte sich wie ein Zuschauer, der durch die Augen eines Roboters blickte. „Das war ich nicht“, flüsterte er in die Stille des Raumes, doch die Hardware seiner Hand blieb ungerührt. Sie" },
+            { src: 'dissertation die Hinrichtung der Kausalität-013.jpg', alt: "hatte den Code bereits ausgeführt. Die Kausalität war nicht nur unterbrochen – sie hatte ihn überholt. Es war ein Beweis, so offensichtlich wie grausam, und doch weigerte sich sein Ver-stand, die Konsequenz zu ziehen. Er hielt es für einen Krampf, für einen Reflex, für einen Zufall. Die Software „Ich“ kämpfte verzweifelt gegen die Tatsache an, dass sie längst deinstalliert war.Das Papier war schon ein unförmiger Klumpen. Seine Mus-keln hatten den Befehl des Compilers längst ausgeführt, wäh-rend sein Bewusstsein noch mit der moralischen Prüfung be-schäftigt war. Die Wirkung war der Ursache vorausgeeilt. Die Hardware hatte die Software überholt. Er betrachtete seine Faust wie ein fremdes Objekt, ein autonomes Werkzeug, das keinen Besitzer mehr brauchte. War es nur eine kurze Ausset-zung seines Gedächtnisses, ein kurzer Augenblick der Träume-rei oder nur die Möglichkeit eines Wimpernschlages im Tage-straum? Alrik hält alles für sicher, außer der vagen Wallungen von Angst, die aufkommt, weil er ebenso bereits in der Falle dieser unbekannten Entführer sitzt. Dass es ein Schutzmecha-nismus eines Bugs ist, kommt ihm nicht in den Sinn. Sein Be-wusstsein versucht, die Hardware-Autonomie als &quot;Zufall&quot; oder &quot;Muskelzucken&quot; umzudeuten, um seine eigene Existenzberech-tigung nicht zu verlieren. Diese Verleugnung ist die letzte Bar-riere vor der absoluten Konstruktion des Nichts. Es musste ge-nau die Angst sein, die Anweisung 2 erwähnte. K. wusste demnach, dass mir dieses schreckliche Gefühl aufsteigen wird. Er sollte sich die Zeilen doch aufmerksamer durchlesen." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

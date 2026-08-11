@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-02.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Norden ist immer oben_148x210cm 7-013.jpg', alt: "Dienstag, das Wetter ist wie immer, so oder eben anders, kaum der Rede wert. Die Arbeit ist auch nicht viel besser. Alle Ge-danken sind auf das zu Hause ausgerichtet. Das Auto wartet wohl wieder ungeduldig. Der Parkplatz ist wie immer randvoll mit fremden Blechgesellen. Still und tot warten die Gesellen der Schnelligkeit da, wo sie abgestellt worden waren. Kein Laut an Gejammer. Keinen Muckser an Qual der Langeweile, kein Lied der Leidenschaft erfüllt ihre Leiber, wenn sie denn welche hätten. Die computergestützten Funktionen schweigen und lamentieren nicht. Lust oder Unlust – eh alles gleich und egal." },
+            { src: 'Norden ist immer oben_148x210cm 7-014.jpg', alt: "Mein Körper ist auf dem Weg zu meinem Gestüt. Tür auf, hin-setzen, Schlüssel aus dem Gehänge raus und in das Zünd-schloss, drehen, fertig. Mein 'Pferd' ist da. Flüssig, etwas schnaufend oder ein klein wenig bockig. Es knattert wie ein hüpfendes Bienchen, bevor es summt. Nun geht es endlich los. Ab in die Straßen zum Ziel des Tages, nach Hause. Egal wie der Wind versucht, mich zu bremsen und mein 'Pferd' zu zü-geln. Der laute Fresssack, auch Motor genannt, hat was zu Bei-ßen. Benzin oder Strom, irgendwas wird ihm in sein Maul ge-stopft. Hauptsache die Räder drehen sich. Der Teufel sitzt da-bei oben auf und dreht sein Spieß in der Höhe. Alles normal und voll modern. Der Sichelmann in der Ferne läuft indes ein-sam hinterher, heute wird es keinen Unfall geben. Mein Gespür ist sich sicher. Die Laune wird besser und was kann es Schöne-res geben, als alsbald zu Hause zu sein. Die Gedanken sind praktisch schon mit Überlichtgeschwindigkeit da, wo sie eh fast immer geblieben sind. Komisch, dass keine Zeit zwischen Ab-fahrt und Ankunft vergangen ist. Meine Person ist lediglich gefühlt woanders gewesen.Der Parkplatz hat eine Schranke, die sich wie immer alleine öffnet. Hindurch und dann rechts, nochmal rechts an der Tank-stelle vorbei, über den Zebrastreifen, dann links an dem verfal-lenen Eckhaus vorbei und dann mitten durch eine Wiese. Auf ihr sieht man im Frühling unzählige Butterblumen blühen. Je-des Jahr das gleiche Spiel. Wenn sie ausgeblüht sind, schwirren ungezählte Samenfäden an kleinen Fallschirmchen in der Luft. Wenn man nach ihnen greift, entschwinden sie wieder mit ei-nem ungeahnten Schwung. Dann plötzlich ein blechender Knall und Knirschen – ein Ruck – die Kiste steht.Erschrocken geht mein Blick über den Kühler. Da bewegt sich eine Krücke mit einer Hand unterhalb des Einblicks mei-ner Augen hinter dem Kühlerdach hin und her. Nichts wie hin und" },
+            { src: 'Norden ist immer oben_148x210cm 7-015.jpg', alt: "schnell helfen, war mein erster Gedanke. Was war geschehen? Ein relativ junger Mann lag da wie eine Schlange vor den Rä-dern meines Fahrzeugs und rappelte so vor sich hin. Er kroch mehr, als dass er aufstand, und war total verwirrt, was mit ihm wohl gerade eben geschehen sei. Nun, meine Nervenwaren ebenso stark angegriffen. Mit beiden Händen musste man den komisch verhüllten Körper auf die Beine helfen.„He“, meinte er, „was Sie auch tun, es war meine Schuld, ganz sicher. Das Sie spontan ausgerechnet zufällig hier vorbei-gekommen sind, konnten sie nicht wissen. Entschuldigen Sie meine Unachtsamkeit auf der Straße. Die Vorfahrt war gewiss die Ihre und außerdem haben Sie ja angehalten, sodass mir be-stimmt nichts passiert ist“. Das konnte man nun allerdings weniger erwarten. Es wäre wohl normaler gewesen, wenn er mich im besten Falle einen Idioten genannt oder er die übliche Phrase abgelassen hätte, dass die Polizei so einen Straßenversager wie mich einhaschen muss und Ähnliches. Nichts von allem war der Fall. Der Mann, von recht muskulöser Gestalt, stellte sich nicht vor. Er gab mir die Hand und lallte irgendwie was von Besuch oder Mitkom-men oder etwas bringen. Er sprach nicht undeutlich, sondern seine Mundart war nicht von diesem Landstrich hier. Meine Intuition erahnte allerdings, was er meinte. Er wollte nach Hau-se gebracht werden. Etwas mulmig war mir, nach solch einem Sturz eines Menschen vor meinem Fahrzeug, schon. Ob es ein Unfall war, ist nicht so ganz klar. Die Verursachung lag mir nicht im Bewusstsein. Eine Beule im Auto, welche da irgend-wie im Blech geknirscht hätte, war nicht sichtbar. Eventuell hat der Man mit seinem Stock versehentlich an meinem Auto-Vorderteil herumhantiert. Wie dem auch gewesen ist. Wir wa-ren schließlich bei ihm zu Hause angekommen." },
+            { src: 'Norden ist immer oben_148x210cm 7-016.jpg', alt: "An dieser Stelle möchte ich betonen, dass es um das 'wie' und 'wo', und 'wer' mit 'wem', aus welchem Grunde, 'was' oder 'wa-rum' passiert ist, unbedeutend ist, im Verhältnis zu dem, was nun zu berichteten sein wird. Alles Geschehene ist nicht so an-nähernd wichtig wie das, was da kommen sollte.Wir waren in einem ganz normalen Mehrfamilienhaus im zweiten Stock. Das Haus war mir optisch durchaus bekannt, da es fast auf meinem täglichen Arbeitsweg lag. Allerdings trieb mich bisher nichts in die Nähe der Hausmauern. Weil, da ist nichts weiter, was mich interessiert hätte. Kein Bäcker, kein Fri-seur, kein Kaufhaus für Lebensmittel, einfach nichts. Ein paar Häuser, eine Straße und ein paar Katzen und ein Hund" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

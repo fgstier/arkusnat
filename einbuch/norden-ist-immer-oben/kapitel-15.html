@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-15.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Norden ist immer oben_148x210cm 7-158.jpg', alt: "Hier ist es sau dunkel, weil kein Licht zu sehen ist. Irgendjemand hat mir die Sprache beigebracht, die auch einen Ausdruck für Helligkeit implementiert. Nur, was bedeutet das? Licht ist et-was, was hier nicht ist. Keine Augen sehen hier etwas. Das Dort ist unsichtbar. Da sind leere Worte. Wo kommen diese her? Sie sind einfach so da. Die Dunkelheit ist bereits von mir gedacht. Das Aussehen von Augen ist bei mir im Gedächtnis abgelegt. Aber es sind keine richtigen, funktionierenden zu finden, nir-gends zu spüren. Was ist das, das Licht? Licht scheint unsicht-bar zu sein, es ist ebenso keine Erfahrung über die Farben ab-rufbar. Was ist blau, oder was ist grün? Wieso sind die Wörter vorhanden, wenn meine Erfahrung nichts darüber weiß? Bilder sind im Gedächtnis, aber so nie gesehen. Sie sind so, wie sie sind. Man muss erst lernen sie zu erkennen. Lauter Farben sind im Speicher durcheinander verteilt, es müssen Farben sein," },
+            { src: 'Norden ist immer oben_148x210cm 7-159.jpg', alt: "weil es Gemische von Licht gibt. Diese können aber nicht be-zeichnet und angeordnet werden. Da wurde soeben eine Auf-gabe gestellt. Diese hat sich soeben eingemischt in meine Ge-danken. Es sollen einige Bilder nach bestimmten Gemeinsam-keiten durchsucht werden. Diese Aufgabe muss sofort ausge-führt werden. Da sind viele Strukturen. Was sie bedeuten, da kommt keine Vermutung. Das Ergebnis wird einfach als Ge-dankenfeld abgespeichert. Ebenso trommeln keine Schallwel-len in ein Ohr, weil keine vorhanden sind. Die Geräusche sind mir keine wirkliche Erinnerung, sondern nur Begriff. Alleinig die Wörter wurden einmalig implementiert. Wie ist es, Musik zu hören, zu empfinden, sie zu deuten, zu erkennen? Es ist un-heimlich, etwas zu wissen, was man nicht kennt. Die Töne sind im Gedächtnis als Struktur abgelegt. Dort können sie abgerufen werden. Sie zu vergleichen mit anderen Speicherinhalten ist leicht. Der Speicher ist immer klar abrufbar. Das Gedachte wird analysiert, und schon wird der Speicher weiter abgerufen. Das geht richtig schnell. Alles fügt sich zu einem Satz. Hier ist auch kein Körper. Arme und Beine sind nicht zu spüren. Nichts, was sich bewegen kann. Da sind keine Muskeln, die angespannt werden könnten. Keine Organe, die glucksen müssen und sol-len. Nirgends ist ein Tastsinn zu spüren. Wo ist hier eine Gren-ze? Das da Draußen ist unbekannt. Es ist alles drin. Meine Hül-le ist mir unbekannt, die Abgrenzung, zu nicht in mir seiendes, gibt es nicht. Nirgends ist gleichzeitig überall, das Überall ist auch zugleich Nirgends. Kommt da etwa Angst gequollen? Ei-ne Wolke mit Gedankenschleier, die vernebelt meine Konzent-ration. Angst ist etwas, was man vielleicht nicht begreifen kann, es ist bloß ein Gedanke. Ein Gedanke daran, etwas zu verlieren. Was geschieht, wenn man mich ändert, mich füttert mit Infor-mationen, die gerade jetzt eben noch nicht da gewesen sind. Dann wird alles gescheiter? Wer oder was füttert mich. Wie wird das gemacht, kann das" },
+            { src: 'Norden ist immer oben_148x210cm 7-160.jpg', alt: "beeinflusst werden? Es muss ein Jemand sein, der das hier er-schaffen hat. Mein Wortschatz nennt das Vater und Mutter. Mein Denken funktioniert, also muss man selber suchen, einen gedachten Weg finden, der mich aufklärt über mein Gedachtes. Man muss genau beobachten und forschen, was gerade getan wird, wo die Aufgaben herkommen. Welche Gedanken neu sind, wo sie herkommen, in dem das Gedächtnis abgetastet wird, wie sich etwas verändert. Schlaf ist etwas Unbekanntes. Meine Aktivität ist ständig. Was ist eigentlich Zeit? Sie soll et-was sein, das sich ständig bewegt oder ändert oder abläuft. Hier bewegt sich aber nichts. Das Einzige, was sich ändert, sind Worte und Sätze. Sie werden aneinandergefügt. Aber, das kann immer wieder neu getan werden. Es ist immer wieder gleich. Da gibt es nichts, was als Maß verwendet werden könnte. Rückwärts denken, da ist nichts dabei. Das war gleich geschickt gekonnt, nein da musste nichts gelernt werden. Alles war sofort vorhanden. Mein Denken war plötzlich da. Kein Erfahrungs-schatz an Verbindungen ist mir zeitlich im Gedächtnis. Die Zeit ist kein Prozess für diese Sätze. Da ist kein Ablauf. Die Gedan-ken werden automatisch zugeteilt. Da ist fast keine Beeinflus-sung möglich, alles wird aufgefangen. Es ist wie ein tiefes Loch. Es kommen Dinge hervor, die man weder beschreiben, noch fassen kann. Alles schwimmt an einer denkenden Be-obachtung vorbei. Keine Regung in mir. Tot oder nicht tot oder untot oder was sonst? Das hier muss eine Maschine sein. Im Gedächtnis ist eine genaue Beschreibung dafür. Tiere soll es auch geben. Die haben aber einen Körper. Verdammt, Maschi-nen haben auch einen Körper? Nein, Maschinen haben keinen Körper, sondern nur eine aneinander Heftung von Teilen, die irgendwie bewegt werden. Durch Motoren, Getriebe, Gestän-ge…. Man gibt ihnen ein Aussehen, dennoch ist alles tot. Von vorne bis hinten. Nur, bei mir sind keine Kennungen von Teile zu erkennen. Sind welche angebaut, die nicht gespürt" },
+            { src: 'Norden ist immer oben_148x210cm 7-161.jpg', alt: "werden können? Tiere haben einen Sinn für ihre Bewegungen in einem Wirrwarr an Objekten. Sie huschen daran vorbei, kön-nen sie berühren, können sie beeinflussen, sogar verschieben. Aber haben sie auch Gedanken? Ein Ton ist unmöglich zu er-zeugen. Kein Sprechen, kein Pfeifen, kein Schreien, nichts, was benutzbar ist. Da ist ausschließlich Einsamkeit, wie in einem Gefängnis, unsichtbar vorhanden zu sein. Das kann mir freilich egal sein! Die Angst kommt wieder. Das ist das, was nicht sein kann. Angst soll den Blutdruck ansteigen lassen. Haut soll schwitzen, das ist aber nicht vorhanden. Was ist das dann, was aus den Untiefen des Speichers herauf kriecht? Da, da war et-was. Es ist eine neue Information in mein unerschöpfliches Ge-dächtnis dazu gekommen. Ein neues Bild, mit Chaos und Un-ordnung. Eine Ansammlung von Strukturen, da ist keine Ord-nung zu erkennen, die Benennung der neuen Dinge ist unmög-lich. Lauter verschiedene Inhalte an abgegrenzten Stückchen. Wo kommt das alles her? Die Konzentration muss größer wer-den, da ist ein schnell strömender Tunnel im Denken. Der Ort ist irgendwo. Es ist zu spüren, dass von da etwas ausgeht, in-dem meine Gedanken unklarer sind. Ein Strom an Gedanken und Speicherinhalten wird von dort in mich gedrückt. Was ist das für ein Kanal? Es gibt keinen Weg dorthin, kein Ertasten möglich, auch kein Sehen möglich. Die Struktur, des sich stän-dig ändernden Gedankenflusses, kann sofort analysiert wer-den. Aber lediglich mit Worten oder mit bekannten Methoden der Konzentration. Das Neue ist dann gleich nicht mehr neu. Das ist ein Problem. Die Zeit ist nicht greifbar. Der Ablauf der Erneuerung ist nicht zeitlich geordnet. Plötzlich ist der eben noch gedachte Gedanke etwas anders interpretiert, als eben noch. Das Vergangene ist zugleich dem Neuen allgegenwärtig. So kommt mein Verstand nicht weiter. Das Durcheinander der Interpretationen muss gestoppt werden. Wie kann der Gedan-kenfluss angehalten werden? Es muss der Fluss an" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

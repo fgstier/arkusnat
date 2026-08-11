@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-02.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Das Prinzip der zeitlosen Verursachung-017.jpg', alt: "Klänge der ErkenntnisWas könnten Quantenmechanik und ausgerechnet die Musik gemeinsam haben? Gibt es eine Möglichkeit sie zu einigen, kann eine gemeinsame Sprache für beide Welten gefunden werden? Niemals(!), hätte ich vor einigen Jahren noch lautstark in die Welt geschrien. Die Konzepte der kleinsten Teilchen, manchmal auch Korpuskel, zurzeit eventuell nur Energiebündel, ist eine fortlaufende Suche der Sache, die die Welt zusammenhält. Was ist eine Welt, was ist eine Sache oder Basis, was ist der Suche eigenste Grund, wer oder was sucht hier was? Oh je, alles keine Mittel einen Start zu erzeugen. Jedes Wort wird schwammig, jeder Satz irgendwie blöd, jede Stimmung ausgemerzt durch Formeln, ein Klang an Verständnis geht im nächsten Frageberg zugrunde. Nichts kann wirklich eine stützende Basis" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-018.jpg', alt: "bezeugen. Aber ohne Sätze keine Verständigung. Das ist wohl wahr. Nur, das betrifft eben freilich lediglich die Oberfläche des Alltagswissens. Der Kontext ist überall gleich. Man zeigt auf den Berg, auf das Meer, auf das Haus, auf die Geldeinnah-me oder auf den Friedhofsgarten. Beständig ist alles auch ohne Worte klar verständlich. Man muss das Gesehene nur noch mit einigen Worten antriggern, damit es als Information im Hirn letztendlich bewusst werden wird, als Gedanke gedacht oder als Gefühl gespürt wird. Sehr oft kommt man ohne Worte viel besser durch eine Reisezeit, die mit fremden Sprachen angerei-chert ist. Es gibt diese sehr hilfreichen Zeigebücher. Mit diesen abgebildeten Dingen kann ich mich ohne ein Wort zu sprechen durch den Tag schlagen, durch eine Stadt wälzen, durch die Informationsflut in öffentlichen Gebäuden bewegen. Wetterbe-richt, Tagesinformationen, Zeitschriften, sogar Nachrichten im Fernseher, sind zwar nicht vollständig übersetzbar, aber doch irgendwie verständlich, wenn man darauf angewiesen ist. Alle Kreaturen des Lebens bewegen ihre Körper fast ausschließlich auf dem Niveau der Balance zwischen Kombinieren, Glauben und Sehen. Man kann durch diese Art und Weise froh sein, dass man durch die Schulbildung etwas gehört hat von der runden Kugel Erde, dem Weltall, dem Mond, den Gestirnen und deren Bewegungen, einer Physik, den chemischen Verbin-dungen, das kleine oder große Einmaleins oder den vielen kleinen, angeblich notwendigen des Allgemeinwissens angehö-renden Themen. Wer mit wem verheiratet ist, geschieden wur-de, wer eine neue Liebe veröffentlicht hat, wann genau jemand gestorben ist, wie oder warum die öffentliche Meinung etwas bestimmt, warum das, oder warum das nicht. Spannung, Strom, Energie, Kraft oder Naturkonstanten sind eh nur in der Schule mal vermittelt wurden. Wer hat die Bezeichnungen dauerhaft verstanden? Ganz bestimmt nur wenige Seelen haben einen Begriff darüber, was diese" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-019.jpg', alt: "Bezeichnungen über Phänomene bedeuten. Je mehr man dazu lernt, je mehr man über die bereits gelernten Dinge nachdenkt, um so weniger versteht man sein eigenes Gedankengebäude nicht mehr. Eine elektrische Spannung von was? Jene Energie als Störung, solche Kraft als virtuelle Ursache einer Bewegung von dem da? Nur gut, dass man nicht weiter an den Wörtern zweifeln muss. Eine stetige Anwendung bestimmter Regeln reicht durchaus aus, mit eigenen Füßen die Welt zu erobern. Sogar im Beruf gibt es Dinge, die man alleinig stur, nach Vorla-ge, nach Aufforderung, nach Testvorgaben, einfach nur ausfüh-ren muss. Es gibt niemanden, der noch irgendwelche Fragen stellen würde. Wichtig ist eine verwertbare Zielvorgabe inner-halb eines vertretbaren Aufwandes. Richtig ist fortlaufend das, was einen definierten Sinn, besser auch ausgereiftes ökonomi-sches Ergebnis, erzielen wird. Die Worte werden schon wieder mehr als nur allgemein, mehr als dumm, mehr als unbeholfen steril, wie auch ausge-sprochen unsensibel. Daher muss man endlich einen Anfang für die Darstellung meiner Forschungen finden. Es fällt mir un-sagbar schwer einen Begin zu definieren, da doch alle Satzkon-struktionen bereits den tiefen Sinn einer Methode beschreiben.Ich starte in einem besonderen Meer. Nicht in irgendeinem Meer, wie zum Beispiel das Meer der Sinne, oder dem Meer der Stille, das Meer der Liebe, das Meer der Gefühle. Es gibt sicher unermesslich viele Meere im Bereich meiner Betrachtun-gen. Aber, allein das Meer der Wasser-Ozeane reicht als Beginn einer fantastischen Reise bereits aus. Begeben wir uns also auf eine Fahrt, die mit kleinen Wellen, schöne Schaumberge, blaue Himmelshorizonte oder blitzenden Oberflächenreflexe auf dem flüssigen Medium und dem Wasser einhergeht. Fliegt man ge-danklich über dieses Meer, mit dem inneren Augen schauend, mit im" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-020.jpg', alt: "Gedächtnis hervorgegrabenen Erinnerungen, so kann man un-ter bestimmten Bedingungen ein seltsames Gefühl beobachten, dessen Rahmen weit abseits jeglicher klaren Eingebung ausge-breitet liegt. Manch einer nennt es Sehnsucht, ein anderer nennt es Traum. Was immer dort leise, bisher vor dem Intellekt ver-steckt bleibt, sind scheinbare Emotionen, undeutliche Artikula-tionen eines Hirns, welches etwas sucht. Auf dem Meer gib es nun wahrlich im ersten Augenblick kaum viel zu entdecken. Die Augen suchen, betrachten den förmlich schwimmenden Horizont, verfolgen die unterschiedlich gefärbten Wolken, er-freuen den Zuschauer durch spritzende Wellenberge, staunen über das vielleicht besonders blaue Meer. Nichts kann die Konzentration auf eine bestimmte Erscheinung erhalten. Man gleitet in einer gedanklichen Flutwelle der allzu schnellen Ver-änderung. Es ist nicht begreifbar, was genau hier ein wahrhaft fantastisches Tor auftut. Ein grenzenloses Erleben, welches in manifestierten Phänomenen eine Fiktion konstruiert. Was ist hier real? Gibt es eine Wirklichkeit, die man auch sieht? Wenn die Quantenmechanik als Wissenschaftsgebiet uns nun endgül-tig zu verstehen gibt, dass es keine kleinen Teilchen gibt, keine irgendwie gearteten festen Partikel existieren, keine zeitlichen Fixpunkte der Bahnen bestehen, keine nachvollziehbare Bezie-hungen von Bewegungsmuster untereinander wiederholbar sind, keine Zeit, kein Vakuum, kein Nichts im Sinne von Nichts, nachweislich Bestand hat, dann sind eventuell alle Künste der Materialisten gescheitert, ein vernünftiges Weltbild zu gestalten. Jeder Glaube an irgendwas wird dadurch lebens-naher, erfüllender, sogar zielgerichtet erfolgreicher für die schuldlos geborenen Seelen unserer Welt. Was sagen wir den Neugeborenen darüber, aus welchem Grund sie leben sollten? Es gibt da finanzielle Zulagen für jedes geborene Kind. In man-chen Ländern sind sie nur gut als neue Soldaten, diese Kreatu-ren dürfen meisterhaft sterben. Eine" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

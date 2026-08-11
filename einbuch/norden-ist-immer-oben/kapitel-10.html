@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-10.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Norden ist immer oben_148x210cm 7-100.jpg', alt: "Viele Hühner und das Schwein RosaliK entpuppte sich als Hühnerkenner. „Wie Hühner sich vermeh-ren kennen sie bestimmt. Der Hahn kräht und macht sich stark für seine Hühner. Dann werden sie getreten, so nennt man die Paarung, und anschließend können so an die zehn Eier befruch-tet sein. Das Huhn legt aber nur jeden Tag so etwa ein Ei. Wenn der Hahn mehrere Hühner tritt, dann gilt das gleiche für die anderen Hühner. Wir haben nun herausgefunden, dass die Kü-ken, die dann schlüpfen ein eigenartiges Verhalten zeigen. Das vierte und das sechste Küken sind mit" },
+            { src: 'Norden ist immer oben_148x210cm 7-101.jpg', alt: "dem jeweils anderen Küken einer anderen Henne regelrecht transgressus . Diese Eigenschaft ist nicht das gleiche, als wie die bekannte Verschränkung aus ihrer Welt. Das sind hier alles Haushühner. Die werden auch Grünleger genannt, weil sie grüne Eier legen können. Aber nur die, die miteinander trans-gressus sind. Wir haben diese Nester nummeriert und können immer vergleichen, ob die Farbe der Eier gleich ist. Die Farben der Eier in jedem Nest sind wirklich immer zufällig. Aber im Vergleich, ist das Ei vom Huhn mit der Nummer sechs grün, dann ist das Ei vom Huhn mit der Nummer sechs weiß, sowie das alles auch umgekehrt. Wir führen hier oben über einen län-geren Zeitraum schon Buch über diese Zusammenhänge und ich habe bereits eine Theorie entwickelt. Der Zusammenhang ist der, dass es keinen gibt. Der Zufall spielt uns hier einen ne-ckischen Streich. Es sieht eben lediglich so aus, als ob hier eine Gesetzmäßigkeit vorhanden ist. Die Eier haben für sich eine Eigenschaft und die anderen Eier sind statistisch völlig unab-hängig. So, wie bei dem Roulette die Häufigkeit hintereinander ermittelten geraden und ungeraden Zahlen, obwohl man meint, wenn viele gerade Zahlen vorhanden waren, ist die Wahr-scheinlichkeit größer, dass nun endlich eine Kugel in einen un-gerade Fächer fällt. Es sieht so aus, als wenn ein Orakel im Huhn erkennt, was sein muss, damit wir getäuscht werden. Haben sie schon von dem Orakel gehört? Das ist ein Gemisch aus 'Ahnung haben' sowie 'hinters Licht führen'. Ein gemeiner Täuscher der vilis fraudsters . Ich habe ständig mit diesem Wicht zu tun. Der hat sich in mein Hirn verschanzt. Ständig muss er hinausbegleitet werden, wahrlich sehr lästig.“" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

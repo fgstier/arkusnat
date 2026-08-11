@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Norden ist immer oben_148x210cm 7-007.jpg', alt: "Gefühlt tausend Jahre ist es her, dass mein damaliger Schullehrer der Oberstufe M. Lockwile mir etwas erzählte über überdimen-sionale Gebäude aus Zahlen, Buchstaben, auch Dimensionen in der unüberschaubaren kosmischen Vielfalt der mathematischen Irrgärten. Dunkle Zahlenkolonnen mit den Schatten der imagi-nären Vielfältigkeit. Verworrene und sich windende überei-nander gelegene Bewusstseinsebenen eines vielleicht Wahn-sinnigen, der kurz vor dem Durchbruch aller Wahrheiten von Himmel und Hölle zu sein schien. Er war der Lösung, seiner Lösung, der Vollendung allen Seins in seiner Welt der Spiralen, Kreisen von Zufälligen, Gesetze der Mechanik, der Quanten-mechanik, der Himmelsmechanik," },
+            { src: 'Norden ist immer oben_148x210cm 7-008.jpg', alt: "Uhrmechanik und weiß der Teufel persönlich für sonstige Me-chaniken der Geschichte, nicht mehr weiter entfernt, als wie ein einzelner Schritt bis zur wahrhaftigen Erkenntnis aller Wesen dieser Welt.Er ist aus meiner Aufmerksamkeit verschwunden, vor eini-gen Jahren schon. Unbemerkt von der Welt, leise zugleich ver-stohlen wie ein Kind seine Kindheit verlässt. Was ist von ihm geblieben? Man kann es leider nur vermuten. Jedenfalls schweifen meine Gedanken an jenen Mann mit kräftigem Kör-perbau zurück. Seine Gestalt war sehr auffällig. Der Gang war von weitem zu erkennen. Man mochte ihn nicht so besonders. Er war nicht sehr einfühlsam und immer absolut direkt. Manchmal sogar etwas eklig oder vorlaut. Niemand konnte ihm das intellektuelle Wasser reichen. Seine Intelligenz war gewaltig breit gefächert. Seine Arme umfassten einen sprich-wörtlich wie eine Meeresbucht den Strand bei einem Gespräch. Seine Augen funkelten voller Stolz sowie mit Großmut seinem Partner gegenüber. Aber, er war ein Gigant an Wissen, wobei auch sehr geduldig einem etwas zu erklären. Die Augen konnte man nicht verlassen und war gezwungen immerfort seinen Worten zu lauschen, auch wenn man vieles nicht sofort ver-stand oder gar nicht. Seine Sätze verwöhnten jedes Gehör mit Klang, Dynamik als auch Widerhall. Musik aus einer Welt, die allein leicht an der Oberfläche schäumt. Unvorstellbar, was da in der Tiefe der Worte noch wartete, erkannt sowie entdeckt zu werden.Ein Verlust an denkbaren Sätzen, die nie gesprochen wor-den. Die nie gedacht und auch vielleicht nie geahnt werden können. Wenn er durch die Straßen zog, um zu seiner Arbeit zu kommen, hatte er immer seine Aktentasche dabei. Er trug sie nicht unterm Arm, sondern ließ sie an einem Finger mit schlen-derndem Arm" },
+            { src: 'Norden ist immer oben_148x210cm 7-009.jpg', alt: "schaukeln. Siegessicher und glücklich, wie es schien, dorthin zu gehen, wo die Schüler nicht unbedingt fröhlich auf ihn war-teten.Teilnahmslos nimmt bestimmt jedermann diesen Verlust an Charakter dahin. Man kennt sich nicht, man hat keine Bezie-hung, man lebt eh anders.Meine Beschäftigung besteht gerade darin, mich auf eine Be-sprechung vorzubereiten, sitze dabei am Fenster und schaue so vor mich hin in die Stadt. Da ist zwar etwas zu sehen, aber mei-ne Gedanken sind fern jener Realität, die mein Auge erzeugt. Na wenn schon! Der Kaffee ist kalt geworden und eine Pause war ja auch nicht schlecht. Mein Chef wollte einen allgemeinen Bericht über die Regelungstechnik für alle Kollegen. Der soll nicht länger als 10 Minuten dauern. Eine Informationsveranstal-tung für alle sozusagen, der das beinhalten wird, was eh schon alle wissen. Kann im Grunde für mich nur langweilig sein.Da kommen dann noch ganz andere Gedanken hoch. Warum soll gerade ich das machen? Will er mich testen? Wieso sollten 10 Minuten reichen und was weiß er mehr über das Thema, als die anderen Kollegen? Soll man sich zweifelsohne zum Affen machen oder soll man allen zeigen, was man so draufhat? Wahrlich zum kotz... Ein Studium dauert einige Jahre, bevor man die Werkzeuge der Mathematik anwenden kann. Ob man die auch verstanden hat, steht dabei noch auf anderen Blättern der Gedankenirrwege. Wie viele Diskussionen an Abenden mit Kommilitonen, wie viele Stunden der Übungen am Gewehr der Schriftsetzung, damit ist der Bleistift gemeint, hat man überste-hen müssen? Mein Verstand hat gewürgt, geknurrt, gefleht – gar gestreikt. Was musste man da alles über sich ergehen las-sen? Warum, wieso, weshalb, …. Die Antwort lag da, im Stu-dentenwohnheim überall ausgebreitet – Klausur. Logische Antwort der Hochschule. Aber nunmehr wieder diese Fragen, allerdings" },
+            { src: 'Norden ist immer oben_148x210cm 7-010.jpg', alt: "diesmal ist es viel, viel schlimmer. Auf der einen Seite sitzen mir da gegenüber gespannte Kollegen, die von der Materie fast keine Lust dafür haben, auch nur in Ansätzen davon was ver-stehen zu wollen, weil der Stoff eh nicht klar vermittelbar. An-dererseits ist das Thema in aller Tiefe kaum von einem selbst durchschaubar. Dann noch die vielen Hintergedanken in die-sem Universum von anderen, viel besser geschulten, als auch geübten Mitmenschen, denen eh nie das Wasser zugereicht werden kann, weil man selbst gefühlt kaum das Abitur schafft. Die Zange ist einfach unerklärlich weit gefasst, in die man hier unweigerlich stürzen muss. Kann man eigentlich noch tiefer in einen Abgrund schauen und trotzdem nicht mehr sehen, was auf dem Grund liegt?Ja gewiss, es geht noch ungenießbarer, bei weitem entsetzli-cher, als man sich das vorstellen kann. Bisher ist es mir nicht gelungen, auch nur etwas aus diesem unbehaglichen Milieu an die Oberfläche zu tragen und mit einer willigen Seele auf die-ser Welt zu teilen. Jeder Versuch eine in Sätze gekleidete Ko-lonne von Wörtern hintereinander zu gestalten sind kläglich gescheitert. Kein Lesender konnte auch nur erahnen, was meine Sätze meinen könnten. Man steht dann als Idiot im Mittelpunkt. Nicht so sehr als der Dumme, sondern mehr als jener, der be-dauert werden muss. Losgelöst von der weltlichen Realität der Gesetze aller Vernünftigen. Sätze müssten die Wörter gleichzei-tig beinhalten, welche für den zu" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

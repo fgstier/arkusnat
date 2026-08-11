@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-04.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK</button>
+            <button onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+const pageFiles = [
+            { src: 'Norden ist immer oben_148x210cm 7-054.jpg', alt: "Es ist anzumerken, das Dingsda ähnelte eher einem Waschbe-cken mit nicht abgeschraubtem Abfluss, welches eben leicht durchsichtig war und einem Abschlusspfropfen versehen war, damit nichts herausfallen kann. Dann war da noch eine kleine Tür mit Scharnieren, damit man das, was dort drinnen sein könnte, geschwind wieder herausholen kann. So weit war mir das Gerät schon mal klar. Es war scheinbar bei weitem nicht so ein Unikum wie das, was man bereits bei ihm gesehen hatte." },
+            { src: 'Norden ist immer oben_148x210cm 7-055.jpg', alt: "K begann vorzuführen: „Passen sie mal auf. Wir haben eben festgestellt, dass ohne eine Zeitschiene kein Objekt denkbar ist, was irgendwie geometrisch vor uns steht oder liegt. Nun wer-den ich ihnen zeigen, was passiert, wenn der Zeitstrahl um ei-nige Grade gebrochen wird. Also ihr Bewusstsein wird in der Art verändert, dass sie den normalen Strahl der Zeit nicht mehr so sehen, wie gewohnt. Im ersten Versuch schauen sie bitte ge-nau auf das kleine Türchen dort unten, dabei nehmen sie die kleine Kugel hier wieder raus“.Gesagt getan. Er legte eine Kugel aus dem Beutel in die Schale, und ließ sie los. Diese kullerte alsbald geschwind in das Loch. Dort klapperte sie etwas hin und her. Des Weiteren konn-te sie dann auch schon, nach dem Öffnen des Türchens, wieder entnommen werden. „Das war einfach“ war mein Murmeln zu vernehmen. „Nun machen wir das etwas anders.“, sprach K langsam weiter: „Bitte schauen sie nur der Kugel nach, nicht aber zum Türchen. Sie dürfen das Türchen nicht sehen.“Er nahm eine zweite Kugel. Diese kullerte ebenso wie die Erste in das Loch. Das Klappern war genauso laut wie eben. Dann schaute ich an das Türchen und wollte auch diese Kugel dort herausholen. Aber da war nichts. „Keine Kugel da!“ Das platzte mir nicht nur verdutzt heraus, sondern sogar ängstlich, dazu wirklich entsetzt. Wo war die verschwunden?Es gibt ja im Fernsehen immer Künstler, die geben dir was in die Hand, überdies stellt man fest, dass das Ding nun plötzlich in der Hosentasche ist. Oder es fällt etwas aus der Nase, den Ohren, oder es wächst aus den Haaren und so weiter, und so weiter...Ich sah K an. Er meinte ganz lakonisch: „Die hat der Teufel geholt.“" },
+            { src: 'Norden ist immer oben_148x210cm 7-056.jpg', alt: "Sein Ton war auffallend ernst. Konnte man nun den Worten glauben, oder sagte er das, nur um mich zu erschrecken?„Sein sie beruhigt, der Teufel nun gerade nicht, aber ein Y-Quant hat sich hier entschieden, uns zu foppen. Das machen die immer dann, wenn wir ihnen nicht genau auf die Finger sehen. Ehe man es sich versieht klauen die einem die Gegen-stände. In meinem Besitz war mal eine ganze Schachtel voll mit Reißzwecken – alle weg, zugleich ins nescio quo entführt. Alle Streichhölzer weg, alle Knöpfe weg, alle Nudeln weg, sogar das Wasser verschwindet auf nimmer wieder sehen. Stellen sie sich das vor." },
+            { src: 'Norden ist immer oben_148x210cm 7-057.jpg', alt: "Man gießt Wasser in die Schüssel, schaut nicht an das Türchen und - das Wasser ist wie verdampft einfach weg. Wenn sie aber mal kurz hinschauen, dann läuft der Abfluss wie ein Feuer-schlauch gleich aus. Na logisch dann, es kommt das unten raus, was oben reinkommt. Bei mir war schon die größte Sauerei hier wegen dem Wasser. Sie können mit den Kugeln ruhig noch et-was weiterspielen, wenn sie möchten.“Seine Aufforderung bin ich natürlich nachgekommen. Immer das Gleiche. Schaut man zum Türchen ist die Kugel da, schaut man weg ist die Kugel ebenso weg. Schließlich war der Sack leer. „Was hat das komische Spiel hier mit dem Zeitstrahl zu tun? Das ist im Augenblick nicht so einfach in meinem Kopf zu ordnen.“ Meine Stimme klang wie eine leere Konservendose, Kontrolle klingt da anders. Piepsen und röcheln wechselten sich wild ab. Mir war auch etwas schlecht, manchmal kam der Schwindel in meinem Kopf durch. Das musste der Kaffee sein, der auch ziemlich stark war. Also die Y-Quanten verschlingen alles wie ein Drachen. K meint aber ausnahmslos in meinem Bewusstsein. Dann bedeutet das, dass die verschwundenen Dinge noch da sind. Neugierig musste schließlich die Frage an K kommen: „Also mein Bewusstsein erzeugt die Dinge, und lässt sie auch verschwinden?“ „Ja freilich mein lieber Freund.“, war die Antwort. „Jedoch, wenn ich aber nicht will, dass die Dinge ver-schwinden, was muss dann getan werden?“ K sprach ganz ge-lassen: „Sie dürfen die Dinge eben nicht aus den Augen lassen. Sobald sie weg schauen ist es geschehen. Das sind alles ganz gerissene Diebe. Viel schlauer als sie oder ich. Man kann nicht genug aufpassen. Überall haben sie ihre Finger im Spiel. Manchmal bekomme ich entsetzliche Angst. Renne sodann in den Keller und versuche frische Luft zu bekommen. Das funk-tioniert. Nach ein paar Minuten kann man dann wieder klarer denken.“" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

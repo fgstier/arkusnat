@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Das Prinzip der zeitlosen Verursachung-007.jpg', alt: "Tragöde der QuantenIch betrachte meinen hochmodernen Forschungskeller. Bevor weitere Experimente fortgeführt werden können, muss meine bisherige Arbeit doch erst einmal grob auf Papier gebracht werden. Vielleicht kann man dann später einen Vorteil aus den niedergeschriebenen Einsichten gewinnen. Bisher blieb mir jeg-licher Erfolg innerhalb der öffentlichen Publikationen aus. Frei-lich ist diese Tatsache in keinster Weise so sehr wichtig, den-noch sollte bekannt gemacht werden, in welche chaotische Not-lage jede physikalische Außenwelt grade hinein rudert.Viele Jahre lang beschäftigte mich das andauernde Problem, endlich diese Theorie von Allem, die Quantensaga, zu durch-leuchten. Alles Mühen, jegliche zeitaufwendige Sucharbeit und jeder Versuch eines erneuten Starts mit frischen Bemühungen" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-008.jpg', alt: "war bisher beständig sowie gleichermaßen erfolglos, im dich-ten Leerraum des Unverständnisses, verloren gegangen. Alle Berichte, Dokumentationen, wissenschaftlichen Abhandlungen als auch andere gelesenen Fachbücher konnten mir im Nach-hinein kein konstantes Bild meiner mir erlebbaren Welt besche-ren. Natürlich hatte ich manches Mal den Eindruck gewonnen, endlich einen Lichtblick und dadurch eine Idee des Verstehens zu erhaschen. Nach einigen Minuten der inneren Freude ver-schwand dieser leider nur kurz gefühlte Erfolg im Nebel des aufsteigenden Zweifels. Warum sollte man also versuchen, diese Leere meiner unzureichenden Geisteskraft, mit dieser Schrift weitergeben, da doch schon ausreichend Unsinn in zu vielen Buchveröffentlichungen vorhanden ist? Am wichtigsten erscheint mir meine winzige Vorstellung zu sein, einen tempo-rär virtuellen Wellenberg an Anregungen erzeugen zu können, welcher eventuell eine weitere unglückliche Seele erreicht. Was meine Wellen an Energie, in Form dieser Zeilen mit Worten und Sätzen, vermitteln werden, liegt dann im Auge des neuen Verstandes. Die hier verweilenden Mitdenker, müssen wahr-scheinlich um ein Vielfaches intelligenter sein, um hier nieder-gelegte zaghafte Bemühungen meiner Gedankenwelt zu ver-stehen. Gleichbleibend immer nur mit Hilfe dieser verfluchten Worte, die doch für jeden, im Zusammenhang innerhalb eines Satzes, unter verschiedenen Umständen, eine völlig andere Be-deutung erlangen können. Es ist nicht möglich eine unter-schiedliche Betonung zu artikulieren, eine Satzpause, ein virtu-elles Komma in diesen Texten zu setzen. Selbst Musiker sind ausgereifter qualifiziert, eine Unmenge von Zeichen auf ihrem Notenblatt zu notieren. Dort sind Lautstärke, Geschwindigkeit, besondere Akzente, Toneigenschaften oder Wiederholungen für besondere Betonungen, überall mit verschiedenen Bildern einer Kennzeichnung möglich. Die Sprache der Musik ist daher auch um viele Male reicher mit" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-009.jpg', alt: "speziellen Informationsdiamanten bestückt, als diese hier prak-tizierte primitive Form der niedergeschriebenen Sprache in Form von Text. Wenn man nun mit einem Vehikel an Buchsta-ben kaum fähig ist, mit meinen kurzen bruchstück-ähnlichen Sätzen aus gedanklichen Gebäuden eine Idee zu extrahieren, wie soll man dann die Welt erklären können? Mathematik zu-sammen mit Logik machen es möglich? Diese präzisen Formen einer Sprache haben die hervorzuhebende Eigenschaft, dass sie zeitlich gleichbleibend und darüber hinaus gleichzeitig in der Vergangenheit und Zukunft einer Bewegung ausgesetzt sind. Die Gegenwart ist eine schwammig zähe Bewegung zwischen diesen beiden Zeitformen. Das bedeutet, sie beschreibt Vor-gänge in der Art, dass sie bildlich als Formel notiert wird, mit dessen Hilfe dann eine zukünftige zeitliche Abfolge von Abläu-fen dargestellt werden kann, die in einer Vergangenheit bereits ähnlich oder wiederholend bereits abgelaufen sind. Aus die-sem Grund besitzen viele Formeln einen universellen Charak-ter, sind zeitlos gültig, sind starr unbeweglich, einem Fixstern gleich unverrückbar. Eine festgeschriebene Information ähnlich einem Vakuum. Ein Gesetz zum Beispiel ist eben eine statische Beobachtung, welches alle Zeit gültig sein sollte.Die Physik ist eine Modellierung, die genau diese Eigen-schaften aus jeglicher Mathematik verwendet, damit eine spe-ziell herausgegriffene Teil-Welt wunderbar beschreibbar ge-macht wird. Mit dieser Technik kann jede ausgewählte Zukunft vorausgesagt werden. Eine genaue zeitliche Bewegung eines Problems wird abgebildet, anhaltend in einem bildlichen Kon-text an notwendiger Information über definierte Bedeutungen einzelner mathematischer Symbole. Ein genialer Trick der Menschheit, jede mögliche Zukunft bereits jetzt, in der dauer-haft fluktuierenden Gegenwart zu deuten. Darüber hinaus gibt es auch jene" },
+            { src: 'Das Prinzip der zeitlosen Verursachung-010.jpg', alt: "Mathematik, welche fixe Tatsachen statisch wiedergibt und somit niemals dynamische Veränderung erfährt.Ein Wahnsinn an Hintergründen ist eine Voraussetzung, um ein Verständnis für entsprechende Inhalte auszubilden. Verste-hen heißt nun nicht unbedingt, auch wirklich etwas verstanden zu haben. Es soll jetzt auch weniger herausgearbeitet werden, was dieses Verstehen an Begriffen beinhaltet. Allerdings möch-te betont sein, dass ein verstandenes Problem freilich nur im Bereich vorgegebener Fragen oder einer bezogenen Denkweise, der gerade gesehenen Möglichkeiten an Lösungen, liegt. Somit wird die Mathematik, ähnlich einer Notation in der Musik, zu einem Hilfswerk an Symbolen und Zeichen. Beide können aber viel nuancenreicher oder detaillierter als eine textliche Passage etwas berichten. Es gibt nur eine Mathematik, eine musikali-sche Notation anhand unterschiedlicher Methoden für spezielle Darstellungen, aber demgegenüber sehr viele verbale Spra-chen. Damit ist die mundartige Verbreitung von Information leider fast zu" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

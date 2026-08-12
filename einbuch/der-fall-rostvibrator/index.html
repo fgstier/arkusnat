@@ -1,0 +1,822 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>F.G. Stier – Der Fall Rostvibrator // Das 33-Sektoren-Aggregat</title>
+   <meta name="description" content="Offizielles Sektor-Archiv zum Buch 'Der Fall Rostvibrator' von F.G. Stier. 33 Themen, SW-Artefakte und kybernetische Dekodierung.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; font-family: monospace; }
+        .cyber-border { border: 1px solid rgba(0, 255, 204, 0.3); box-shadow: 0 0 15px rgba(0, 255, 204, 0.1); }
+        .block-cell { position: relative; background: #09090b; border: 1px solid #27272a; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; cursor: pointer; }
+        .block-cell:hover { border-color: #00ffcc; box-shadow: 0 0 25px rgba(0, 255, 204, 0.4), inset 0 0 15px rgba(0, 255, 204, 0.15); transform: translateY(-3px) scale(1.02); z-index: 30; }
+        .block-cell:not(.cell-active-transition):hover .cell-overlay { opacity: 1; transform: translateY(0); }
+        .cell-overlay { opacity: 0; transform: translateY(15px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); background: linear-gradient(to top, rgba(5,5,8,0.92) 70%, rgba(5,5,8,0.4)); pointer-events: none; }
+        .cell-active-transition { transform: scale(1.33) !important; z-index: 50 !important; border-color: #00ffcc !important; box-shadow: 0 0 35px rgba(0, 255, 204, 0.9), inset 0 0 20px rgba(0, 255, 204, 0.4) !important; }
+        .cell-active-transition .cell-overlay, .cell-active-transition .sector-header-tag { opacity: 0 !important; transition: opacity 0.2s ease; }
+        @keyframes scanline-anim { 0% { transform: translateY(-100%); } 100% { transform: translateY(1000%); } }
+        .scanline { position: absolute; top: 0; left: 0; right: 0; height: 15px; background: linear-gradient(to bottom, transparent, rgba(0, 255, 204, 0.25), transparent); animation: scanline-anim 3s linear infinite; pointer-events: none; }
+        @keyframes pulse-glow { 0%, 100% { border-color: rgba(0, 255, 204, 0.3); box-shadow: 0 0 5px rgba(0,255,204,0.1); } 50% { border-color: rgba(0, 255, 204, 0.7); box-shadow: 0 0 18px rgba(0,255,204,0.3); } }
+        .pulse-border { animation: pulse-glow 3s infinite ease-in-out; }
+        @keyframes subtle-zoom { 0% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.08) rotate(0.5deg); } 100% { transform: scale(1) rotate(0deg); } }
+        .sim-video { animation: subtle-zoom 8s ease-in-out infinite alternate; }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+    <div class="fixed inset-0 pointer-events-none z-[9998] opacity-15"
+         style="background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04)); background-size: 100% 4px, 6px 100%;">
+    </div>
+    <header class="w-full max-w-6xl mb-8 border-b border-[#00ffcc]/30 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+           <span class="text-xs text-[#00ffcc]/70 tracking-widest">// AUTOR: F.G. STIER // DOSSIER-MATRIX</span>
+           <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mt-1">DER FALL ROSTVIBRATOR</h1>
+            <p class="text-xs text-slate-400 mt-1 max-w-2xl">Systemische Analyse in 33 Aggregat-Sektoren. Wählen Sie ein Modul zur Dechiffrierung der Schwingungen und behördlichen Protokolle.</p>
+        </div>
+        <div class="flex flex-col items-end gap-2">
+            <div class="text-right font-mono text-[11px] text-[#00ffcc]/80 bg-zinc-950 px-3 py-1.5 border border-zinc-800 rounded pulse-border">
+               <div>STATUS: 33/33 SEKTOREN GELADEN</div>
+                <div>ARTEFAKTE: >200 SW-DOCS</div>
+            </div>
+            <a href="https://www.amazon.de/dp/3912752060" target="_blank" class="text-xs px-4 py-2 bg-[#00ffcc] text-black font-bold rounded hover:bg-[#00ffcc]/80 transition-all">[ BUCH BESTELLEN ]</a>
+        </div>
+    </header>
+    <div class="w-full max-w-6xl mb-6 flex flex-wrap justify-between items-center gap-3 bg-zinc-950/80 p-3 border border-zinc-800 rounded-lg text-xs">
+        <div class="flex items-center gap-2">
+            <span class="text-[#00ffcc] font-bold">// AGGREGAT-ANSICHT:</span>
+            <button onclick="setGridCols('grid-cols-3')" class="px-2.5 py-1 bg-zinc-900 border border-zinc-700 rounded text-zinc-300 hover:border-[#00ffcc]">3 Spalten</button>
+            <button onclick="setGridCols('grid-cols-4')" class="px-2.5 py-1 bg-zinc-900 border border-zinc-700 rounded text-zinc-300 hover:border-[#00ffcc]">4 Spalten</button>
+            <button onclick="setGridCols('grid-cols-6')" class="px-2.5 py-1 bg-zinc-900 border border-zinc-700 rounded text-zinc-300 hover:border-[#00ffcc]">6 Spalten (Kompakt)</button>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="triggerPulse()" class="px-2.5 py-1 bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-[#00ffcc]">System-Pulse</button>
+        </div>
+    </div>
+    <main class="w-full max-w-6xl">
+        <div id="matrix-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div onclick="activateSectorCell(this, 'kapitel-01-kinetische-ignoranz-pflicht/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-kinetische-ignoranz-pflicht-sektor-01.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 01 (AZ-VIB-001) - Die Kinetische Ignoranz-Pflicht" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-001: Die Kinetische Ignoranz-Pflicht - Analyse der mechanischen Resonanzen und der behördlichen Ausblendung." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-01-fg-stier-der-fall-rostvibrator-kinetische-ignoranz-pflicht.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 01/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 16</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Kinetische Ignoranz-Pflicht</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-001</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Kinetische Ignoranz-Pflicht</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Analyse der mechanischen Resonanzen und der behördlichen Ausblendung.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-02-kommunikative-null-loesung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-kommunikative-null-loesung-sektor-02.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 02 (AZ-VIB-002) - Die Kommunikative Null-Lösung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-002: Die Kommunikative Null-Lösung - Systemische Abwicklung und Filterung von Eingaben im Verwaltungsprozess." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-02-fg-stier-der-fall-rostvibrator-kommunikative-null-loesung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 02/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 21</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Kommunikative Null-Lösung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-002</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Kommunikative Null-Lösung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Systemische Abwicklung und Filterung von Eingaben im Verwaltungsprozess.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-03-transmurale-frequenz-simulation/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-transmurale-frequenz-simulation-sektor-03.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 03 (AZ-VIB-003) - Transmurale Frequenz-Simulation" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-003: Transmurale Frequenz-Simulation - Messung und Rekonstruktion tieffrequenter Körperschall-Übertragungen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-03-fg-stier-der-fall-rostvibrator-transmurale-frequenz-simulation.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 03/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 26</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Transmurale Frequenz-Simulation</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-003</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Transmurale Frequenz-Simulation</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Messung und Rekonstruktion tieffrequenter Körperschall-Übertragungen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-04-brandschutz-verschleierung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-brandschutz-verschleierung-sektor-04.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 04 (AZ-VIB-004) - Die Brandschutz-Verschleierung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-004: Die Brandschutz-Verschleierung - Dokumentation gebäudetechnischer Mängel im Dachbodenbereich." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-04-fg-stier-der-fall-rostvibrator-brandschutz-verschleierung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 04/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 32</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Brandschutz-Verschleierung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-004</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Brandschutz-Verschleierung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Dokumentation gebäudetechnischer Mängel im Dachbodenbereich.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-05-kryogene-dach-duldung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-kryogene-dach-duldung-sektor-05.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 05 (AZ-VIB-005) - Die Kryogene Dach-Duldung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-005: Die Kryogene Dach-Duldung - Thermische und mechanische Auswirkungen der Dachlüftungsanlage." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-05-fg-stier-der-fall-rostvibrator-kryogene-dach-duldung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 05/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 37</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Kryogene Dach-Duldung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-005</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Kryogene Dach-Duldung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Thermische und mechanische Auswirkungen der Dachlüftungsanlage.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-06-zirkulaere-zustaendigkeits-abwehr/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-zirkulaere-zustaendigkeits-abwehr-sektor-06.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 06 (AZ-VIB-006) - Die Zirkuläre Zuständigkeits-Abwehr" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-006: Die Zirkuläre Zuständigkeits-Abwehr - Bürokratischer Umschlag von Aktenzeichen zwischen Fachämtern." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-06-fg-stier-der-fall-rostvibrator-zirkulaere-zustaendigkeits-abwehr.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 06/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 42</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Zirkuläre Zuständigkeits-Abwehr</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-006</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Zirkuläre Zuständigkeits-Abwehr</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Bürokratischer Umschlag von Aktenzeichen zwischen Fachämtern.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-07-einspruchs-neutralisierung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-einspruchs-neutralisierung-sektor-07.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 07 (AZ-VIB-007) - Einspruchs-Neutralisierung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-007: Einspruchs-Neutralisierung - Verfahrenstechnische Entwertung formgerechter Einwände." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-07-fg-stier-der-fall-rostvibrator-einspruchs-neutralisierung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 07/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 47</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Einspruchs-Neutralisierung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-007</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Einspruchs-Neutralisierung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Verfahrenstechnische Entwertung formgerechter Einwände.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-08-biologische-kompetenz-anmassung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-biologische-kompetenz-anmassung-sektor-08.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 08 (AZ-VIB-008) - Biologische Kompetenz-Anmaßung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-008: Biologische Kompetenz-Anmaßung - Grenzen der medizinischen und technischen Bewertung durch Sachbearbeiter." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-08-fg-stier-der-fall-rostvibrator-biologische-kompetenz-anmassung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 08/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 52</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Biologische Kompetenz-Anmaßung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-008</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Biologische Kompetenz-Anmaßung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Grenzen der medizinischen und technischen Bewertung durch Sachbearbeiter.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-09-vakuum-abluft-synchronisation/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-vakuum-abluft-synchronisation-sektor-09.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 09 (AZ-VIB-009) - Die Vakuum-Abluft-Synchronisation" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-009: Die Vakuum-Abluft-Synchronisation - Technische Analyse des Entlüftungsaggregats und Druckdifferenzen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-09-fg-stier-der-fall-rostvibrator-vakuum-abluft-synchronisation.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 09/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 57</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Vakuum-Abluft-Synchronisation</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-009</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Vakuum-Abluft-Synchronisation</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Technische Analyse des Entlüftungsaggregats und Druckdifferenzen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-10-patentierte-akten-annihilation/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-patentierte-akten-annihilation-sektor-10.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 10 (AZ-VIB-010) - Die Patentierte Akten-Annihilation" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-010: Die Patentierte Akten-Annihilation - Systemischer Löschungs- und Archivierungscode in Verwaltungsstrukturen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-10-fg-stier-der-fall-rostvibrator-patentierte-akten-annihilation.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 10/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 62</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Die Patentierte Akten-Annihilation</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-010</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Die Patentierte Akten-Annihilation</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Systemischer Löschungs- und Archivierungscode in Verwaltungsstrukturen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-11-fiskalische-einbruchs-optimierung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-fiskalische-einbruchs-optimierung-sektor-11.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 11 (AZ-VIB-011) - Fiskalische Einbruchs-Optimierung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-011: Fiskalische Einbruchs-Optimierung - Ökonomische Bilanzen vs. Instandhaltungspflichten im Bestandsbau." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-11-fg-stier-der-fall-rostvibrator-fiskalische-einbruchs-optimierung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 11/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 67</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Fiskalische Einbruchs-Optimierung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-011</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Fiskalische Einbruchs-Optimierung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Ökonomische Bilanzen vs. Instandhaltungspflichten im Bestandsbau.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-12-unidirektionalen-portal-zensur/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-unidirektionalen-portal-zensur-sektor-12.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 12 (AZ-VIB-012) - Unidirektionalen Portal-Zensur" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-012: Unidirektionalen Portal-Zensur - Kanalisierung digitaler Beschwerdewege und Barrieren." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-12-fg-stier-der-fall-rostvibrator-unidirektionale-portal-zensur.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 12/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 72</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Unidirektionalen Portal-Zensur</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-012</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Unidirektionalen Portal-Zensur</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Kanalisierung digitaler Beschwerdewege und Barrieren.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-13-mykologische-schuld-inversion/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-mykologische-schuld-inversion-sektor-13.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 13 (AZ-VIB-013) - Mykologische Schuld-Inversion" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-013: Mykologische Schuld-Inversion - Verursacher-Umkehrung bei bauphysikalischen Folgeschäden." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-13-fg-stier-der-fall-rostvibrator-mykologische-schuld-inversion.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 13/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 77</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Mykologische Schuld-Inversion</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-013</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Mykologische Schuld-Inversion</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Verursacher-Umkehrung bei bauphysikalischen Folgeschäden.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-14-biologische-vertrags-ueberwachung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-biologische-vertrags-ueberwachung-sektor-14.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 14 (AZ-VIB-014) - Biologische Vertrags-Überwachung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-014: Biologische Vertrags-Überwachung - Physische Belastungsgrenzen des Habitat-Nutzers im Dauerbetrieb." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-14-fg-stier-der-fall-rostvibrator-biologische-vertrags-ueberwachung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 14/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 82</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Biologische Vertrags-Überwachung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-014</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Biologische Vertrags-Überwachung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Physische Belastungsgrenzen des Habitat-Nutzers im Dauerbetrieb.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-15-limitierung-gasaustausch-frequenz/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-limitierung-gasaustausch-frequenz-sektor-15.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 15 (AZ-VIB-015) - Limitierung Gasaustausch-Frequenz" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-015: Limitierung Gasaustausch-Frequenz - Messwerte der Raumluftwechselraten und Lüfterdrosselung." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-15-fg-stier-der-fall-rostvibrator-limitierung-gasaustausch-frequenz.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 15/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 87</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Limitierung Gasaustausch-Frequenz</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-015</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Limitierung Gasaustausch-Frequenz</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Messwerte der Raumluftwechselraten und Lüfterdrosselung.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-16-annihilation-der-mietminderungs-grundlage/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-annihilation-der-mietminderungs-grundlage-sektor-16.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 16 (AZ-VIB-016) - Annihilation der Mietminderungs-Grundlage" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-016: Annihilation der Mietminderungs-Grundlage - Abwehrversuche bezüglich der rechnerischen Mietminderungsquote." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-16-fg-stier-der-fall-rostvibrator-annihilation-mietminderung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 16/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 92</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Annihilation der Mietminderungs-Grundlage</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-016</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Annihilation der Mietminderungs-Grundlage</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Abwehrversuche bezüglich der rechnerischen Mietminderungsquote.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-17-intelligenz-der-maengel-dechiffrierung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-intelligenz-der-maengel-dechiffrierung-sektor-17.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 17 (AZ-VIB-017) - Intelligenz der Mängel-Dechiffrierung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-017: Intelligenz der Mängel-Dechiffrierung - Mustererkennung im Schriftverkehr und Dechiffrierung von Standardantworten." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-17-fg-stier-der-fall-rostvibrator-intelligenz-maengel-dechiffrierung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 17/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 97</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Intelligenz der Mängel-Dechiffrierung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-017</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Intelligenz der Mängel-Dechiffrierung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Mustererkennung im Schriftverkehr und Dechiffrierung von Standardantworten.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-18-annihilation-der-baurechtlichen-zustaendigkeit/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-annihilation-der-baurechtlichen-zustaendigkeit-sektor-18.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 18 (AZ-VIB-018) - Annihilation der baurechtlichen Zuständigkeit" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-018: Annihilation der baurechtlichen Zuständigkeit - Erlöschen von Prüfpflichten im Schnittfeld von Bauaufsicht und Immissionsschutz." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-18-fg-stier-der-fall-rostvibrator-annihilation-baurechtliche-zustaendigkeit.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 18/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 105</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Annihilation der baurechtlichen Zuständigkeit</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-018</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Annihilation der baurechtlichen Zuständigkeit</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Erlöschen von Prüfpflichten im Schnittfeld von Bauaufsicht und Immissionsschutz.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-19-axiomatischen-gleichsetzung-von-kontrolle-und-korrektur/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-axiomatischen-gleichsetzung-von-kontrolle-und-korrektur-sektor-19.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 19 (AZ-VIB-019) - Axiomatischen Gleichsetzung von Kontrolle und Korrektur" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-019: Axiomatischen Gleichsetzung von Kontrolle und Korrektur - Methodische Fehlschlüsse in behördlichen Überwachungsprotokollen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-19-fg-stier-der-fall-rostvibrator-gleichsetzung-kontrolle-korrektur.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 19/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 113</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Axiomatischen Gleichsetzung von Kontrolle und Korrektur</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-019</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Axiomatischen Gleichsetzung von Kontrolle und Korrektur</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Methodische Fehlschlüsse in behördlichen Überwachungsprotokollen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-20-standard-maengel-neutralisierung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-standard-maengel-neutralisierung-sektor-20.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 20 (AZ-VIB-020) - Standard Mängel-Neutralisierung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-020: Standard Mängel-Neutralisierung - Textbausteine und Prüfmuster zur Beseitigung juristischer Haftung." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-20-fg-stier-der-fall-rostvibrator-standard-maengel-neutralisierung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 20/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 121</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Standard Mängel-Neutralisierung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-020</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Standard Mängel-Neutralisierung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Textbausteine und Prüfmuster zur Beseitigung juristischer Haftung.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-21-annihilation-der-behoerdlichen-interventionspflicht/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-annihilation-der-behoerdlichen-interventionspflicht-sektor-21.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 21 (AZ-VIB-021) - Annihilation der behördlichen Interventionspflicht" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-021: Annihilation der behördlichen Interventionspflicht - Passivität der Fachämter trotz messtechnischer Bestätigung der TA Lärm." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-21-fg-stier-der-fall-rostvibrator-annihilation-interventionspflicht.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 21/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 125</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Annihilation der behördlichen Interventionspflicht</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-021</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Annihilation der behördlichen Interventionspflicht</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Passivität der Fachämter trotz messtechnischer Bestätigung der TA Lärm.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-22-monetaere-antragshuerde-der-beweislast/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-monetaere-antragshuerde-der-beweislast-sektor-22.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 22 (AZ-VIB-022) - Monetäre Antragshürde der Beweislast" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-022: Monetäre Antragshürde der Beweislast - Kostenrisiko privater Lärm- und Schwingungsgutachten." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-22-fg-stier-der-fall-rostvibrator-monetaere-antragshuerde-beweislast.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 22/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 133</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Monetäre Antragshürde der Beweislast</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-022</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Monetäre Antragshürde der Beweislast</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Kostenrisiko privater Lärm- und Schwingungsgutachten.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-23-judikative-resonanz-anerkennung/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-judikative-resonanz-anerkennung-sektor-23.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 23 (AZ-VIB-023) - Judikative Resonanz-Anerkennung" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-023: Judikative Resonanz-Anerkennung - Richterliche Würdigung von Frequenzprotokollen und Beweisstück A." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-23-fg-stier-der-fall-rostvibrator-judikative-resonanz-anerkennung.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 23/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 141</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Judikative Resonanz-Anerkennung</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-023</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Judikative Resonanz-Anerkennung</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Richterliche Würdigung von Frequenzprotokollen und Beweisstück A.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-24-verschleierung-der-exekutiven-interventions-pflicht/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-verschleierung-der-exekutiven-interventions-pflicht-sektor-24.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 24 (AZ-VIB-024) - Verschleierung der exekutiven Interventions-Pflicht" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-024: Verschleierung der exekutiven Interventions-Pflicht - Nichtausführung von Anordnungen gegen Betreiber von Industrieanlagen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-24-fg-stier-der-fall-rostvibrator-verschleierung-exekutive-interventionspflicht.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 24/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 149</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Verschleierung der exekutiven Interventions-Pflicht</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-024</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Verschleierung der exekutiven Interventions-Pflicht</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Nichtausführung von Anordnungen gegen Betreiber von Industrieanlagen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-25-annihilation-der-betroffenenrechte-durch-beweislast-umkehr/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-annihilation-der-betroffenenrechte-durch-beweislast-umkehr-sektor-25.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 25 (AZ-VIB-025) - Annihilation der Betroffenenrechte durch Beweislast-Umkehr" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-025: Annihilation der Betroffenenrechte durch Beweislast-Umkehr - Verschiebung der messtechnischen Nachweispflicht auf den Antragsteller." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-25-fg-stier-der-fall-rostvibrator-beweislast-umkehr-betroffenenrechte.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 25/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 157</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Annihilation der Betroffenenrechte durch Beweislast-Umkehr</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-025</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Annihilation der Betroffenenrechte durch Beweislast-Umkehr</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Verschiebung der messtechnischen Nachweispflicht auf den Antragsteller.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-26-systemische-intransparenz-und-verantwortungs-diffusion/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-systemische-intransparenz-und-verantwortungs-diffusion-sektor-26.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 26 (AZ-VIB-026) - Systemische Intransparenz und Verantwortungs-Diffusion" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-026: Systemische Intransparenz und Verantwortungs-Diffusion - Zersplitterung der Ansprechpartner in Konzern- und Verwaltungsstrukturen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-26-fg-stier-der-fall-rostvibrator-systemische-intransparenz.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 26/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 165</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Systemische Intransparenz und Verantwortungs-Diffusion</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-026</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Systemische Intransparenz und Verantwortungs-Diffusion</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Zersplitterung der Ansprechpartner in Konzern- und Verwaltungsstrukturen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-27-zirkulaere-beschwerde-annihilation/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-zirkulaere-beschwerde-annihilation-sektor-27.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 27 (AZ-VIB-027) - Zirkuläre Beschwerde-Annihilation" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-027: Zirkuläre Beschwerde-Annihilation - Endlosschleifen im formalen Vorgangsbearbeitungssystem." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-27-fg-stier-der-fall-rostvibrator-zirkulaere-beschwerde-annihilation.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 27/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 173</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Zirkuläre Beschwerde-Annihilation</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-027</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Zirkuläre Beschwerde-Annihilation</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Endlosschleifen im formalen Vorgangsbearbeitungssystem.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-28-oekonomische-fehlallokation-der-beweislast/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-oekonomische-fehlallokation-der-beweislast-sektor-28.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 28 (AZ-VIB-028) - Ökonomische Fehlallokation der Beweislast" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-028: Ökonomische Fehlallokation der Beweislast - Finanzielle Disparitäten zwischen Habitat-Nutzer und Großvermieter." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-28-fg-stier-der-fall-rostvibrator-oekonomische-fehlallokation-beweislast.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 28/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 181</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Ökonomische Fehlallokation der Beweislast</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-028</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Ökonomische Fehlallokation der Beweislast</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Finanzielle Disparitäten zwischen Habitat-Nutzer und Großvermieter.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-29-administrative-absolution-der-untaetigkeit/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-administrative-absolution-der-untaetigkeit-sektor-29.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 29 (AZ-VIB-029) - Administrative Absolution der Untätigkeit" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-029: Administrative Absolution der Untätigkeit - Rechtliche Schutzgründe für das Nichthandeln von Kontrollorganen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-29-fg-stier-der-fall-rostvibrator-administrative-absolution-untaetigkeit.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 29/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 187</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Administrative Absolution der Untätigkeit</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-029</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Administrative Absolution der Untätigkeit</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Rechtliche Schutzgründe für das Nichthandeln von Kontrollorganen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-30-juristische-belagerung-der-teuton-zelle/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-juristische-belagerung-der-teuton-zelle-sektor-30.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 30 (AZ-VIB-030) - Juristische Belagerung der Teuton-Zelle" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-030: Juristische Belagerung der Teuton-Zelle - Konsequente Anwendung des Rechtssicheren Filters im Verfahren." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-30-fg-stier-der-fall-rostvibrator-juristische-belagerung-teuton-zelle.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 30/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 195</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Juristische Belagerung der Teuton-Zelle</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-030</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Juristische Belagerung der Teuton-Zelle</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Konsequente Anwendung des Rechtssicheren Filters im Verfahren.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-31-systemische-verdraengung-der-entschaedigungspflicht/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-systemische-verdraengung-der-entschaedigungspflicht-sektor-31.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 31 (AZ-VIB-031) - Systemische Verdrängung der Entschädigungspflicht" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-031: Systemische Verdrängung der Entschädigungspflicht - Verjährungs- und Ausgleichsstrategien bei Sach- und Nutzungsschäden." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-31-fg-stier-der-fall-rostvibrator-verdraengung-entschaedigungspflicht.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 31/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 203</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Systemische Verdrängung der Entschädigungspflicht</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-031</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Systemische Verdrängung der Entschädigungspflicht</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Verjährungs- und Ausgleichsstrategien bei Sach- und Nutzungsschäden.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-32-anomalie-der-sektor-fluktuation/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-anomalie-der-sektor-fluktuation-sektor-32.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 32 (AZ-VIB-032) - Anomalie der Sektor-Fluktuation" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-032: Anomalie der Sektor-Fluktuation - Dynamische Veränderung der Messergebnisse unter wechselnden Lastbedingungen." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-32-fg-stier-der-fall-rostvibrator-anomalie der sektor-fluktuation.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 32/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 211</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">Anomalie der Sektor-Fluktuation</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-032</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">Anomalie der Sektor-Fluktuation</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Dynamische Veränderung der Messergebnisse unter wechselnden Lastbedingungen.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+            <div onclick="activateSectorCell(this, 'kapitel-33-epilog-statusbericht-nach-90-zyklen/index.html')" class="block-cell rounded-lg aspect-square flex flex-col justify-between p-3 group relative">
+                <div class="scanline"></div>
+                <div class="absolute inset-0 bg-zinc-900 overflow-hidden media-container">
+                   <video autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" poster="images/fg-stier-der-fall-rostvibrator-epilog-statusbericht-nach-90-zyklen-sektor-33.jpg" title="F.G. Stier Autor - Der Fall Rostvibrator: Sektor 33 (AZ-VIB-033) - EPILOG: STATUSBERICHT NACH 90 ZYKLEN" aria-label="F.G. Stier Autor - Video-Akte AZ-VIB-033: EPILOG: STATUSBERICHT NACH 90 ZYKLEN - Abschließendes Kausal-Protokoll und Systemzustand nach Beendigung des Zyklus." class="w-full h-full object-cover opacity-85 group-hover:opacity-50 transition-opacity duration-300">
+                       <source src="videos/sektor-33-fg-stier-der-fall-rostvibrator-finale-des-rostvibrators.mp4" type="video/mp4">
+                       Dein Browser unterstützt dieses Video-Format nicht.
+                   </video>
+                </div>
+                <div class="relative z-10 flex justify-between items-start sector-header-tag transition-opacity duration-300">
+                   <span class="text-[10px] bg-black/85 px-2 py-0.5 border border-[#00ffcc]/40 text-[#00ffcc] font-mono shadow">SEKTOR 33/33</span>
+                   <span class="text-[10px] bg-black/85 px-1.5 py-0.5 border border-zinc-700 text-zinc-300 font-mono shadow">S. 218</span>
+                </div>
+                <div class="relative z-10 bg-black/85 p-2 border-t border-zinc-800 rounded-b backdrop-blur-sm sector-header-tag transition-opacity duration-300">
+                   <h2 class="text-xs font-bold text-white group-hover:text-[#00ffcc] transition-colors truncate">EPILOG: STATUSBERICHT NACH 90 ZYKLEN</h2>
+                </div>
+                <div class="cell-overlay absolute inset-0 z-20 p-4 flex flex-col justify-end">
+                   <span class="text-[10px] text-[#00ffcc] font-mono tracking-widest">// AZ-VIB-033</span>
+                   <h2 class="text-sm font-bold text-white mb-1.5 leading-snug">EPILOG: STATUSBERICHT NACH 90 ZYKLEN</h2>
+                   <p class="text-[10px] text-slate-300 line-clamp-3 leading-tight mb-3">Abschließendes Kausal-Protokoll und Systemzustand nach Beendigung des Zyklus.</p>
+                    <span class="text-[10px] text-[#00ffcc] font-mono flex items-center gap-1 font-bold">[ AKTE OEFFNEN & ARTEFAKTE → ]</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="w-full max-w-6xl mt-12 pt-6 border-t border-zinc-800/80 flex flex-col sm:flex-row justify-between items-center text-xs text-zinc-500">
+       <div>© F.G. Stier – Der Fall Rostvibrator // 33-Sektoren-Aggregat</div>
+        <div class="mt-2 sm:mt-0">Als technischer Autor nutze ich die inimitable temptation der Worte als Bildmaschine.</div>
+    </footer>
+    <script>
+        function setGridCols(colsClass) {
+            const grid = document.getElementById('matrix-grid');
+            grid.className = 'grid gap-4 ' + colsClass;
+        }
+        function triggerPulse() {
+            const cells = document.querySelectorAll('.block-cell');
+            cells.forEach((cell, i) => {
+                setTimeout(() => {
+                    cell.style.borderColor = '#00ffcc';
+                    cell.style.boxShadow = '0 0 20px rgba(0,255,204,0.6)';
+                    setTimeout(() => {
+                        cell.style.borderColor = '';
+                        cell.style.boxShadow = '';
+                    }, 400);
+                }, i * 30);
+            });
+        }
+        function activateSectorCell(element, targetUrl) {
+            // 1. Kachel vergrößern und Text-Overlay ausblenden
+            element.classList.add('cell-active-transition');
+            
+            // 2. Medien-Container leeren & gähnenden Amtsroboter in 100% Schärfe laden
+            const mediaBox = element.querySelector('.media-container');
+            mediaBox.innerHTML = '<video autoplay muted playsinline class="w-full h-full object-cover opacity-100 z-30"><source src="videos/amtsroboter-gaehnen.mp4" type="video/mp4"></video>';
+            
+            // 3. Nach 3 Sekunden zur Ziel-Seite springen
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

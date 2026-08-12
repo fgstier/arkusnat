@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Die Logik der Zensur-007.jpg', alt: "Gesetz des absoluten MisstrauensBevor sich das Gebäude der Verwerfung dieser Zivilisation auftut, kann es nur richtig sein, die Schluchten der Verdammnis unserer Vernunft klar aufzuzeigen. Jahrzehnte der Forschung wurden damit verbracht, Netzwerke zu kreieren, um das Netzwerk der Gedanken und Fantasie nachzubilden. Tausende Programmierer wurden hoch bezahlt verwendet, sich selbst aufzulösen um letzten Endes ein Teil der elektronischen Stür-me zu werden. Nachdem die menschliche Steinzeit verlassen wurde, eine mechanische Industrie ausgebügelt wurde und die Umweltschäden auf abgasarme Betonköpfe umdefiniert wer-den konnte, ist die Zeit herangebrochen, den Geist als natürli-che Erfindung abzuschaffen. Des Gesetz der wahrscheinlichen Lügen oder Satz-Konstrukte wurde öffentlich implementiert durch wohl definierte und perfekt ausformulierte Satzfragmen-te. Jede geistige Anstrengung ist nun sofort als KI-Handwerk deklariert. Schöne artikulierte Sätze werden herausgefiltert aus dem Sprachgebrauch der Autorenschaft, da sie wahrscheinlich zu schön für menschliche Regungen sind. Nur eine Maschine kann in der Lage sein, Sätze auszuschmücken, die verständlich und klug wirken. Damit beginnt mein Leidensweg der Identität in einer" },
+            { src: 'Die Logik der Zensur-008.jpg', alt: "Welt ohne Respekt und Vernunft. Wen interessiert nun die Welt der künstlichen Satzbefruchtung? Doch nur diejenigen, die in der Lage sind in der Gesellschaft nicht nur zu überleben, sondern auch intellektuell sich selbst zu erforschen und die Natur als Wunder zu betrachten. Was ist nun ein „gutes Buch“? Ist es mit sinnlosen und sinn-freien Geschichten ausgeschmückt oder ist es ein Buch welches die Gesetze der unsrigen Zivilisation beschreibt, oder ist es ein Buch über Tod und Verderben, über Mord und Kriege? Tot-schlag verkauft sich immer gut, auch die unzähligen Kochre-zept-vergewaltigungen sind gut für eine Auflage. Doch die Trümmer der geistigen Ablenkung werden immer sichtbarer. Irgendwann wird das Öl alles überschwemmen und in einem Brei an zähflüssigen Gestank ertränken. Somit hat diese Geschichte den Sinn, mein Wirken gegen das Monster meiner Vernichtung zu beschreiben und muss begin-nen mit dem industriellen Machtwerk, dass sich über viele Jah-re etabliert hat. Dabei ist es nicht das Kunstwerk der Technik, welches jegliche menschliche Regung zerstört, sondern die Anwendung eben jener Errungenschaft gegen sich selbst und den Anwendern dieser Werkzeuge, die als Maschine ausge-grenzt werden. In der Steinzeit hat man den Faustkeil erfunden um sich innerhalb der Natur durchzusetzen, heute wurde die Netzwerktechnik erfunden, um sie gleich darauf wieder abzu-schaffen und den Nutzen als Schadhaft zu deklarieren. Die Steinzeit ist auf digitaler Ebene zurück und macht nun den Geist selbst als Krüppel auslöschbar. Wie soll man sich die Maschine der Zivilisation nun vorstellen? Um das Monster der Vernichtung zu begreifen, muss man die Anatomie seines Körpers sezieren. Die Architektur der Auslöschung ist kein vager Nebel, sondern eine physische Ma-nifestation aus Silizium, Stahlbeton und redundanter Energie. Sie ist" },
+            { src: 'Die Logik der Zensur-009.jpg', alt: "das Skelett der ZM (Zivilisations-Maschine) – das Herz der lo-gischen Maschine.Große, industrielle KI-Anlagen (oft als Hyperscale Data Cen-ters oder AI Compute Clusters bezeichnet) sind extrem kom-plexe Systeme, die praktisch in drei Hauptbereiche unterteilt sind: Compute, Storage und Security bzw.Operations. Im Bereich Compute ist das Team ML Operation (MLOps). Hier erfolgt die Verwaltung des gesamten Lebenszyklus der KI-Modelle wie Training, Deployment und Überwachung. Darüber hinaus besteht die Abteilung Accelerated Computing Division, die den Betrieb und die Wartung der spezialisierten Hardware (GPUs, TPUs, ASICs) für das Hochleistungstraining betreut.Der Komplex Data/Storage (Datenhaltung) beinhaltet das Data Engineering für das Sammeln, Bereinigen und Transfor-mieren riesiger Datenmengen (Big Data Pipelines) und das Team Data Lake/Data Warehouse Management welches für die Sicherstellung der schnellen und zuverlässigen Speicherung der Trainings- und Betriebsdaten zuständig ist.Der Bereich Operations besitzt einen Komplex des Site Reliabi-lity Engineering (SRE) für die Gewährleistung der Systemstabi-lität, Skalierbarkeit und Notfallwiederherstellung. Die Abtei-lung Infrastructure Provisioning hat die Aufgabe für die Instal-lation und Konfiguration neuer physischer Hardware und Netzwerke.Diese virtuos gezüchteten Strukturen benötigen Schutz vor Intrusion und sonstigen Bedrohungen. Der Schutz erfolgt mehrstufig (Defense-in-Depth) und adressiert die kritischen Schwachstellen: physischer Zugang, Netzwerkausfall und Da-tenmanipulation. Der Schutz vor Eindringlingen erfolgt über sehr spezielle Mechanismen wie:" },
+            { src: 'Die Logik der Zensur-010.jpg', alt: "Zero Trust Architecture (ZTA): Keinem Benutzer und keinem Gerät wird standardmäßig vertraut – auch intern. Zugriff wird nur für diejenige spezifi-sche Ressource gewährt, die gerade für die anstehende Aufga-be benötigt wird.Network Segmentation / Air Gapping:Trennung kritischer Rechenkerne (z.B. Trainings-Cluster) vom allgemeinen Unternehmensnetzwerk oder sogar vom In-ternet (Air Gapping) zum Schutz vor externen Cyberangriffen.Intrusion Detection/Prevention Systems (IDPS):KI-gestützte Systeme, die ungewöhnliches Datenverkehrs-verhalten identifizieren und Angriffe automatisch blockieren, bevor sie den Kern erreichen.Multi-Faktor-Authentifizierung (MFA):Standard für alle Zugänge, oft mit Hardware-Tokens, um Keylogger-Angriffe zu verhindern.Gehärtete Infrastruktur (Hardened Infrastruc-ture):Standorte in geografisch stabilen Zonen, oft unterirdisch oder mit gehärteten Stahlbetonstrukturen gegen EMP (Elekt-romagnetischer Puls) und Ballistik geschützt." }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

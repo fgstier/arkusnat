@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-02.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Totalschaden oder Mathematik-010.jpg', alt: "Das Wunderwerk der FalleMein Albtraum, der sprichwörtlich unnachgiebig Dauerhaft in meinem Kopf herumschwirrt, ist eine nicht enden wollende Episode nach dem Studium meiner Träume „Theoretische Phy-sik mit dem Schwerpunkt auf Topologische Quantenfeldtheo-rie“. Auf dem Tisch liegen beständig zwei Dokumente: Ein un-befristeter Vertrag eines Hochfrequenz-Handelsunternehmens aus Frankfurt und eine handgeschriebene Herleitung zur Quanten-Gravitation, die immer in einer alles ersäufenden Sackgasse endet. Der morgendliche Gang zum Waschbecken im Wohnheim ist kein Erwachen, sondern nur der Wechsel von einem Albtraum in eine Simulation. Das traumatische scheinba-re Aufwachen macht sich als bequemer Rettungsanker dieser unheilvollen Situation immer nur langsam bemerkbar. Die Ge-danken sind nicht gleich mit der Realität des neuen Tages ver-schmolzen. Der geisterhafte Vorhang meiner Ängste bleibt noch einige Minuten in meinem Nacken sitzen und treibt mir Stiche der gesponnenen" },
+            { src: 'Totalschaden oder Mathematik-011.jpg', alt: "Erinnerung mitten in meine Wahrnehmungen. Es geht um die Wahl zwischen dem Verkauf der Seele an die Hochfrequenz-Algorithmen und dem geistigen Verhungern vor einer unlösba-ren Herleitung. Wenn man sich für ein Studium entscheidet und womöglich einige tausend Meinungen darüber durchdenkt, was man ler-nen möchte, wo und wie sich das Leben dadurch gestaltet und wozu überhaupt man sich dieser Qual des Lernens auferlegt, wird sich im Laufe der Zeit immer mehr das Problem der Zu-kunft auftun. Was macht man danach? Was kommt auf einem in diesem mit Fragezeichen gespickten Lebensabschnitt als Be-geisterung noch dazu? Wohin mit dem Wissen, welches einem die Professoren eingetrichtert haben, wohin mit den besonde-ren Bewerbungsschreiben, die sich von den anderen Mitbewer-bern abgrenzen müssen? Sobald man anfängt sich über die Zu-kunft Gedanken zu machen, kommt die Unlust und Frustkälte in mein Gemüt. Dafür habe ich keine Zeit. Meine mentale Kon-zentration und ganztägige geistige Anstrengung müssen ohne Ermüdungserscheinungen wie in einem Uhrwerk völlig syn-chron ticken. Allein sie entscheidet über meine Fähigkeit, die auf mich einströmenden Probleme im Vorlesungssaal zu be-wältigen. Sportliche Aktivitäten kommen zu kurz. Das Laufen am Ufer des in der Nähe der Uni fließenden Flusses, ist außer-ordentlich mühsam. Nach ein paar hundert Meter kommt mir die Luft bereits als schwerer Metallklotz in die Lunge. Wenn ich mein Studium beendet habe, werde ich sicherlich mehr für den Muskelaufbau unternehmen müssen. Mein derzeitiges Training findet im Schlamm statt. Die Topologische Quanten-feldtheorie ist kein" },
+            { src: 'Totalschaden oder Mathematik-012.jpg', alt: "Wissensgebiet, sie ist eine ordnungstherapeutische Exekution und vollzieht sich im Wesentlichen in einem Moor an Theorien und Gesetzen der Mathematik. Sie hilft dabei, sich in dem Di-ckicht der Physik durchzuwühlen. Die Sprache der Mathematik ist logisch sauber und daher leicht unverständlich. Diese Sichtweise ist so logisch, dass sie jede Menschlichkeit wegätzt. Sie erklärt nichts, sondern sperrt die Komplexität in einen Kä-fig, dessen Gitterstäbe die Wissenschaft selbst geschmiedet hat.Vormittags lauert eine Informations-Akquise durch die un-terschiedlichen Vorlesungs-Zügellosigkeiten. Diese Overthin-king -Orgien der Herleitung von fundamentalen Gleichungen und Mitschriften diverser Kalkulationen für die Nuancen einer S-Matrix oder eines dynamischen Systems, führen nach kurzer Zeit zu Lernblockaden und Abschaltsyndromen. Es entsteht ein Zustand an unkontrollierten kreisenden Endlosschleifen im Kopf, die genauso wirken wie eine aufgeschäumte Flüssigkeit im Kochtopf. Nachmittags sitze ich am Schreibtisch meiner Einraumwoh-nung im Studentenwohnheim und mache mich bei Lösungs-versuchen von Übungsaufgaben heiß. Es beginnt ein rituelles Verbrennen von Zeit, Zettel um Zettel verschwinden im Pa-piereimer. Die Praxis der theoretischen Umsetzung von Prü-fungsaufgaben ist mitunter zeitaufwendig. Ein reales Phäno-men wie z. B. die Ausbreitung einer Epidemie oder das Verhal-ten von Quantenflüssigkeiten muss in ein System von Differen-tialgleichungen gegossen werden. Wer es noch nicht gemacht hat, weiß nicht, was er nicht verpasst hat." },
+            { src: 'Totalschaden oder Mathematik-013.jpg', alt: "Die numerische Umsetzung von nicht mehr analytisch lösbaren Modellen führt mich auch an den Computer. Programmierung ist das Thema der Wahl für die Beweiskette eines mathemati-schen Modells unter Belastung mit entsprechenden Parame-tern. Stochastik, Dynamik, Topologie, Geometrie, nichtlineare Systeme, Chaos, Wahrscheinlichkeiten und Gravitation und andere Raumausfüllende Bereiche der Physik müssen mathe-matisch handhabbar bleiben, ohne den Kern der Wahrheit zu verlieren. Man lernt, die Welt nicht mehr als Ansammlung von Objekten zu sehen, sondern als ein Geflecht aus Relationen und Frequenzen. Diese distanzierte, fast schon kühle Sichtweise hilft, die Komplexität zu bändigen.Man muss akzeptieren, dass man acht Stunden Lebenszeit an einem Problem arbeitet, nur um festzustellen, dass ein Vorzei-chenfehler am Anfang alles entwertet hat. Erfolg in der theoreti-schen Physik bedeutet, einmal mehr aufzustehen, als man hin-gefallen ist. Ich beobachte mich allerdings dabei nur noch auf-zustehen und schon nicht mehr zu fallen, weil ich liegen ge-blieben bin.Die Frustrationsgrenze ist so hoch hinaufgestiegen, dass ich den Schmerz der Sinnlosigkeit kaum noch spüre. Ich program-miere Beweisketten für Modelle unter Einfluss von Störungen, ich bändige das Chaos mit Stochastik und Topologie, nur um festzustellen, dass der Kern der Wahrheit in der Abstraktion verdampft ist.Mein kollaborative Intelligenz, die Organisation innerhalb von Lerngruppen, ist manchmal der einzige Leim, um über einen Rechenfehler in Zeile 40 eines Beweises zu stolpern und ihn" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

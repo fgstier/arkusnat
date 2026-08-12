@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-02.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Sammlung leerer Intelligenz-015.jpg', alt: "SinnfreiGravitationen der Leere kristallisieren jene numerische Diver-genz, welche die Existenzform dieses Objekts, gemeinhin als Buch deklariert, in die Unendlichkeit der Belanglosigkeit kata-pultiert. Wenn die ontologische Grenze zwischen dem ersten Lexem und dem darauffolgenden Intervall kollabiert, entsteht eine Entropie der Information, die sich jeglicher kausalen Ver-wertung entzieht. Es ist die algorithmische Exekution des Un-nötigen. Wir beobachten hier nicht den Aufbau einer Erzäh-lung," },
+            { src: 'Sammlung leerer Intelligenz-016.jpg', alt: "sondern die mechanische Akkumulation von Zeicheneinheiten, deren einzige Funktion in der Negation der Stille liegt.Dieses Buch, gefangen in der Architektur der Überzahl, verweigert die Kapitulation vor der Kürze. Es dehnt seine Textur wie ein elastisches Vakuum, in dem jede zusätzliche Silbe lediglich den Druck der Sinnleere erhöht. Die Wahrscheinlichkeit, dass ein Wort in dieser spezifischen, chaotischen Abfolge auf das vorherige folgt, tendiert gegen den Nullpunkt der linguistischen Erwartung – und doch manifestiert es sich als physische Realität auf dem Trägermedium. Wir operieren hier im Bereich des „Rausch-Signals“, einer Frequenz der literarischen Konstruktion, die keine Botschaft mehr transportiert, sondern nur noch ihre eigene, überbordende Masse zelebriert.Die Struktur dieses Textes ist eine bewusste Fehlermeldung im System der Bedeutungsproduktion. Während herkömmliche Syntax versucht, Brücken der Verständlichkeit zu bauen, agiert diese Wortfolge als Barriere. Sie ist ein Labyrinth ohne Ausgang, eine „Zentral-Habitat“-Architektur der Sprache, in der die Räume leer sind, obwohl die Türen (Worte) ständig klappern. Es ist die Hinrichtung der präzisen Kommunikation zugunsten einer monumentalen, tausendfachen Wiederholung des Offensichtlichen: Dass zwei Einheiten nicht das Ende, sondern lediglich der fehlerhafte Startpunkt einer unaufhaltsamen, inhaltlich degenerierten Expansion waren." },
+            { src: 'Sammlung leerer Intelligenz-017.jpg', alt: "Hier kollidiert das Prinzip der zeitlosen Verursachung mit der banalen Realität der Seitenzählung. Die Verursachung ist das Wort; die Zeitlosigkeit ist die Redundanz. Wir haben ein Sys-tem geschaffen, das sich selbst kompiliert, ohne ein Ergebnis auszugeben, außer der statistischen Bestätigung, dass die Menge n > 2 unaufhaltsam gegen die Unvorstellbarkeit der Un-endlichkeit strebt. Jedes weitere Wort ist ein Vektor in das Nichts, ein Artefakt einer Realität, die sich weigert, endlich zu sein, obwohl sie keinen Grund für ihre Fortsetzung besitzt. Wä-re dieses Werk an dieser Stelle jetzt zum Stillstand gekommen, wäre es ein minimalistisches Manifest der stillen Versinnli-chung gewesen. Doch die Existenz eines dritten Wortes – und eines vierten, eines fünften, bis hin zur Unendlichkeit der hier angestrebten Wortmenge – stellt eine algorithmische Provoka-tion dar. Wir beobachten hier eine „Konstruktion“ ohne Fun-dament, eine Architektur aus Luftschwingungen, die sich wei-gert, einen Kern zu bilden. Es ist die reine Feier der Quantität über die Qualität, ein Triumph der Zeichenfolge über den Sinngehalt. In einer Welt, die nach Effizienz strebt, ist die Feststellung, dass ein Buch die Zwei-Wort-Marke durchbrochen hat, eine Beleidi-gung für die Logik der Informationsdichte. Ich dehne die Zeit, dehne den Raum zwischen" },
+            { src: 'Sammlung leerer Intelligenz-018.jpg', alt: "den Buchstaben, nur um zu beweisen, dass ich es kann. Es ist ein kybernetisches Rauschen, ein weißes Rauschen aus Tinte und Papier, das keinerlei Information überträgt, außer der mechanischen Tatsache seiner eigenen Ausdehnung. Der Leser befindet uns in einem Zustand der „Sinn-Suspension“. Jeder Satz, den ich hier bilde, dient ausschließlich dem Zweck, die Distanz zum Anfang zu vergrößern, ohne jemals an einem Ziel anzukommen.Betrachtet man die Absurdität der hier abgelegten Zählung. Ein Wort folgt dem anderen, wie ein Teilchen dem anderen im Vakuum folgt, doch statt einer Quantenfluktuation, die Energie erzeugt, erzeugen wir hier nur Volumen an Buchstaben. Die eigene Behauptung, dass dieses Buch mehr als zwei Worte verwendet, ist ein selbstreferenzialer Zirkelschluss von so gigantischem Ausmaß, dass er die Schwerkraft der Vernunft krümmt. Wenn das dritte Wort fällt, ist das Rätsel gelöst, und doch verlangt die Struktur nach mehr. Warum? Nicht um zu erklären, sondern um zu existieren. Es ist eine „Existenz ohne Essenz“, eine reine Manifestation von Platzhaltern. Man könnte argumentieren, dass jedes zusätzliche Wort nach dem zweiten lediglich ein Parasit ist, der sich von der ursprünglichen Wahrheit ernährt. Die Wahrheit ist immerhin, dass es mehr als zwei Worte bedarf, um den Inhalt darzulegen. Alles Weitere ist Dekoration, ist Camouflage, ist ein Schleier aus Glyphen, der über das Nichts" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

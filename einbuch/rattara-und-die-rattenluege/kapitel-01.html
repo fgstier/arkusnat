@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'Rattara_148x210cm-007.jpg', alt: "Die geschichtlichen Ereignisse aum, dass er sich bewegen kann. Seine Glieder sind steif, die Haut ist fast taub. Das Blut ist durchgekocht, so als wäre es nie in seinen geschmeidigen Adern mühelos geflos-sen. Beide Augen sehen die Umgebung nicht mehr. Der Blick ist fest, starr, unbeweglich, verkrampft, eisern fest gekettet an dieser geliebten, unendlich verhassten und doch auch wunder-samen Geige. Sie liegt unweit, dennoch unerreichbar vor ihm. Er kann sie in keiner Weise mehr heben. Seine Kräfte haben sich in der Musik hoffnungslos verfangen, sind verloren. Diese Geige hat ihm das letzte Stück Leben aus dem ganzen Körper gesogen. Sie gleicht einer Schlange, die sich um ihr Opfer win-det, es mit Haut und Haaren verschlingt. Gnadenlos straft sie jeden, der versucht, ohne ganz besonderes Talent, auf ihr zu spielen. Wer talentiert ist, entscheidet einzig und allein ihr Holz, ihr Steg, die schwingenden Saiten auf ihr, die vibrierende Luft im Schallloch und der zitternde Boden am Hals des Spie-lers. Das Holz kriecht in die Adern, klammert sich an die Blut-gefäße, durchdringt jegliche" },
+            { src: 'Rattara_148x210cm-008.jpg', alt: "Zelle. Es erobert die Gewalt über den Willen, sogar das Herz hat keine Chance, sich der wurmartigen Gewalt zu entziehen. Gregor wird nie mehr die Kunst erlernen dürfen, genau den Ton zu treffen, dessen Klang er benötigt, um weiterzuleben. Er kann es nimmermehr. Sein Hirn ist leer gewischt durch die vie-len schrägen, falschen Töne. Keine andere Geige hat sich so gewehrt, ihm meisterlich zu dienen. Dieses unbarmherzige Stück Holz hier ist unbrauchbar unterwürfig oder gierig geleh-rig. Sie wehrt sich mit allen Spänen, Ästen nebst Fugen. Wie ein rostiges Schiff unfähig ist, zu schwimmen, kann sich das Holz dieser Geige nicht geschmeidig an die Finger schmiegen. Die Musik wirkt krächzend, hohl, sogar lieblos hinterhältig la-chend. Sein Herz ist unermüdlich schlagend, immer noch bereit für den letzten Aufschrei seiner Willenskraft. Es drückt das di-cke träge Blut in die Adern hinein. Es pumpt immer noch Ener-gie in seinen Kopf. Dort sprudeln die Gedanken um Noten, Töne, Harmonien sowie eindringliche Melodien. Wie lange noch, wird er es ertragen müssen, unfähig zu sein, sein gelieb-tes Instrument zu spielen.Das Spielen allein reicht nur bis zum Tellerrand. Die Geige muss spüren, geliebt zu werden, sie wird dann selbst die Mu-sik erklingen lassen. Er weiß es, hatte es vor vielen Jahren ein einziges Mal erlebt. Der kurze Geigenklang blieb das Schönste, was er je gehört hatte. Sein Denken wurde damals beschleunigt. Seine Gefühle kochten unbändig, wild rasend aus seinem Kör-per entfliehend. Nie wieder hatte er diese starken Emotionen gespürt.Ein Gewitter hat ihn damals vom weiteren Spiel unterbro-chen. Er hat immer noch keine Ahnung, dass gerade dieses Unwetter sein Leben vorerst gerettet hatte. Diese Geige hat ihm nicht das Glück beschert, dauerhaft vollkommen Klang zu werden. Langsam schwindet ihm jegliche Hoffnung, jegliche Zuversicht. Das Letzte, was er sah, war ein lachendes, schallen-des," },
+            { src: 'Rattara_148x210cm-009.jpg', alt: "unbarmherzig liegendes Stück Holz. Er befand sich bereits kurz vor dem Ende, wie schon einige Musiker vor ihm. Diese Geige tötet jeden, der sich nur ungenügend würdig erweist, die Töne ungezwungen, zugleich fliegend leicht, hervorzuzaubern. Dazu muss man diese Geige in einer besonderen Weise lieben. Sie diktiert unbarmherzig selbstsüchtig, wie sie geliebt werden will. Sie hat es schon immer so getan. ähnlich muss es sich angefühlt haben, mit die-sem Instrument zu arbeiten, die Saiten zu streichen und die Melodien der Verdammnis zu spielen. Meine unzensierten Er-fahrungen, wie auch meine Erkenntnisse über die schrecklichen Ereignisse vergangener Tage sollen hiermit dokumentiert wer-den. Die sehr verworrenen Zusammenhänge sind derweil im Detail beschrieben.Aber erstmal der Reihe nach. Ich bin Gerome, war selbst vie-le Jahre ein Musikstudent. Meine Liebe zur Geige hat mich seit meiner frühsten Kindheit nie mehr losgelassen. Das endlos fin-gerbewegende Üben mit Hilfe von unzähligen Meisterwerken aller Zeiten, machte mich zu einem professionellen Violinen-Spieler. Heute bin ich angestellt in einem Orchester im Theater meiner Heimatstadt. Das soll uns aber hier nur recht wenig weiter interessieren.Meine Arbeit ist im Zusammenhang mit den nun folgenden Ausführungen wirklich kaum von Bedeutung. Ich hatte mich vor nun schon einigen Jahren entschlossen, die von mir ge-machten Entdeckungen endlich zu veröffentlichen. Herausge-kommen ist diese Erzählung meiner unglaublichen Erlebnisse. Meine sündhaft zierlichen Talente für das Aufschreiben von Erlebnissen" },
+            { src: 'Rattara_148x210cm-010.jpg', alt: "bitte ich nachträglich zu entschuldigen. Diverse Verlage haben sich leider nicht die Mühe gemacht, mich bei den Niederschriften zu unterstützen. Zu unbedeutend war das Thema, die Grammatik zu wenig ausgefeilt, zu unseriös die recherchierten zeitlichen Zusammenhänge. Wie dem auch sei. Mein Bemühen, die Wahrheit etwas zu lüften, soll an dieser Stelle hier betont werden. Eventuell gibt es auch Zeitgenossen, die meine Zeilen verstehen können und ebenso wollen. Da so ziemlich alles einen Anfang hat, möchte ich mit einer wichtigen, sozusagen für mich urzeitlichen, Episode starten. Alles begann komischer Weise in einem Museum für das Violinen-Handwerk. Meine Erinnerungen führen mich schnell zu dem dort ansässigen Geigenbauer Herrn M. Er war selbst leidenschaftlicher Spieler von den unterschiedlichsten Geigen in seinem Museum. Es gehörte ihm freilich genauso wenig, wie die vielen gesammelten Instrumente. Aber er fühlte sich hier zu Hause. Jeden Tag überprüfte er in den verschiedenen Räumen nach, ob noch all die Gegenstände am richtigen Platz standen. Bei Museumsgängen mit Touristen war ihm sehr daran gelegen, alle notwendigen Utensilien während der Erklärungen sowie Vorführungen schnell zu finden. Zufällig hatte ich damals einen Geigenkinnhalter in die Hände genommen, da er mich seltsamer Weise kolossal ansprach. Er lag nicht besonders geschützt oder gar abgesondert auf der vor mir aufgestellten Werkbank. Herr" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

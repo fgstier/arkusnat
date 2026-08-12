@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-01.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 4</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'die schlaue dusseline_148x210cm-007.jpg', alt: "Das Problem mit den KundenHeute ist schon wieder Dienstag, ein ganz normaler Tag eben, wie jeder andere sollte man meinen. Und doch war dieser Wochentag ein besonderer Zeitpunkt innerhalb meiner täglichen Arbeit, systematisch nach neuen Musik-Lied-Produkten zu suchen. Was genau kann man sich darunter vorstellen? Es geht darum, mit Hilfe von ausgewählten musikalischen Lied-Unterstützungen in Werbesendungen der Medien wie Fernsehen, Radio oder Kino einen besonderen Effekt der Aufmerksamkeitsbildung zu erreichen, besser noch zu erzwingen. Diese wird hier nicht nur als zusätzliche Füllung der allgemeinen Akustik verwendet, sondern für eine eindringliche Klangbildung im Kopf der Zuhörer. Dabei sollten sie aktiv am Hören verweilen und weniger nur passiv alles an sich vorbeirauschen lassen." },
+            { src: 'die schlaue dusseline_148x210cm-008.jpg', alt: "Daher wird und soll meine Musik immer ein notwendiger, so-wie unverzichtbarer Unterpfand für die Wirkung der Werbung sein. Meine wichtige Arbeit beschäftigt sich auch mit der Pro-duktion von Sampler für vielen kleineren Musikproduzenten der breiten Masse. Insbesondere auch in der Filmmusik kommt meine Arbeit regelmäßig zum Einsatz. Wenn auch faktisch manchmal fremd bearbeitet, aber doch auszugsweise aus mei-ner Feder stammend. Die Passagen eignen sich meistens für Szenen mit spannend wirkenden Handlungen wie Action oder Phantastik oder auch Thriller. Bisher war meine künstlerische Tätigkeit also zu vergleichen mit einem hochgradig und voll-ständig kompetenten Liedermacher für viele Bereiche der Ver-kaufsmanipulationen. Da meine Chips in den unterirdischen Computerkeller der Branche immer aktuell mit den neusten wissenschaftlichen Erkenntnissen und Neuveröffentlichungen aus der Musikbranche gefüttert werden, sind meine Kreationen immer auf den letzten brandheißen Trend eingefahren. Natür-lich auf internationaler Ebene. Alle Kompositionen der letzten 400 Jahre sind in meinem Speicher abgelegt. Dabei wurden sie in mehrere Unterabschnitte aufgegliedert und geordnet. Jeden Bereich an Unterhaltung oder Begleitung kann ich innerhalb weniger Sekunden abdecken. Ich kenne jede Harmonie, jede Harmoniefolge, jede Note, jede jemals erfundene Melodie bzw. abgekupferte Passage aus Werken der Vergangenheit. Dazu kommen noch die persönlichen individuellen Eigenarten der Komponisten und deren Lebensläufe. Immerhin entstand die Musik ja niemals nur einfach losgelöst von dem gesellschaftli-chen Kontext. Der Einfluss der Umwelt innerhalb der Leben-sumwelt eine jeden Menschen nahm eine wichtige Rolle bei der Erschaffung ihrer Musik ein. Das darf absolut nicht vernachläs-sigt werden. Mein intelligentes Netz ist darüber hinaus voll mit angelernten Algorithmen für die Mischung verschiedenartiger Musikrichtungen ausgestattet. Selbst" },
+            { src: 'die schlaue dusseline_148x210cm-009.jpg', alt: "im Bereich der atonalen Musik bin ich ein perfekter Produzent. Ausgesprochen wichtig sind hier allein die klanglichen Passa-gen der Tonerzeugung. Die Melodie ist hier weiter gefasst als bei der normalen verbreiteten tonalen Musik. Die mathemati-schen Zusammenhänge besitzen eine mitunter hervorragende Rolle, bei der Berechnung einzelner zufälliger Tonpassagen. Das kann man später mal noch ausgiebig erklären. Eine Melodie kann hier zum Beispiel das Tropfen eines Wasserhahns, das Getöse eines Wasserfalles oder das Poltern eines Steines auf einer Holztreppe sein. Das Begreifen einer melodischen Harmoniefolge ist natürlich hier schwerer zu er-lernen. Daher macht das Erzeugen einer beliebigen Melodie nicht mehr, als maximal ein paar hundertstel Prozentpunkte meiner schöpferischen Arbeit aus. Das letzte Werk aus dieser Kategorie beinhaltete viele Hahnenschreie, Schweinegrunzen, Hundegebelle sowie Magenknurren von Kühen. Der Hinter-grund war ein Film über Bio-Hundefutter. Der anspruchsvolle Part hierbei, beschäftigte sich mit der Wohlfühlkultur der Vier-beiner. Das nun musikalisch entsprechend aufzuarbeiten, ver-langte ein Höchstmaß an zusätzlichen Informationen. Diese Da-ten wurden von mir mit viel Mühe herangeschafft und ausge-arbeitet. Es war notwendig, tausende Kuhställe und Bauernhö-fe per Videoaufnahmen zu inspizieren. Dort wurden notwen-diger Weise ein paar hundert Tonaufnahmen von Hunden in den verschiedensten Situationen mit anderen Tieren mitge-schnitten. Die Tonanalyse mit Hilfe diverser Stimmanalysato-ren nahm für wahr bei dieser Arbeit die meiste Zeit in An-spruch. Im Ergebnis dieser aufwendigen Tätigkeiten konnten einige Sekunden mit dem Bellen der Hunde ausgewertet, so-wie auch verwendet werden. Die Hunde müssen natürlich ihre eigenen Äußerungen äußerst selten selber wiedererkennen. Es genügt, wenn die Halter, durch die Animation der Hundeme-lodien, vom Produkt überzeugt sind." },
+            { src: 'die schlaue dusseline_148x210cm-010.jpg', alt: "Das Prinzip, nach der die Musik nach der Fertigstellung von mir beurteilt wird, ist grotteneinfach. Ein Tonvorrat innerhalb einer Oktave besteht aus genau 12 Tönen. Diese 12 Töne haben weltweit unterschiedliche Abstände. Gehen wir mal, um das Wesentliche auszuarbeiten, von den hier gebräuchlichen Ton-stufen aus. Aus diesen Tönen wurde nun ein System von ver-schiedenen Abläufen und Definitionen kreiert, was dazu ge-führt hat, dass die Menschen diese definierten Reihenfolgen studieren müssen. Das dauert in der Regel einige Jahre. Für mich ist das natürlich weitaus weniger problematisch. Diese Reihenfolge begründet sich allein auf diese wenigen Töne. Wenn man also mit dem ersten Ton anfängt, sagen wir mal U, dann ist das Abklappern der nächsten 11 Töne ja vorgegeben. Wenn man als Beispiel mit dem zweiten Ton anfängt, sagen wir mal X, dann werden die nächsten elf Töne wieder innerhalb der 12 Töne liegen. Aber eben immer um einen Ton versetzt. Und warum das Ganze? Weil sich die Gehirne einbilden, dass dadurch eine Gemütsstimmung suggeriert werden kann. Wie schauerlich doch dieses idiotische Beziehungskiste für die Menschen ist. Ein Beispiel mit Ziffern von 0 bis 9. Diese schrei-be man nebeneinander durch Komma getrennt einige Male wiederholend auf ein Stück Papier. Dann wirft man einen klei-nen Stoffball darauf und wartet ab, wo er zum Erliegen kommt. Diese Zahl kann nun als Startzahl ausgewählt werden, sondiert anschließend die sich jeweils rechts davon befindlichen Ziffern aus, um eine Art Zahlenleiter zu definieren. Wenn dann ein anderer Startpunkt genommen wird, und wieder nach rechts folgend eine neue Zahlenleiter ausgewählt wird, dann soll die-se eine Neuartigkeit an Empfindung bringen. Und jetzt kommt noch eine Tonleiter hinzu, wo man nur acht Töne benötigt. Da überspringt man einfach einige Stellen und schon entsteht ein Gehopse durch diese Töne. Dann bezeichnet man die" }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>kapitel-08.html // Sektor-Archiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050508; color: #00ffcc; margin: 0; overflow: hidden; font-family: monospace; }
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%; z-index: 9999; pointer-events: none; opacity: 0.15;
+        }
+        #bg-slot { z-index: -1; }
+        .video-frame {
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+            background: #09090f;
+            position: relative;
+        }
+        #chapterPage {
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+            clip-path: inset(0 0 0 0);
+        }
+        .transition-wipe {
+            clip-path: inset(100% 0 0 0) !important;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-slot" class="fixed inset-0 flex items-center justify-center pointer-events-none"></div>
+    <div class="flex flex-col items-center justify-center h-screen w-screen">
+        <div class="text-center mb-4">
+            <span id="chapterIndicator" class="text-xs tracking-widest text-[#00ffcc] opacity-80">// Seite 1 VON 2</span>
+        </div>
+        <div class="video-frame rounded-xl overflow-hidden p-2 w-[320px] md:w-[380px] aspect-[15.5/22.8] flex items-center justify-center">
+            <img id="chapterPage" src="" alt="" class="w-full h-full object-cover rounded-lg">
+        </div>
+        <div class="mt-6 flex gap-4">
+            <button id="btnPrev" onclick="changeChapter(-1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// ZURÜCK</button>
+            <button id="btnNext" onclick="changeChapter(1)" class="px-4 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)] disabled:opacity-30 disabled:pointer-events-none">// WEITER</button>
+        </div>
+        <div class="mt-4 flex gap-4">
+            <a href="inhaltsverzeichnis.html" class="px-5 py-2 border border-[#00ffcc] text-[#00ffcc] text-xs font-bold hover:bg-[#00ffcc] hover:text-[#050508] transition shadow-[0_0_10px_rgba(0,255,204,0.2)]">// ZURÜCK ZUM INHALT</a>
+        </div>
+    </div>
+    <script>
+        const slot = document.getElementById('bg-slot');
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; canvas.height = 350;
+        canvas.style.border = "1px solid #1e1e2f";
+        canvas.style.borderRadius = "50%";
+        canvas.style.boxShadow = "0 0 20px rgba(0, 255, 204, 0.15)";
+        slot.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        function drawRadar() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; ctx.fillRect(0,0,350,350);
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.1)';
+            ctx.beginPath(); ctx.arc(175, 175, 160, 0, Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(175, 175); ctx.rotate(angle);
+            ctx.strokeStyle = '#00ffcc'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(160,0); ctx.stroke();
+            ctx.restore();
+            angle += 0.02;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    </script>
+    <script>
+        const pageImage = document.getElementById('chapterPage');
+        const indicator = document.getElementById('chapterIndicator');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+const pageFiles = [
+            { src: 'die hinrichtung der kausalität-67.jpg', alt: "„Du“ erschufst deine ZeitAlrik stand regelrecht unmerklich angespannt vor diesem Wesen. Die Augen blickten ihn an. Er vergrub sich in dieses Wunder. Wer weiß wie lange er verharrte. Die Blechdose war ein sonderbares Relikt in diesem Kino der Symbole. Dieses Stück verbliebenes Objekt musste mit ihm zurück, wenn er es denn auch greifen hätte können. Seine Arme sind nur im Bild als synonymisches Ding an Beschreibung, um das Geschehen im Nebel der Objekte zu manifestieren. Er hatte nichts, um etwas zu tragen.Mit diesem Problem seiner surrealen Objektvorstellung, begann vor ihm ein gewaltiger Prozess der Bewegung. Die Luft schien flockenartig zu gerinnen. Es war kein Staub oder dunstiger Nebel, sondern eine plötzliche Verdichtung der herumwirbelnden Syntax. Buchstaben, die eben noch bedeutungslos am Boden lagen, ordneten sich in Sekunden zu vertikalen Strukturen an. Sie bildeten keine Sätze, sondern Gliedmaßen. Der Archivar entstand nicht durch Magie, sondern durch eine architektonische Notwendigkeit des Systems." },
+            { src: 'die hinrichtung der kausalität-68.jpg', alt: "Er war eine Gestalt aus geschichtetem Pergament und fließender Tinte, dessen Körperoberfläche ständig in Bewegung war. Wo andere eine Haut hatten, besaß er Textabsätze; seine Gelenke waren Satzzeichen, die das Fließen der Glieder kontrollierten. Sein Gesicht war eine leere Seite, auf der sich je nach Aussage neue Lettern formten. Er wirkte nicht wie eine Fee, sondern wie ein gewaltiger, wandelnder Aktenordner – schwer, präzise und vollkommen gleichgültig gegenüber Alriks Leid. Er war die Grammatik, die den Schmerz erst in eine Form goss, damit er gelesen werden konnte.In der ersten Ebene gab es demnach einen Bereich, der bisher verschlossen war – das Zentralregister. Dort trifft Alrik nun auf eine Projektion von einem Terminal. Er stellte sich keineswegs vor, stattdessen implementierte er sich. Er ist einfach da, sobald die logische Bedingung seiner Anwesenheit erfüllt war. Er ist kein Gegenüber, sondern eine Voraussetzung. Denn sonst wäre er eine soziale Kausalität einer Höflichkeit in der Zeit. Er aber diktiert die Struktur des Raumes als Verwalter jeglicher Sätze.Ein surreales Wesen aus fließenden Buchstaben geformt, sein Wesen nach war er Buchstäblich: Er ist weder männlich noch weiblich, sondern seine Existenzgrundlage ist die Skripturialität und verkörpert die pure Form des Satzbaus. Es erklärt Alrik kühl und wissenaktlich, warum es ihn als Skriptor-Aggregator gibt.Der einfacher gesagt Signifikator emittierte seine Struktur direkt in Alriks Bewusstsein. Er erklärte nicht – er überschrieb Alriks Unwissenheit mit der Wahrheit der Konstruktion.Du nennst es Leben, doch wissenaktlich bist du eine Sequenz. Ich aber existiere als Syntaktischer Konfigurator, um das Rauschen des Universums in die Linearität des Sinns zu zwingen.Die menschliche Wahrnehmung unterliegt der Tyrannei des Sequenziellen. Für ein biologisches Bewusstsein ist ein Satz ein Pfad," }
+        ];
+        let currentIndex = 0;
+        function updatePageDisplay() {
+            pageImage.src = pageFiles[currentIndex].src;
+            pageImage.alt = pageFiles[currentIndex].alt;
+            indicator.innerText = `// Seite ${currentIndex + 1} VON ${pageFiles.length}`;
+            if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+            if (btnNext) btnNext.disabled = (currentIndex === pageFiles.length - 1);
+        }
+        updatePageDisplay();
+        function changeChapter(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= pageFiles.length) return;
+            currentIndex = newIndex;
+            pageImage.classList.add('transition-wipe');
+            setTimeout(() => {
+                updatePageDisplay();
+                pageImage.classList.remove('transition-wipe');
+            }, 400);
+        }
+    </script>
+</body>
+</html>
